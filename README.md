@@ -1,50 +1,20 @@
-# multimedia_annotator
+# Multimedia Annotator
 
-This application was generated using JHipster 5.8.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.8.2](https://www.jhipster.tech/documentation-archive/v5.8.2).
+This application is used for creating a Gold Standard based on text and multimedia data. It allows multiple users to annotate text corpus supplemented by audio or video data and then allows funtions for inter-annotator agreement.
 
 ## Development
 
-Before you can build this project, you must install and configure the following dependencies on your machine:
+Install the following dependencies.
 
-1.  [Node.js][]: We use Node to run a development web server and build the project.
-    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
+1.  [Node.js][]
+2.  Install Dependencies `npm install`
+3.  Run the following commands in two separate terminals to create a blissful development experience where your browser
+    auto-refreshes when files change on your hard drive.
 
-After installing Node, you should be able to run the following command to install development tools.
-You will only need to run this command when dependencies change in [package.json](package.json).
-
-    npm install
-
-We use npm scripts and [Webpack][] as our build system.
-
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
-
+```
     ./mvnw
     npm start
-
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
-
-The `npm run` command will list all of the scripts available to run for this project.
-
-### Service workers
-
-Service workers are commented by default, to enable them please uncomment the following code.
-
--   The service worker registering script in index.html
-
-```html
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js').then(function() {
-            console.log('Service Worker Registered');
-        });
-    }
-</script>
 ```
-
-Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
