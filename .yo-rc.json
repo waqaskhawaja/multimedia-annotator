@@ -1,0 +1,38 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "pk.waqaskhawaja.ma",
+            "nativeLanguage": "en"
+        },
+        "jhipsterVersion": "5.8.2",
+        "applicationType": "monolith",
+        "baseName": "multimedia_annotator",
+        "packageName": "pk.waqaskhawaja.ma",
+        "packageFolder": "pk/waqaskhawaja/ma",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "postgresql",
+        "prodDatabaseType": "postgresql",
+        "searchEngine": false,
+        "messageBroker": false,
+        "serviceDiscoveryType": false,
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "jwtSecretKey": "ZWJjN2UyNmQ3MjBhZDFkNTFlMWIyNDc3ZDEzY2JhYjVmM2ZjMGIxMTJiNzkzZmQ1M2VlNmNlNjk0MTQzZGUwYzJjOWY5NTg5OTZjNTcxZGIwYWIzNjhkNTYzYWU2YTMzMDg3ODE0Y2QwNDUwNGFhODllMTRmYzVlYzQ3M2NkNGE=",
+        "clientFramework": "angularX",
+        "useSass": false,
+        "clientPackageManager": "npm",
+        "testFrameworks": [],
+        "jhiPrefix": "jhi",
+        "entitySuffix": "",
+        "dtoSuffix": "DTO",
+        "otherModules": [],
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en"]
+    }
+}
