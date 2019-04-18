@@ -1,0 +1,14 @@
+entity Scenario{
+    name String
+}
+
+entity SourceDataType{
+    name String
+}
+
+relationship ManyToOne {
+  SourceDataType{scenario} to Scenario
+}
+
+
+

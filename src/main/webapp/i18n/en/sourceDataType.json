@@ -1,0 +1,22 @@
+{
+    "multimediaAnnotatorApp": {
+        "sourceDataType": {
+            "home": {
+                "title": "Source Data Types",
+                "createLabel": "Create a new Source Data Type",
+                "createOrEditLabel": "Create or edit a Source Data Type"
+            },
+            "created": "A new Source Data Type is created with identifier {{ param }}",
+            "updated": "A Source Data Type is updated with identifier {{ param }}",
+            "deleted": "A Source Data Type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Source Data Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Source Data Type"
+            },
+            "name": "Name",
+            "scenario": "Scenario"
+        }
+    }
+}

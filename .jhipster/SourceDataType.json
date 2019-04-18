@@ -1,0 +1,27 @@
+{
+    "name": "SourceDataType",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "scenario",
+            "otherEntityRelationshipName": "sourceDataType",
+            "relationshipName": "scenario",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190418114736",
+    "entityTableName": "source_data_type",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
