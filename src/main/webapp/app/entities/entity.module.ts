@@ -11,6 +11,10 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'source-data-type',
                 loadChildren: './source-data-type/source-data-type.module#MultimediaAnnotatorSourceDataTypeModule'
+            },
+            {
+                path: 'source-data-type',
+                loadChildren: './source-data-type/source-data-type.module#MultimediaAnnotatorSourceDataTypeModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

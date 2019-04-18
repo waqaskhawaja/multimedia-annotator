@@ -4,6 +4,7 @@ entity Scenario{
 
 entity SourceDataType{
     name String
+    sourceFile Blob
 }
 
 relationship ManyToOne {

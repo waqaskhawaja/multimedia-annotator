@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -42,6 +43,11 @@ public class SourceDataTypeResourceIntTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_SOURCE_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_SOURCE_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_SOURCE_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_SOURCE_FILE_CONTENT_TYPE = "image/png";
 
     @Autowired
     private SourceDataTypeRepository sourceDataTypeRepository;
@@ -85,7 +91,9 @@ public class SourceDataTypeResourceIntTest {
      */
     public static SourceDataType createEntity(EntityManager em) {
         SourceDataType sourceDataType = new SourceDataType()
-            .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME)
+            .sourceFile(DEFAULT_SOURCE_FILE)
+            .sourceFileContentType(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
         return sourceDataType;
     }
 
@@ -110,6 +118,8 @@ public class SourceDataTypeResourceIntTest {
         assertThat(sourceDataTypeList).hasSize(databaseSizeBeforeCreate + 1);
         SourceDataType testSourceDataType = sourceDataTypeList.get(sourceDataTypeList.size() - 1);
         assertThat(testSourceDataType.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testSourceDataType.getSourceFile()).isEqualTo(DEFAULT_SOURCE_FILE);
+        assertThat(testSourceDataType.getSourceFileContentType()).isEqualTo(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -142,7 +152,9 @@ public class SourceDataTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(sourceDataType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
     }
     
     @Test
@@ -156,7 +168,9 @@ public class SourceDataTypeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(sourceDataType.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.sourceFileContentType").value(DEFAULT_SOURCE_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.sourceFile").value(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE)));
     }
 
     @Test
@@ -180,7 +194,9 @@ public class SourceDataTypeResourceIntTest {
         // Disconnect from session so that the updates on updatedSourceDataType are not directly saved in db
         em.detach(updatedSourceDataType);
         updatedSourceDataType
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .sourceFile(UPDATED_SOURCE_FILE)
+            .sourceFileContentType(UPDATED_SOURCE_FILE_CONTENT_TYPE);
 
         restSourceDataTypeMockMvc.perform(put("/api/source-data-types")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -192,6 +208,8 @@ public class SourceDataTypeResourceIntTest {
         assertThat(sourceDataTypeList).hasSize(databaseSizeBeforeUpdate);
         SourceDataType testSourceDataType = sourceDataTypeList.get(sourceDataTypeList.size() - 1);
         assertThat(testSourceDataType.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testSourceDataType.getSourceFile()).isEqualTo(UPDATED_SOURCE_FILE);
+        assertThat(testSourceDataType.getSourceFileContentType()).isEqualTo(UPDATED_SOURCE_FILE_CONTENT_TYPE);
     }
 
     @Test

@@ -28,6 +28,13 @@ public class SourceDataType implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Lob
+    @Column(name = "source_file")
+    private byte[] sourceFile;
+
+    @Column(name = "source_file_content_type")
+    private String sourceFileContentType;
+
     @ManyToOne
     @JsonIgnoreProperties("sourceDataTypes")
     private Scenario scenario;
@@ -52,6 +59,32 @@ public class SourceDataType implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getSourceFile() {
+        return sourceFile;
+    }
+
+    public SourceDataType sourceFile(byte[] sourceFile) {
+        this.sourceFile = sourceFile;
+        return this;
+    }
+
+    public void setSourceFile(byte[] sourceFile) {
+        this.sourceFile = sourceFile;
+    }
+
+    public String getSourceFileContentType() {
+        return sourceFileContentType;
+    }
+
+    public SourceDataType sourceFileContentType(String sourceFileContentType) {
+        this.sourceFileContentType = sourceFileContentType;
+        return this;
+    }
+
+    public void setSourceFileContentType(String sourceFileContentType) {
+        this.sourceFileContentType = sourceFileContentType;
     }
 
     public Scenario getScenario() {
@@ -93,6 +126,8 @@ public class SourceDataType implements Serializable {
         return "SourceDataType{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", sourceFile='" + getSourceFile() + "'" +
+            ", sourceFileContentType='" + getSourceFileContentType() + "'" +
             "}";
     }
 }

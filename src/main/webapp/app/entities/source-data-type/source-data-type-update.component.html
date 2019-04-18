@@ -14,6 +14,24 @@
                     <input type="text" class="form-control" name="name" id="field_name"
                         [(ngModel)]="sourceDataType.name" />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.sourceDataType.sourceFile" for="field_sourceFile">Source File</label>
+                    <div>
+                        <div *ngIf="sourceDataType.sourceFile" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(sourceDataType.sourceFileContentType, sourceDataType.sourceFile)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{sourceDataType.sourceFileContentType}}, {{byteSize(sourceDataType.sourceFile)}}</span>
+                            <button type="button" (click)="sourceDataType.sourceFile=null;sourceDataType.sourceFileContentType=null;"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_sourceFile" (change)="setFileData($event, sourceDataType, 'sourceFile', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="sourceFile" id="field_sourceFile"
+                        [(ngModel)]="sourceDataType.sourceFile" />
+                    <input type="hidden" class="form-control" name="sourceFileContentType" id="field_sourceFileContentType"
+                        [(ngModel)]="sourceDataType.sourceFileContentType" />
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.sourceDataType.scenario" for="field_scenario">Scenario</label>

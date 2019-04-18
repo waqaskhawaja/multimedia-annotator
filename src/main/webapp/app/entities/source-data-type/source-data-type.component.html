@@ -16,6 +16,7 @@
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
             <th><span jhiTranslate="multimediaAnnotatorApp.sourceDataType.name">Name</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.sourceDataType.sourceFile">Source File</span></th>
             <th><span jhiTranslate="multimediaAnnotatorApp.sourceDataType.scenario">Scenario</span></th>
             <th></th>
             </tr>
@@ -24,6 +25,10 @@
             <tr *ngFor="let sourceDataType of sourceDataTypes ;trackBy: trackId">
                 <td><a [routerLink]="['/source-data-type', sourceDataType.id, 'view' ]">{{sourceDataType.id}}</a></td>
                 <td>{{sourceDataType.name}}</td>
+                <td>
+                    <a *ngIf="sourceDataType.sourceFile" (click)="openFile(sourceDataType.sourceFileContentType, sourceDataType.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                    <span *ngIf="sourceDataType.sourceFile">{{sourceDataType.sourceFileContentType}}, {{byteSize(sourceDataType.sourceFile)}}</span>
+                </td>
                 <td>
                     <div *ngIf="sourceDataType.scenario">
                         <a [routerLink]="['../scenario', sourceDataType.scenario?.id, 'view' ]" >{{sourceDataType.scenario?.id}}</a>

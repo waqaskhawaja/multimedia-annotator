@@ -16,6 +16,7 @@
                 "title": "Source Data Type"
             },
             "name": "Name",
+            "sourceFile": "Source File",
             "scenario": "Scenario"
         }
     }

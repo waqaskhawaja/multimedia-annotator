@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 import { ISourceDataType } from 'app/shared/model/source-data-type.model';
 import { SourceDataTypeService } from './source-data-type.service';
 import { IScenario } from 'app/shared/model/scenario.model';
@@ -20,6 +20,7 @@ export class SourceDataTypeUpdateComponent implements OnInit {
     scenarios: IScenario[];
 
     constructor(
+        protected dataUtils: JhiDataUtils,
         protected jhiAlertService: JhiAlertService,
         protected sourceDataTypeService: SourceDataTypeService,
         protected scenarioService: ScenarioService,
@@ -38,6 +39,18 @@ export class SourceDataTypeUpdateComponent implements OnInit {
                 map((response: HttpResponse<IScenario[]>) => response.body)
             )
             .subscribe((res: IScenario[]) => (this.scenarios = res), (res: HttpErrorResponse) => this.onError(res.message));
+    }
+
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     previousState() {

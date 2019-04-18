@@ -9,6 +9,13 @@
                 <dd>
                     <span>{{sourceDataType.name}}</span>
                 </dd>
+                <dt><span jhiTranslate="multimediaAnnotatorApp.sourceDataType.sourceFile">Source File</span></dt>
+                <dd>
+                    <div *ngIf="sourceDataType.sourceFile">
+                        <a (click)="openFile(sourceDataType.sourceFileContentType, sourceDataType.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                        {{sourceDataType.sourceFileContentType}}, {{byteSize(sourceDataType.sourceFile)}}
+                    </div>
+                </dd>
                 <dt><span jhiTranslate="multimediaAnnotatorApp.sourceDataType.scenario">Scenario</span></dt>
                 <dd>
                     <div *ngIf="sourceDataType.scenario">
