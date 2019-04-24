@@ -1,0 +1,36 @@
+{
+    "name": "Session",
+    "fields": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "analyst",
+            "otherEntityRelationshipName": "session",
+            "relationshipName": "analyst",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "scenario",
+            "otherEntityRelationshipName": "session",
+            "relationshipName": "scenario",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "data",
+            "otherEntityRelationshipName": "session",
+            "relationshipName": "data",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190424120255",
+    "entityTableName": "session",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

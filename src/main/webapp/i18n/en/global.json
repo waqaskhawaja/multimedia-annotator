@@ -9,6 +9,12 @@
                 "main": "Entities",
                 "scenario": "Scenario",
                 "sourceDataType": "Source Data Type",
+                "dataType": "Data Type",
+                "interactionType": "Interaction Type",
+                "data": "Data",
+                "dataRecord": "Data Record",
+                "analyst": "Analyst",
+                "session": "Session",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

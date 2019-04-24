@@ -1,0 +1,70 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="multimediaAnnotatorApp.session.home.title">Sessions</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-session" [routerLink]="['/session/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="multimediaAnnotatorApp.session.home.createLabel">
+            Create new Session
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="sessions">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.analyst">Analyst</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.scenario">Scenario</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.data">Data</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let session of sessions ;trackBy: trackId">
+                <td><a [routerLink]="['/session', session.id, 'view' ]">{{session.id}}</a></td>
+                <td>
+                    <div *ngIf="session.analyst">
+                        <a [routerLink]="['../analyst', session.analyst?.id, 'view' ]" >{{session.analyst?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="session.scenario">
+                        <a [routerLink]="['../scenario', session.scenario?.id, 'view' ]" >{{session.scenario?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="session.data">
+                        <a [routerLink]="['../data', session.data?.id, 'view' ]" >{{session.data?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/session', session.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/session', session.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'session', { outlets: { popup: session.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

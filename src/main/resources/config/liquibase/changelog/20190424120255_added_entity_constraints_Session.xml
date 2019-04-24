@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Session.
+    -->
+    <changeSet id="20190424120255-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="analyst_id"
+                                 baseTableName="session"
+                                 constraintName="fk_session_analyst_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="analyst"/>
+
+        <addForeignKeyConstraint baseColumnNames="scenario_id"
+                                 baseTableName="session"
+                                 constraintName="fk_session_scenario_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="scenario"/>
+
+        <addForeignKeyConstraint baseColumnNames="data_id"
+                                 baseTableName="session"
+                                 constraintName="fk_session_data_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data"/>
+
+    </changeSet>
+</databaseChangeLog>

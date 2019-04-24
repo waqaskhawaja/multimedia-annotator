@@ -1,12 +1,15 @@
 package pk.waqaskhawaja.ma.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -27,6 +30,9 @@ public class Scenario implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "scenario")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Session> sessions = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -47,6 +53,31 @@ public class Scenario implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Session> getSessions() {
+        return sessions;
+    }
+
+    public Scenario sessions(Set<Session> sessions) {
+        this.sessions = sessions;
+        return this;
+    }
+
+    public Scenario addSession(Session session) {
+        this.sessions.add(session);
+        session.setScenario(this);
+        return this;
+    }
+
+    public Scenario removeSession(Session session) {
+        this.sessions.remove(session);
+        session.setScenario(null);
+        return this;
+    }
+
+    public void setSessions(Set<Session> sessions) {
+        this.sessions = sessions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

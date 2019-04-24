@@ -1,15 +1,46 @@
+entity DataType{
+    name String
+}
+
+entity InteractionType{
+    name String
+}
+
 entity Scenario{
     name String
 }
 
-entity SourceDataType{
+entity Data{
     name String
     sourceFile Blob
 }
 
-relationship ManyToOne {
-  SourceDataType{scenario} to Scenario
+entity DataRecord{
+    duration Integer
+    text String
+    sourceId String
+    time Integer
+}
+
+entity Analyst{
+    name String
+    experience Integer
+}
+
+entity Session
+
+relationship ManyToOne{
+    DataRecord to Data,
+    DataRecord to InteractionType
 }
 
 
+relationship ManyToOne{
+    Data to DataType
+}
 
+relationship ManyToOne{
+    Session to Analyst,
+    Session to Scenario,
+    Session to Data
+}

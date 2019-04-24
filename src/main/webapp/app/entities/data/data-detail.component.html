@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="data">
+            <h2><span jhiTranslate="multimediaAnnotatorApp.data.detail.title">Data</span> {{data.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="multimediaAnnotatorApp.data.name">Name</span></dt>
+                <dd>
+                    <span>{{data.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="multimediaAnnotatorApp.data.sourceFile">Source File</span></dt>
+                <dd>
+                    <div *ngIf="data.sourceFile">
+                        <a (click)="openFile(data.sourceFileContentType, data.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                        {{data.sourceFileContentType}}, {{byteSize(data.sourceFile)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="multimediaAnnotatorApp.data.dataType">Data Type</span></dt>
+                <dd>
+                    <div *ngIf="data.dataType">
+                        <a [routerLink]="['/data-type', data.dataType?.id, 'view']">{{data.dataType?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/data', data.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

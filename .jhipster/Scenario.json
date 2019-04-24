@@ -6,7 +6,14 @@
             "fieldType": "String"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "session",
+            "otherEntityRelationshipName": "scenario",
+            "relationshipName": "session"
+        }
+    ],
     "changelogDate": "20190418114735",
     "entityTableName": "scenario",
     "dto": "no",
