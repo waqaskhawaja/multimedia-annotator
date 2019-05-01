@@ -1,0 +1,69 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="multimediaAnnotatorApp.session.home.title">Sessions</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-session" [routerLink]="['/session/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="multimediaAnnotatorApp.session.home.createLabel">
+            Create new Session
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="sessions">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.sourceFile">Source File</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.dataType">Data Type</span></th>
+            <th><span jhiTranslate="multimediaAnnotatorApp.session.scenario">Scenario</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let session of sessions ;trackBy: trackId">
+                <td><a [routerLink]="['/session', session.id, 'view' ]">{{session.id}}</a></td>
+                <td>
+                    <a *ngIf="session.sourceFile" (click)="openFile(session.sourceFileContentType, session.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                    <span *ngIf="session.sourceFile">{{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}}</span>
+                </td>
+                <td>
+                    <div *ngIf="session.dataType">
+                        <a [routerLink]="['../data-type', session.dataType?.id, 'view' ]" >{{session.dataType?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="session.scenario">
+                        <a [routerLink]="['../scenario', session.scenario?.id, 'view' ]" >{{session.scenario?.name}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/session', session.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/session', session.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'session', { outlets: { popup: session.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

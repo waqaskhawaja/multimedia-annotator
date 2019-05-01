@@ -9,9 +9,9 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "data",
+            "otherEntityName": "session",
             "otherEntityRelationshipName": "dataType",
-            "relationshipName": "data"
+            "relationshipName": "session"
         }
     ],
     "changelogDate": "20190424120249",

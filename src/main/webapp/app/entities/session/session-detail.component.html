@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="session">
+            <h2><span jhiTranslate="multimediaAnnotatorApp.session.detail.title">Session</span> {{session.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="multimediaAnnotatorApp.session.sourceFile">Source File</span></dt>
+                <dd>
+                    <div *ngIf="session.sourceFile">
+                        <a (click)="openFile(session.sourceFileContentType, session.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                        {{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="multimediaAnnotatorApp.session.dataType">Data Type</span></dt>
+                <dd>
+                    <div *ngIf="session.dataType">
+                        <a [routerLink]="['/data-type', session.dataType?.id, 'view']">{{session.dataType?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="multimediaAnnotatorApp.session.scenario">Scenario</span></dt>
+                <dd>
+                    <div *ngIf="session.scenario">
+                        <a [routerLink]="['/scenario', session.scenario?.id, 'view']">{{session.scenario?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/session', session.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -21,9 +21,9 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "data",
+            "otherEntityName": "session",
             "otherEntityRelationshipName": "dataRecord",
-            "relationshipName": "data",
+            "relationshipName": "session",
             "otherEntityField": "id"
         },
         {

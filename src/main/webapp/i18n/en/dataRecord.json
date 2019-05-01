@@ -1,0 +1,26 @@
+{
+    "multimediaAnnotatorApp": {
+        "dataRecord": {
+            "home": {
+                "title": "Data Records",
+                "createLabel": "Create a new Data Record",
+                "createOrEditLabel": "Create or edit a Data Record"
+            },
+            "created": "A new Data Record is created with identifier {{ param }}",
+            "updated": "A Data Record is updated with identifier {{ param }}",
+            "deleted": "A Data Record is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Data Record {{ id }}?"
+            },
+            "detail": {
+                "title": "Data Record"
+            },
+            "duration": "Duration",
+            "text": "Text",
+            "sourceId": "Source Id",
+            "time": "Time",
+            "session": "Session",
+            "interactionType": "Interaction Type"
+        }
+    }
+}

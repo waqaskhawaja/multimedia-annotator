@@ -1,0 +1,22 @@
+{
+    "multimediaAnnotatorApp": {
+        "dataType": {
+            "home": {
+                "title": "Data Types",
+                "createLabel": "Create a new Data Type",
+                "createOrEditLabel": "Create or edit a Data Type"
+            },
+            "created": "A new Data Type is created with identifier {{ param }}",
+            "updated": "A Data Type is updated with identifier {{ param }}",
+            "deleted": "A Data Type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Data Type {{ id }}?"
+            },
+            "detail": {
+                "title": "Data Type"
+            },
+            "name": "Name",
+            "session": "Session"
+        }
+    }
+}

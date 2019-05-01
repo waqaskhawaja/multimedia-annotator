@@ -1,12 +1,18 @@
 {
     "name": "Session",
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "sourceFile",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "analyst",
+            "otherEntityName": "dataType",
             "otherEntityRelationshipName": "session",
-            "relationshipName": "analyst",
+            "relationshipName": "dataType",
             "otherEntityField": "id"
         },
         {
@@ -14,14 +20,13 @@
             "otherEntityName": "scenario",
             "otherEntityRelationshipName": "session",
             "relationshipName": "scenario",
-            "otherEntityField": "id"
+            "otherEntityField": "name"
         },
         {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "data",
+            "relationshipType": "one-to-many",
+            "otherEntityName": "dataRecord",
             "otherEntityRelationshipName": "session",
-            "relationshipName": "data",
-            "otherEntityField": "id"
+            "relationshipName": "dataRecord"
         }
     ],
     "changelogDate": "20190424120255",

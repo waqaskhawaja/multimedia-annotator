@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-data-record-heading" jhiTranslate="multimediaAnnotatorApp.dataRecord.home.createOrEditLabel">Create or edit a Data Record</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!dataRecord.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="dataRecord.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.duration" for="field_duration">Duration</label>
+                    <input type="number" class="form-control" name="duration" id="field_duration"
+                        [(ngModel)]="dataRecord.duration" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.text" for="field_text">Text</label>
+                    <input type="text" class="form-control" name="text" id="field_text"
+                        [(ngModel)]="dataRecord.text" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.sourceId" for="field_sourceId">Source Id</label>
+                    <input type="text" class="form-control" name="sourceId" id="field_sourceId"
+                        [(ngModel)]="dataRecord.sourceId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.time" for="field_time">Time</label>
+                    <input type="number" class="form-control" name="time" id="field_time"
+                        [(ngModel)]="dataRecord.time" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.session" for="field_session">Session</label>
+                    <select class="form-control" id="field_session" name="session" [(ngModel)]="dataRecord.session" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="sessionOption.id === dataRecord.session?.id ? dataRecord.session : sessionOption" *ngFor="let sessionOption of sessions; trackBy: trackSessionById">{{sessionOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="multimediaAnnotatorApp.dataRecord.interactionType" for="field_interactionType">Interaction Type</label>
+                    <select class="form-control" id="field_interactionType" name="interactionType" [(ngModel)]="dataRecord.interactionType" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="interactionTypeOption.id === dataRecord.interactionType?.id ? dataRecord.interactionType : interactionTypeOption" *ngFor="let interactionTypeOption of interactiontypes; trackBy: trackInteractionTypeById">{{interactionTypeOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
