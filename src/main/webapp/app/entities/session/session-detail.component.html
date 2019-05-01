@@ -8,14 +8,16 @@
                 <dt><span jhiTranslate="multimediaAnnotatorApp.session.sourceFile">Source File</span></dt>
                 <dd>
                     <div *ngIf="session.sourceFile">
-                        <a (click)="openFile(session.sourceFileContentType, session.sourceFile)" jhiTranslate="entity.action.open">open</a>
-                        {{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}}
+                        <p>
+                            {{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}} KB<br/>
+                            <a (click)="openFile(session.sourceFileContentType, session.sourceFile)" jhiTranslate="entity.action.open">open</a>
+                        </p>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="multimediaAnnotatorApp.session.dataType">Data Type</span></dt>
                 <dd>
                     <div *ngIf="session.dataType">
-                        <a [routerLink]="['/data-type', session.dataType?.id, 'view']">{{session.dataType?.id}}</a>
+                        <a [routerLink]="['/data-type', session.dataType?.id, 'view']">{{session.dataType?.name}}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="multimediaAnnotatorApp.session.scenario">Scenario</span></dt>

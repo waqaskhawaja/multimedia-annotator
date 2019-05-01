@@ -1,4 +1,6 @@
 package pk.waqaskhawaja.ma.web.rest;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import pk.waqaskhawaja.ma.domain.Session;
 import pk.waqaskhawaja.ma.repository.SessionRepository;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -45,6 +49,16 @@ public class SessionResource {
         if (session.getId() != null) {
             throw new BadRequestAlertException("A new session cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        log.info("\n\n\n\n"+session.getSourceFileContentType() + "\n\n\n\n");
+
+        File uploadedJson = new File("");
+        try {
+            FileUtils.writeByteArrayToFile(uploadedJson, session.getSourceFile());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+
         Session result = sessionRepository.save(session);
         return ResponseEntity.created(new URI("/api/sessions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
