@@ -3,6 +3,8 @@ package pk.waqaskhawaja.ma.web.rest;
 import pk.waqaskhawaja.ma.MultimediaAnnotatorApp;
 
 import pk.waqaskhawaja.ma.domain.Session;
+import pk.waqaskhawaja.ma.repository.DataRecordRepository;
+import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
 import pk.waqaskhawaja.ma.repository.SessionRepository;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
 
@@ -50,6 +52,12 @@ public class SessionResourceIntTest {
     private SessionRepository sessionRepository;
 
     @Autowired
+    private InteractionTypeRepository interactionTypeRepository;
+
+    @Autowired
+    private DataRecordRepository dataRecordRepository;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -71,7 +79,8 @@ public class SessionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SessionResource sessionResource = new SessionResource(sessionRepository);
+        final SessionResource sessionResource = new SessionResource(sessionRepository, interactionTypeRepository,
+                                                            dataRecordRepository);
         this.restSessionMockMvc = MockMvcBuilders.standaloneSetup(sessionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

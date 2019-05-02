@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InteractionTypeRepository extends JpaRepository<InteractionType, Long> {
-
+    InteractionType findByName(String name);
 }

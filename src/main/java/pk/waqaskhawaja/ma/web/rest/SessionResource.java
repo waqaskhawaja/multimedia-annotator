@@ -1,7 +1,11 @@
 package pk.waqaskhawaja.ma.web.rest;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import pk.waqaskhawaja.ma.domain.DataRecord;
 import pk.waqaskhawaja.ma.domain.Session;
+import pk.waqaskhawaja.ma.repository.DataRecordRepository;
+import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
 import pk.waqaskhawaja.ma.repository.SessionRepository;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
@@ -11,13 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * REST controller for managing Session.
@@ -31,9 +34,14 @@ public class SessionResource {
     private static final String ENTITY_NAME = "session";
 
     private final SessionRepository sessionRepository;
+    private final InteractionTypeRepository interactionTypeRepository;
+    private final DataRecordRepository dataRecordRepository;
 
-    public SessionResource(SessionRepository sessionRepository) {
+    public SessionResource(SessionRepository sessionRepository, InteractionTypeRepository interactionTypeRepository,
+                            DataRecordRepository dataRecordRepository) {
         this.sessionRepository = sessionRepository;
+        this.interactionTypeRepository  = interactionTypeRepository;
+        this.dataRecordRepository = dataRecordRepository;
     }
 
     /**
@@ -45,21 +53,56 @@ public class SessionResource {
      */
     @PostMapping("/sessions")
     public ResponseEntity<Session> createSession(@RequestBody Session session) throws URISyntaxException {
+
+        Set<DataRecord> dataRecords = new HashSet<>();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode uploadedJson = null;
+
         log.debug("REST request to save Session : {}", session);
         if (session.getId() != null) {
             throw new BadRequestAlertException("A new session cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String jsonString = new String(session.getSourceFile());
 
-        log.info("\n\n\n\n"+session.getSourceFileContentType() + "\n\n\n\n");
-
-        File uploadedJson = new File("");
         try {
-            FileUtils.writeByteArrayToFile(uploadedJson, session.getSourceFile());
+            uploadedJson = mapper.readTree(jsonString);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
         }
 
+        Consumer<JsonNode> data = (JsonNode node) -> {
+            Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
+            DataRecord dataRecord = new DataRecord();
+            while(jsonIterator.hasNext()) {
+                Map.Entry<String, JsonNode> entry = jsonIterator.next();
+                String key = entry.getKey();
+                switch(key){
+                    case "duration":
+                        dataRecord.setDuration(entry.getValue().asInt());
+                        break;
+                    case "Text":
+                        dataRecord.setText(entry.getValue().asText());
+                        break;
+                    case "InteractionType":
+                        dataRecord.setInteractionType(interactionTypeRepository.findByName(entry.getValue().asText()));
+                        break;
+                    case "ID":
+                        dataRecord.setSourceId(entry.getValue().asText());
+                        break;
+                    case "time":
+                        dataRecord.setTime(entry.getValue().asInt());
+                        break;
+                    default:
+                }
+            }
+            dataRecord.setSession(session);
+            dataRecords.add(dataRecord);
+        };
+        uploadedJson.forEach(data);
+
         Session result = sessionRepository.save(session);
+        dataRecordRepository.saveAll(dataRecords);
+
         return ResponseEntity.created(new URI("/api/sessions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
