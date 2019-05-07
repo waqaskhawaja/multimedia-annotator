@@ -1,0 +1,11 @@
+version: '2'
+services:
+    ma-postgresql:
+        image: postgres:10.4
+        # volumes:
+        #     - ~/volumes/jhipster/ma/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=ma
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
