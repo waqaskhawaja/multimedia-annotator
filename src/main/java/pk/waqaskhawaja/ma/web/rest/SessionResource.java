@@ -1,5 +1,10 @@
 package pk.waqaskhawaja.ma.web.rest;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import pk.waqaskhawaja.ma.domain.DataRecord;
 import pk.waqaskhawaja.ma.domain.Session;
+import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
+import pk.waqaskhawaja.ma.service.DataRecordService;
 import pk.waqaskhawaja.ma.service.SessionService;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
@@ -16,11 +21,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -37,12 +43,18 @@ public class SessionResource {
     private static final String ENTITY_NAME = "session";
 
     private final SessionService sessionService;
+    private final DataRecordService dataRecordService;
 
     private final SessionQueryService sessionQueryService;
 
-    public SessionResource(SessionService sessionService, SessionQueryService sessionQueryService) {
+    private final InteractionTypeRepository interactionTypeRepository;
+
+    public SessionResource(SessionService sessionService, SessionQueryService sessionQueryService,
+                           DataRecordService dataRecordService, InteractionTypeRepository interactionTypeRepository) {
         this.sessionService = sessionService;
         this.sessionQueryService = sessionQueryService;
+        this.dataRecordService = dataRecordService;
+        this.interactionTypeRepository = interactionTypeRepository;
     }
 
     /**
@@ -54,11 +66,57 @@ public class SessionResource {
      */
     @PostMapping("/sessions")
     public ResponseEntity<Session> createSession(@RequestBody Session session) throws URISyntaxException {
+
+        Set<DataRecord> dataRecords = new HashSet<>();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode uploadedJson = null;
+
         log.debug("REST request to save Session : {}", session);
         if (session.getId() != null) {
             throw new BadRequestAlertException("A new session cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        String jsonString = new String(session.getSourceFile());
+
+        try {
+            uploadedJson = mapper.readTree(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Consumer<JsonNode> data = (JsonNode node) -> {
+            Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
+            DataRecord dataRecord = new DataRecord();
+            while(jsonIterator.hasNext()) {
+                Map.Entry<String, JsonNode> entry = jsonIterator.next();
+                String key = entry.getKey();
+                switch(key){
+                    case "duration":
+                        dataRecord.setDuration(entry.getValue().asInt());
+                        break;
+                    case "Text":
+                        dataRecord.setText(entry.getValue().asText());
+                        break;
+                    case "InteractionType":
+                        dataRecord.setInteractionType(interactionTypeRepository.findByName(entry.getValue().asText()));
+                        break;
+                    case "ID":
+                        dataRecord.setSourceId(entry.getValue().asText());
+                        break;
+                    case "time":
+                        dataRecord.setTime(entry.getValue().asInt());
+                        break;
+                    default:
+                }
+            }
+            dataRecord.setSession(session);
+            dataRecords.add(dataRecord);
+        };
+        uploadedJson.forEach(data);
+
         Session result = sessionService.save(session);
+        dataRecords.forEach(dataRecord -> dataRecordService.save(dataRecord));
+
         return ResponseEntity.created(new URI("/api/sessions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

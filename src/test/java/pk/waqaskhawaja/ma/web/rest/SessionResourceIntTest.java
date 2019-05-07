@@ -6,8 +6,10 @@ import pk.waqaskhawaja.ma.domain.Session;
 import pk.waqaskhawaja.ma.domain.DataType;
 import pk.waqaskhawaja.ma.domain.Scenario;
 import pk.waqaskhawaja.ma.domain.DataRecord;
+import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
 import pk.waqaskhawaja.ma.repository.SessionRepository;
 import pk.waqaskhawaja.ma.repository.search.SessionSearchRepository;
+import pk.waqaskhawaja.ma.service.DataRecordService;
 import pk.waqaskhawaja.ma.service.SessionService;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
 import pk.waqaskhawaja.ma.service.dto.SessionCriteria;
@@ -64,6 +66,12 @@ public class SessionResourceIntTest {
     @Autowired
     private SessionService sessionService;
 
+    @Autowired
+    private DataRecordService dataRecordService;
+
+    @Autowired
+    private InteractionTypeRepository interactionTypeRepository;
+
     /**
      * This repository is mocked in the pk.waqaskhawaja.ma.repository.search test package.
      *
@@ -97,7 +105,8 @@ public class SessionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SessionResource sessionResource = new SessionResource(sessionService, sessionQueryService);
+        final SessionResource sessionResource = new SessionResource(sessionService, sessionQueryService,
+            dataRecordService, interactionTypeRepository);
         this.restSessionMockMvc = MockMvcBuilders.standaloneSetup(sessionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
