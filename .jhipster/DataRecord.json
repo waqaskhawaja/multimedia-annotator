@@ -1,0 +1,46 @@
+{
+    "name": "DataRecord",
+    "fields": [
+        {
+            "fieldName": "duration",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "text",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sourceId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "time",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "session",
+            "otherEntityRelationshipName": "dataRecord",
+            "relationshipName": "session",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "interactionType",
+            "otherEntityRelationshipName": "dataRecord",
+            "relationshipName": "interactionType",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190507114630",
+    "entityTableName": "data_record",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

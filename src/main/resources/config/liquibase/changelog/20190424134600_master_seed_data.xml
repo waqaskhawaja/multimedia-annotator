@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="20190424134600" author="wk">
+        <loadData file="config/liquibase/seed/scenarios.csv"
+                  quotchar="&quot;"
+                  schemaName="public"
+                  separator=","
+                  tableName="scenario">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+        </loadData>
+
+        <loadData file="config/liquibase/seed/interaction_type.csv"
+                  quotchar="&quot;"
+                  schemaName="public"
+                  separator=","
+                  tableName="interaction_type">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+        </loadData>
+
+        <loadData file="config/liquibase/seed/data_type.csv"
+                  quotchar="&quot;"
+                  schemaName="public"
+                  separator=","
+                  tableName="data_type">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
