@@ -23,6 +23,18 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'data-record',
                 loadChildren: './data-record/data-record.module#MaDataRecordModule'
+            },
+            {
+                path: 'interaction-type',
+                loadChildren: './interaction-type/interaction-type.module#MaInteractionTypeModule'
+            },
+            {
+                path: 'session',
+                loadChildren: './session/session.module#MaSessionModule'
+            },
+            {
+                path: 'data-record',
+                loadChildren: './data-record/data-record.module#MaDataRecordModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

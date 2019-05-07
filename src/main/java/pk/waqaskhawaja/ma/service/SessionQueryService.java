@@ -87,6 +87,9 @@ public class SessionQueryService extends QueryService<Session> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), Session_.id));
             }
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), Session_.name));
+            }
             if (criteria.getDataTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDataTypeId(),
                     root -> root.join(Session_.dataType, JoinType.LEFT).get(DataType_.id)));
@@ -94,10 +97,6 @@ public class SessionQueryService extends QueryService<Session> {
             if (criteria.getScenarioId() != null) {
                 specification = specification.and(buildSpecification(criteria.getScenarioId(),
                     root -> root.join(Session_.scenario, JoinType.LEFT).get(Scenario_.id)));
-            }
-            if (criteria.getDataRecordId() != null) {
-                specification = specification.and(buildSpecification(criteria.getDataRecordId(),
-                    root -> root.join(Session_.dataRecords, JoinType.LEFT).get(DataRecord_.id)));
             }
         }
         return specification;

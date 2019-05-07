@@ -24,11 +24,11 @@ public class SessionCriteria implements Serializable {
 
     private LongFilter id;
 
+    private StringFilter name;
+
     private LongFilter dataTypeId;
 
     private LongFilter scenarioId;
-
-    private LongFilter dataRecordId;
 
     public LongFilter getId() {
         return id;
@@ -36,6 +36,14 @@ public class SessionCriteria implements Serializable {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getName() {
+        return name;
+    }
+
+    public void setName(StringFilter name) {
+        this.name = name;
     }
 
     public LongFilter getDataTypeId() {
@@ -54,14 +62,6 @@ public class SessionCriteria implements Serializable {
         this.scenarioId = scenarioId;
     }
 
-    public LongFilter getDataRecordId() {
-        return dataRecordId;
-    }
-
-    public void setDataRecordId(LongFilter dataRecordId) {
-        this.dataRecordId = dataRecordId;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -74,18 +74,18 @@ public class SessionCriteria implements Serializable {
         final SessionCriteria that = (SessionCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
             Objects.equals(dataTypeId, that.dataTypeId) &&
-            Objects.equals(scenarioId, that.scenarioId) &&
-            Objects.equals(dataRecordId, that.dataRecordId);
+            Objects.equals(scenarioId, that.scenarioId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        name,
         dataTypeId,
-        scenarioId,
-        dataRecordId
+        scenarioId
         );
     }
 
@@ -93,9 +93,9 @@ public class SessionCriteria implements Serializable {
     public String toString() {
         return "SessionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
                 (dataTypeId != null ? "dataTypeId=" + dataTypeId + ", " : "") +
                 (scenarioId != null ? "scenarioId=" + scenarioId + ", " : "") +
-                (dataRecordId != null ? "dataRecordId=" + dataRecordId + ", " : "") +
             "}";
     }
 

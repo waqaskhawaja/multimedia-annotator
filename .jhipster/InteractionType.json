@@ -6,14 +6,7 @@
             "fieldType": "String"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "dataRecord",
-            "otherEntityRelationshipName": "interactionType",
-            "relationshipName": "dataRecord"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20190507114627",
     "entityTableName": "interaction_type",
     "dto": "no",

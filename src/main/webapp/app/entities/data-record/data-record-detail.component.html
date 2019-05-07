@@ -24,13 +24,13 @@
                 <dt><span>Session</span></dt>
                 <dd>
                     <div *ngIf="dataRecord.session">
-                        <a [routerLink]="['/session', dataRecord.session?.id, 'view']">{{dataRecord.session?.id}}</a>
+                        <a [routerLink]="['/session', dataRecord.session?.id, 'view']">{{dataRecord.session?.name}}</a>
                     </div>
                 </dd>
                 <dt><span>Interaction Type</span></dt>
                 <dd>
                     <div *ngIf="dataRecord.interactionType">
-                        <a [routerLink]="['/interaction-type', dataRecord.interactionType?.id, 'view']">{{dataRecord.interactionType?.id}}</a>
+                        <a [routerLink]="['/interaction-type', dataRecord.interactionType?.id, 'view']">{{dataRecord.interactionType?.name}}</a>
                     </div>
                 </dd>
             </dl>

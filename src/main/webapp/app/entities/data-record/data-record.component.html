@@ -34,8 +34,8 @@
             <th jhiSortBy="text"><span>Text</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="sourceId"><span>Source Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="time"><span>Time</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="session.id"><span>Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="interactionType.id"><span>Interaction Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="session.name"><span>Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="interactionType.name"><span>Interaction Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -48,12 +48,12 @@
                 <td>{{dataRecord.time}}</td>
                 <td>
                     <div *ngIf="dataRecord.session">
-                        <a [routerLink]="['../session', dataRecord.session?.id, 'view' ]" >{{dataRecord.session?.id}}</a>
+                        <a [routerLink]="['../session', dataRecord.session?.id, 'view' ]" >{{dataRecord.session?.name}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dataRecord.interactionType">
-                        <a [routerLink]="['../interaction-type', dataRecord.interactionType?.id, 'view' ]" >{{dataRecord.interactionType?.id}}</a>
+                        <a [routerLink]="['../interaction-type', dataRecord.interactionType?.id, 'view' ]" >{{dataRecord.interactionType?.name}}</a>
                     </div>
                 </td>
                 <td class="text-right">

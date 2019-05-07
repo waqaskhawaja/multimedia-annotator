@@ -30,8 +30,9 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="sourceFile"><span>Source File</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="dataType.id"><span>Data Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dataType.name"><span>Data Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="scenario.name"><span>Scenario</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -39,13 +40,14 @@
             <tbody>
             <tr *ngFor="let session of sessions ;trackBy: trackId">
                 <td><a [routerLink]="['/session', session.id, 'view' ]">{{session.id}}</a></td>
+                <td>{{session.name}}</td>
                 <td>
                     <a *ngIf="session.sourceFile" (click)="openFile(session.sourceFileContentType, session.sourceFile)">open</a>
                     <span *ngIf="session.sourceFile">{{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}}</span>
                 </td>
                 <td>
                     <div *ngIf="session.dataType">
-                        <a [routerLink]="['../data-type', session.dataType?.id, 'view' ]" >{{session.dataType?.id}}</a>
+                        <a [routerLink]="['../data-type', session.dataType?.id, 'view' ]" >{{session.dataType?.name}}</a>
                     </div>
                 </td>
                 <td>

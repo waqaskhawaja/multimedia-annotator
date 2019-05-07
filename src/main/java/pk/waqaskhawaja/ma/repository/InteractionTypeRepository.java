@@ -12,6 +12,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InteractionTypeRepository extends JpaRepository<InteractionType, Long>, JpaSpecificationExecutor<InteractionType> {
 
-    InteractionType findByName(String name);
-
 }

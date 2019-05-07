@@ -11,6 +11,7 @@ entity Scenario{
 }
 
 entity Session{
+    name String,
     sourceFile Blob
 }
 
@@ -22,12 +23,12 @@ entity DataRecord{
 }
 
 relationship ManyToOne{
-    DataRecord to Session,
-    DataRecord to InteractionType
+    DataRecord{session(name)} to Session,
+    DataRecord{interactionType(name)} to InteractionType
 }
 
 relationship ManyToOne{
-    Session to DataType
+    Session{dataType(name)} to DataType{session(name)}
 }
 
 relationship ManyToOne{

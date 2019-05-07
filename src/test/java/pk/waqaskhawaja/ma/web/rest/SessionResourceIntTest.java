@@ -5,11 +5,8 @@ import pk.waqaskhawaja.ma.MaApp;
 import pk.waqaskhawaja.ma.domain.Session;
 import pk.waqaskhawaja.ma.domain.DataType;
 import pk.waqaskhawaja.ma.domain.Scenario;
-import pk.waqaskhawaja.ma.domain.DataRecord;
-import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
 import pk.waqaskhawaja.ma.repository.SessionRepository;
 import pk.waqaskhawaja.ma.repository.search.SessionSearchRepository;
-import pk.waqaskhawaja.ma.service.DataRecordService;
 import pk.waqaskhawaja.ma.service.SessionService;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
 import pk.waqaskhawaja.ma.service.dto.SessionCriteria;
@@ -55,6 +52,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = MaApp.class)
 public class SessionResourceIntTest {
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
     private static final byte[] DEFAULT_SOURCE_FILE = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_SOURCE_FILE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_SOURCE_FILE_CONTENT_TYPE = "image/jpg";
@@ -65,12 +65,6 @@ public class SessionResourceIntTest {
 
     @Autowired
     private SessionService sessionService;
-
-    @Autowired
-    private DataRecordService dataRecordService;
-
-    @Autowired
-    private InteractionTypeRepository interactionTypeRepository;
 
     /**
      * This repository is mocked in the pk.waqaskhawaja.ma.repository.search test package.
@@ -105,8 +99,7 @@ public class SessionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final SessionResource sessionResource = new SessionResource(sessionService, sessionQueryService,
-            dataRecordService, interactionTypeRepository);
+        final SessionResource sessionResource = new SessionResource(sessionService, sessionQueryService);
         this.restSessionMockMvc = MockMvcBuilders.standaloneSetup(sessionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -123,6 +116,7 @@ public class SessionResourceIntTest {
      */
     public static Session createEntity(EntityManager em) {
         Session session = new Session()
+            .name(DEFAULT_NAME)
             .sourceFile(DEFAULT_SOURCE_FILE)
             .sourceFileContentType(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
         return session;
@@ -148,6 +142,7 @@ public class SessionResourceIntTest {
         List<Session> sessionList = sessionRepository.findAll();
         assertThat(sessionList).hasSize(databaseSizeBeforeCreate + 1);
         Session testSession = sessionList.get(sessionList.size() - 1);
+        assertThat(testSession.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSession.getSourceFile()).isEqualTo(DEFAULT_SOURCE_FILE);
         assertThat(testSession.getSourceFileContentType()).isEqualTo(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
 
@@ -188,6 +183,7 @@ public class SessionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
     }
@@ -203,8 +199,48 @@ public class SessionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(session.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.sourceFileContentType").value(DEFAULT_SOURCE_FILE_CONTENT_TYPE))
             .andExpect(jsonPath("$.sourceFile").value(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE)));
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where name equals to DEFAULT_NAME
+        defaultSessionShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the sessionList where name equals to UPDATED_NAME
+        defaultSessionShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultSessionShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the sessionList where name equals to UPDATED_NAME
+        defaultSessionShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where name is not null
+        defaultSessionShouldBeFound("name.specified=true");
+
+        // Get all the sessionList where name is null
+        defaultSessionShouldNotBeFound("name.specified=false");
     }
 
     @Test
@@ -244,25 +280,6 @@ public class SessionResourceIntTest {
         defaultSessionShouldNotBeFound("scenarioId.equals=" + (scenarioId + 1));
     }
 
-
-    @Test
-    @Transactional
-    public void getAllSessionsByDataRecordIsEqualToSomething() throws Exception {
-        // Initialize the database
-        DataRecord dataRecord = DataRecordResourceIntTest.createEntity(em);
-        em.persist(dataRecord);
-        em.flush();
-        session.addDataRecord(dataRecord);
-        sessionRepository.saveAndFlush(session);
-        Long dataRecordId = dataRecord.getId();
-
-        // Get all the sessionList where dataRecord equals to dataRecordId
-        defaultSessionShouldBeFound("dataRecordId.equals=" + dataRecordId);
-
-        // Get all the sessionList where dataRecord equals to dataRecordId + 1
-        defaultSessionShouldNotBeFound("dataRecordId.equals=" + (dataRecordId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -271,6 +288,7 @@ public class SessionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
 
@@ -322,6 +340,7 @@ public class SessionResourceIntTest {
         // Disconnect from session so that the updates on updatedSession are not directly saved in db
         em.detach(updatedSession);
         updatedSession
+            .name(UPDATED_NAME)
             .sourceFile(UPDATED_SOURCE_FILE)
             .sourceFileContentType(UPDATED_SOURCE_FILE_CONTENT_TYPE);
 
@@ -334,6 +353,7 @@ public class SessionResourceIntTest {
         List<Session> sessionList = sessionRepository.findAll();
         assertThat(sessionList).hasSize(databaseSizeBeforeUpdate);
         Session testSession = sessionList.get(sessionList.size() - 1);
+        assertThat(testSession.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSession.getSourceFile()).isEqualTo(UPDATED_SOURCE_FILE);
         assertThat(testSession.getSourceFileContentType()).isEqualTo(UPDATED_SOURCE_FILE_CONTENT_TYPE);
 
@@ -395,6 +415,7 @@ public class SessionResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
     }

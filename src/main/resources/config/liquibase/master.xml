@@ -19,4 +19,5 @@
     <include file="config/liquibase/changelog/20190424134600_master_seed_data.xml" relativeToChangelogFile="false"/>
 
     <include file="config/liquibase/changelog/20190502150800_increase_data_record_column_text_width.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190705164100_added_column_name_session.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

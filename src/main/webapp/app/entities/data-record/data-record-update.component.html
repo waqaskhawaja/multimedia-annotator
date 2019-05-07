@@ -34,14 +34,14 @@
                     <label class="form-control-label" for="field_session">Session</label>
                     <select class="form-control" id="field_session" name="session" [(ngModel)]="dataRecord.session" >
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="sessionOption.id === dataRecord.session?.id ? dataRecord.session : sessionOption" *ngFor="let sessionOption of sessions; trackBy: trackSessionById">{{sessionOption.id}}</option>
+                        <option [ngValue]="sessionOption.id === dataRecord.session?.id ? dataRecord.session : sessionOption" *ngFor="let sessionOption of sessions; trackBy: trackSessionById">{{sessionOption.name}}</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_interactionType">Interaction Type</label>
                     <select class="form-control" id="field_interactionType" name="interactionType" [(ngModel)]="dataRecord.interactionType" >
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="interactionTypeOption.id === dataRecord.interactionType?.id ? dataRecord.interactionType : interactionTypeOption" *ngFor="let interactionTypeOption of interactiontypes; trackBy: trackInteractionTypeById">{{interactionTypeOption.id}}</option>
+                        <option [ngValue]="interactionTypeOption.id === dataRecord.interactionType?.id ? dataRecord.interactionType : interactionTypeOption" *ngFor="let interactionTypeOption of interactiontypes; trackBy: trackInteractionTypeById">{{interactionTypeOption.name}}</option>
                     </select>
                 </div>
             </div>

@@ -90,10 +90,6 @@ public class InteractionTypeQueryService extends QueryService<InteractionType> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), InteractionType_.name));
             }
-            if (criteria.getDataRecordId() != null) {
-                specification = specification.and(buildSpecification(criteria.getDataRecordId(),
-                    root -> root.join(InteractionType_.dataRecords, JoinType.LEFT).get(DataRecord_.id)));
-            }
         }
         return specification;
     }

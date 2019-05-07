@@ -2,6 +2,10 @@
     "name": "Session",
     "fields": [
         {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "sourceFile",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
@@ -13,7 +17,7 @@
             "otherEntityName": "dataType",
             "otherEntityRelationshipName": "session",
             "relationshipName": "dataType",
-            "otherEntityField": "id"
+            "otherEntityField": "name"
         },
         {
             "relationshipType": "many-to-one",
@@ -21,12 +25,6 @@
             "otherEntityRelationshipName": "session",
             "relationshipName": "scenario",
             "otherEntityField": "name"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "dataRecord",
-            "otherEntityRelationshipName": "session",
-            "relationshipName": "dataRecord"
         }
     ],
     "changelogDate": "20190507114629",

@@ -24,14 +24,14 @@
             "otherEntityName": "session",
             "otherEntityRelationshipName": "dataRecord",
             "relationshipName": "session",
-            "otherEntityField": "id"
+            "otherEntityField": "name"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "interactionType",
             "otherEntityRelationshipName": "dataRecord",
             "relationshipName": "interactionType",
-            "otherEntityField": "id"
+            "otherEntityField": "name"
         }
     ],
     "changelogDate": "20190507114630",

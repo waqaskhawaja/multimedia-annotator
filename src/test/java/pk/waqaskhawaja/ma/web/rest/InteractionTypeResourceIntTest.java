@@ -3,7 +3,6 @@ package pk.waqaskhawaja.ma.web.rest;
 import pk.waqaskhawaja.ma.MaApp;
 
 import pk.waqaskhawaja.ma.domain.InteractionType;
-import pk.waqaskhawaja.ma.domain.DataRecord;
 import pk.waqaskhawaja.ma.repository.InteractionTypeRepository;
 import pk.waqaskhawaja.ma.repository.search.InteractionTypeSearchRepository;
 import pk.waqaskhawaja.ma.service.InteractionTypeService;
@@ -227,25 +226,6 @@ public class InteractionTypeResourceIntTest {
         // Get all the interactionTypeList where name is null
         defaultInteractionTypeShouldNotBeFound("name.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllInteractionTypesByDataRecordIsEqualToSomething() throws Exception {
-        // Initialize the database
-        DataRecord dataRecord = DataRecordResourceIntTest.createEntity(em);
-        em.persist(dataRecord);
-        em.flush();
-        interactionType.addDataRecord(dataRecord);
-        interactionTypeRepository.saveAndFlush(interactionType);
-        Long dataRecordId = dataRecord.getId();
-
-        // Get all the interactionTypeList where dataRecord equals to dataRecordId
-        defaultInteractionTypeShouldBeFound("dataRecordId.equals=" + dataRecordId);
-
-        // Get all the interactionTypeList where dataRecord equals to dataRecordId + 1
-        defaultInteractionTypeShouldNotBeFound("dataRecordId.equals=" + (dataRecordId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned
      */

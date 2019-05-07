@@ -26,8 +26,6 @@ public class InteractionTypeCriteria implements Serializable {
 
     private StringFilter name;
 
-    private LongFilter dataRecordId;
-
     public LongFilter getId() {
         return id;
     }
@@ -44,14 +42,6 @@ public class InteractionTypeCriteria implements Serializable {
         this.name = name;
     }
 
-    public LongFilter getDataRecordId() {
-        return dataRecordId;
-    }
-
-    public void setDataRecordId(LongFilter dataRecordId) {
-        this.dataRecordId = dataRecordId;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -64,16 +54,14 @@ public class InteractionTypeCriteria implements Serializable {
         final InteractionTypeCriteria that = (InteractionTypeCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(dataRecordId, that.dataRecordId);
+            Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        name,
-        dataRecordId
+        name
         );
     }
 
@@ -82,7 +70,6 @@ public class InteractionTypeCriteria implements Serializable {
         return "InteractionTypeCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
-                (dataRecordId != null ? "dataRecordId=" + dataRecordId + ", " : "") +
             "}";
     }
 

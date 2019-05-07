@@ -1,15 +1,12 @@
 package pk.waqaskhawaja.ma.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -27,6 +24,9 @@ public class Session implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Lob
     @Column(name = "source_file")
     private byte[] sourceFile;
@@ -42,8 +42,6 @@ public class Session implements Serializable {
     @JsonIgnoreProperties("sessions")
     private Scenario scenario;
 
-    @OneToMany(mappedBy = "session")
-    private Set<DataRecord> dataRecords = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -51,6 +49,19 @@ public class Session implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Session name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public byte[] getSourceFile() {
@@ -104,31 +115,6 @@ public class Session implements Serializable {
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
     }
-
-    public Set<DataRecord> getDataRecords() {
-        return dataRecords;
-    }
-
-    public Session dataRecords(Set<DataRecord> dataRecords) {
-        this.dataRecords = dataRecords;
-        return this;
-    }
-
-    public Session addDataRecord(DataRecord dataRecord) {
-        this.dataRecords.add(dataRecord);
-        dataRecord.setSession(this);
-        return this;
-    }
-
-    public Session removeDataRecord(DataRecord dataRecord) {
-        this.dataRecords.remove(dataRecord);
-        dataRecord.setSession(null);
-        return this;
-    }
-
-    public void setDataRecords(Set<DataRecord> dataRecords) {
-        this.dataRecords = dataRecords;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -155,6 +141,7 @@ public class Session implements Serializable {
     public String toString() {
         return "Session{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", sourceFile='" + getSourceFile() + "'" +
             ", sourceFileContentType='" + getSourceFileContentType() + "'" +
             "}";

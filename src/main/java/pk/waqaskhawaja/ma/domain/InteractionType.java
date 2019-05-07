@@ -1,14 +1,11 @@
 package pk.waqaskhawaja.ma.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -29,8 +26,6 @@ public class InteractionType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "interactionType")
-    private Set<DataRecord> dataRecords = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -51,31 +46,6 @@ public class InteractionType implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Set<DataRecord> getDataRecords() {
-        return dataRecords;
-    }
-
-    public InteractionType dataRecords(Set<DataRecord> dataRecords) {
-        this.dataRecords = dataRecords;
-        return this;
-    }
-
-    public InteractionType addDataRecord(DataRecord dataRecord) {
-        this.dataRecords.add(dataRecord);
-        dataRecord.setInteractionType(this);
-        return this;
-    }
-
-    public InteractionType removeDataRecord(DataRecord dataRecord) {
-        this.dataRecords.remove(dataRecord);
-        dataRecord.setInteractionType(null);
-        return this;
-    }
-
-    public void setDataRecords(Set<DataRecord> dataRecords) {
-        this.dataRecords = dataRecords;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
