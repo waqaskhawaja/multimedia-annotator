@@ -3,6 +3,7 @@ package pk.waqaskhawaja.ma.service;
 import pk.waqaskhawaja.ma.MultimediaAnnotatorApp;
 import pk.waqaskhawaja.ma.config.Constants;
 import pk.waqaskhawaja.ma.domain.User;
+import pk.waqaskhawaja.ma.repository.search.UserSearchRepository;
 import pk.waqaskhawaja.ma.repository.UserRepository;
 import pk.waqaskhawaja.ma.service.dto.UserDTO;
 import pk.waqaskhawaja.ma.service.util.RandomUtil;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -45,6 +48,14 @@ public class UserServiceIntTest {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * This repository is mocked in the pk.waqaskhawaja.ma.repository.search test package.
+     *
+     * @see pk.waqaskhawaja.ma.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
 
     @Autowired
     private AuditingHandler auditingHandler;
@@ -158,6 +169,9 @@ public class UserServiceIntTest {
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
     }
 
     @Test
@@ -187,6 +201,9 @@ public class UserServiceIntTest {
         assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
         userService.removeNotActivatedUsers();
         assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
     }
 
 }

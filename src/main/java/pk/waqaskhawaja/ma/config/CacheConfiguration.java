@@ -38,15 +38,6 @@ public class CacheConfiguration {
             cm.createCache(pk.waqaskhawaja.ma.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(pk.waqaskhawaja.ma.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(pk.waqaskhawaja.ma.domain.User.class.getName() + ".authorities", jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.DataType.class.getName(), jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.DataType.class.getName() + ".sessions", jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.InteractionType.class.getName(), jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.InteractionType.class.getName() + ".dataRecords", jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.Scenario.class.getName(), jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.Scenario.class.getName() + ".sessions", jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.Session.class.getName(), jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.Session.class.getName() + ".dataRecords", jcacheConfiguration);
-            cm.createCache(pk.waqaskhawaja.ma.domain.DataRecord.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

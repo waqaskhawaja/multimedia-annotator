@@ -5,18 +5,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190424120249_added_entity_DataType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190424120250_added_entity_InteractionType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190418114735_added_entity_Scenario.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190424120255_added_entity_Session.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190424120253_added_entity_DataRecord.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20190424120255_added_entity_constraints_Session.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190424120253_added_entity_constraints_DataRecord.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-
-    <!-- seed data for scenario, interaction and data types -->
-    <include file="config/liquibase/changelog/20190424134600_master_seed_data.xml" relativeToChangelogFile="false"/>
-
-    <include file="config/liquibase/changelog/20190502150800_increase_data_record_column_text_width.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
