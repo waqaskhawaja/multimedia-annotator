@@ -1,4 +1,4 @@
-Multimedia Annotator
+# Multimedia Annotator
 
 This application is being developed to facilitate Analytic Provenance dataset annotation.
 
