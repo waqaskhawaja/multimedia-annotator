@@ -107,6 +107,10 @@ public class DataRecordQueryService extends QueryService<DataRecord> {
                 specification = specification.and(buildSpecification(criteria.getInteractionTypeId(),
                     root -> root.join(DataRecord_.interactionType, JoinType.LEFT).get(InteractionType_.id)));
             }
+            if (criteria.getAnnotationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAnnotationId(),
+                    root -> root.join(DataRecord_.annotations, JoinType.LEFT).get(Annotation_.id)));
+            }
         }
         return specification;
     }

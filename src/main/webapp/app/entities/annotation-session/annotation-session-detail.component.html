@@ -1,0 +1,45 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="annotationSession">
+            <h2><span>Annotation Session</span> {{annotationSession.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Start</span></dt>
+                <dd>
+                    <span>{{annotationSession.start}}</span>
+                </dd>
+                <dt><span>End</span></dt>
+                <dd>
+                    <span>{{annotationSession.end}}</span>
+                </dd>
+                <dt><span>Name</span></dt>
+                <dd>
+                    <span>{{annotationSession.name}}</span>
+                </dd>
+                <dt><span>Session</span></dt>
+                <dd>
+                    <div *ngIf="annotationSession.session">
+                        <a [routerLink]="['/session', annotationSession.session?.id, 'view']">{{annotationSession.session?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span>Annotator</span></dt>
+                <dd>
+                    {{annotationSession.annotator?.login}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/annotation-session', annotationSession.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

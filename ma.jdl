@@ -22,6 +22,22 @@ entity DataRecord{
     time Integer
 }
 
+entity AnnotationType{
+    name String maxlength(100)
+}
+
+entity AnnotationSession{
+    start Instant
+    end Instant
+    name String
+}
+
+entity Annotation{
+    start Instant
+    end Instant
+    annotationText String
+}
+
 relationship ManyToOne{
     DataRecord{session(name)} to Session,
     DataRecord{interactionType(name)} to InteractionType
@@ -33,6 +49,23 @@ relationship ManyToOne{
 
 relationship ManyToOne{
     Session{scenario(name)} to Scenario{session}
+}
+
+relationship ManyToOne{
+    AnnotationType{parent(name)} to AnnotationType
+}
+
+relationship ManyToOne{
+    Annotation{annotationSession(name)} to AnnotationSession
+}
+
+relationship ManyToMany{
+    Annotation{dataRecord(text)} to DataRecord{annotation}
+}
+
+relationship ManyToOne{
+    AnnotationSession{session(name)} to Session
+    AnnotationSession{annotator(login)} to User
 }
 
 paginate * with pager

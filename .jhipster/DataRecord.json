@@ -32,6 +32,14 @@
             "otherEntityRelationshipName": "dataRecord",
             "relationshipName": "interactionType",
             "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "annotation",
+            "otherEntityRelationshipName": "dataRecord",
+            "relationshipName": "annotation",
+            "otherEntityField": "id",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20190507114630",

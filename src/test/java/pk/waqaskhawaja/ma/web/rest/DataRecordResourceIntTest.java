@@ -5,6 +5,7 @@ import pk.waqaskhawaja.ma.MaApp;
 import pk.waqaskhawaja.ma.domain.DataRecord;
 import pk.waqaskhawaja.ma.domain.Session;
 import pk.waqaskhawaja.ma.domain.InteractionType;
+import pk.waqaskhawaja.ma.domain.Annotation;
 import pk.waqaskhawaja.ma.repository.DataRecordRepository;
 import pk.waqaskhawaja.ma.repository.search.DataRecordSearchRepository;
 import pk.waqaskhawaja.ma.service.DataRecordService;
@@ -456,6 +457,25 @@ public class DataRecordResourceIntTest {
 
         // Get all the dataRecordList where interactionType equals to interactionTypeId + 1
         defaultDataRecordShouldNotBeFound("interactionTypeId.equals=" + (interactionTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllDataRecordsByAnnotationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Annotation annotation = AnnotationResourceIntTest.createEntity(em);
+        em.persist(annotation);
+        em.flush();
+        dataRecord.addAnnotation(annotation);
+        dataRecordRepository.saveAndFlush(dataRecord);
+        Long annotationId = annotation.getId();
+
+        // Get all the dataRecordList where annotation equals to annotationId
+        defaultDataRecordShouldBeFound("annotationId.equals=" + annotationId);
+
+        // Get all the dataRecordList where annotation equals to annotationId + 1
+        defaultDataRecordShouldNotBeFound("annotationId.equals=" + (annotationId + 1));
     }
 
     /**

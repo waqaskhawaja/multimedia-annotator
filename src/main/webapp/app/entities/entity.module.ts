@@ -35,6 +35,22 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'data-record',
                 loadChildren: './data-record/data-record.module#MaDataRecordModule'
+            },
+            {
+                path: 'data-record',
+                loadChildren: './data-record/data-record.module#MaDataRecordModule'
+            },
+            {
+                path: 'annotation-type',
+                loadChildren: './annotation-type/annotation-type.module#MaAnnotationTypeModule'
+            },
+            {
+                path: 'annotation-session',
+                loadChildren: './annotation-session/annotation-session.module#MaAnnotationSessionModule'
+            },
+            {
+                path: 'annotation',
+                loadChildren: './annotation/annotation.module#MaAnnotationModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

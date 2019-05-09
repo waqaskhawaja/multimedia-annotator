@@ -36,6 +36,8 @@ public class DataRecordCriteria implements Serializable {
 
     private LongFilter interactionTypeId;
 
+    private LongFilter annotationId;
+
     public LongFilter getId() {
         return id;
     }
@@ -92,6 +94,14 @@ public class DataRecordCriteria implements Serializable {
         this.interactionTypeId = interactionTypeId;
     }
 
+    public LongFilter getAnnotationId() {
+        return annotationId;
+    }
+
+    public void setAnnotationId(LongFilter annotationId) {
+        this.annotationId = annotationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -109,7 +119,8 @@ public class DataRecordCriteria implements Serializable {
             Objects.equals(sourceId, that.sourceId) &&
             Objects.equals(time, that.time) &&
             Objects.equals(sessionId, that.sessionId) &&
-            Objects.equals(interactionTypeId, that.interactionTypeId);
+            Objects.equals(interactionTypeId, that.interactionTypeId) &&
+            Objects.equals(annotationId, that.annotationId);
     }
 
     @Override
@@ -121,7 +132,8 @@ public class DataRecordCriteria implements Serializable {
         sourceId,
         time,
         sessionId,
-        interactionTypeId
+        interactionTypeId,
+        annotationId
         );
     }
 
@@ -135,6 +147,7 @@ public class DataRecordCriteria implements Serializable {
                 (time != null ? "time=" + time + ", " : "") +
                 (sessionId != null ? "sessionId=" + sessionId + ", " : "") +
                 (interactionTypeId != null ? "interactionTypeId=" + interactionTypeId + ", " : "") +
+                (annotationId != null ? "annotationId=" + annotationId + ", " : "") +
             "}";
     }
 

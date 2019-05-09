@@ -10,6 +10,8 @@ import { ISession } from 'app/shared/model/session.model';
 import { SessionService } from 'app/entities/session';
 import { IInteractionType } from 'app/shared/model/interaction-type.model';
 import { InteractionTypeService } from 'app/entities/interaction-type';
+import { IAnnotation } from 'app/shared/model/annotation.model';
+import { AnnotationService } from 'app/entities/annotation';
 
 @Component({
     selector: 'jhi-data-record-update',
@@ -23,11 +25,14 @@ export class DataRecordUpdateComponent implements OnInit {
 
     interactiontypes: IInteractionType[];
 
+    annotations: IAnnotation[];
+
     constructor(
         protected jhiAlertService: JhiAlertService,
         protected dataRecordService: DataRecordService,
         protected sessionService: SessionService,
         protected interactionTypeService: InteractionTypeService,
+        protected annotationService: AnnotationService,
         protected activatedRoute: ActivatedRoute
     ) {}
 
@@ -50,6 +55,13 @@ export class DataRecordUpdateComponent implements OnInit {
                 map((response: HttpResponse<IInteractionType[]>) => response.body)
             )
             .subscribe((res: IInteractionType[]) => (this.interactiontypes = res), (res: HttpErrorResponse) => this.onError(res.message));
+        this.annotationService
+            .query()
+            .pipe(
+                filter((mayBeOk: HttpResponse<IAnnotation[]>) => mayBeOk.ok),
+                map((response: HttpResponse<IAnnotation[]>) => response.body)
+            )
+            .subscribe((res: IAnnotation[]) => (this.annotations = res), (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     previousState() {
@@ -88,5 +100,20 @@ export class DataRecordUpdateComponent implements OnInit {
 
     trackInteractionTypeById(index: number, item: IInteractionType) {
         return item.id;
+    }
+
+    trackAnnotationById(index: number, item: IAnnotation) {
+        return item.id;
+    }
+
+    getSelected(selectedVals: Array<any>, option: any) {
+        if (selectedVals) {
+            for (let i = 0; i < selectedVals.length; i++) {
+                if (option.id === selectedVals[i].id) {
+                    return selectedVals[i];
+                }
+            }
+        }
+        return option;
     }
 }

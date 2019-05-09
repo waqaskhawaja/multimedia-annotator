@@ -1,12 +1,15 @@
 package pk.waqaskhawaja.ma.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -43,6 +46,10 @@ public class DataRecord implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("dataRecords")
     private InteractionType interactionType;
+
+    @ManyToMany(mappedBy = "dataRecords")
+    @JsonIgnore
+    private Set<Annotation> annotations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -129,6 +136,31 @@ public class DataRecord implements Serializable {
 
     public void setInteractionType(InteractionType interactionType) {
         this.interactionType = interactionType;
+    }
+
+    public Set<Annotation> getAnnotations() {
+        return annotations;
+    }
+
+    public DataRecord annotations(Set<Annotation> annotations) {
+        this.annotations = annotations;
+        return this;
+    }
+
+    public DataRecord addAnnotation(Annotation annotation) {
+        this.annotations.add(annotation);
+        annotation.getDataRecords().add(this);
+        return this;
+    }
+
+    public DataRecord removeAnnotation(Annotation annotation) {
+        this.annotations.remove(annotation);
+        annotation.getDataRecords().remove(this);
+        return this;
+    }
+
+    public void setAnnotations(Set<Annotation> annotations) {
+        this.annotations = annotations;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
