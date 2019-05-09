@@ -32,6 +32,17 @@
                     <input type="hidden" class="form-control" name="sourceFileContentType" id="field_sourceFileContentType"
                         [(ngModel)]="session.sourceFileContentType" />
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_url">Url</label>
+                    <input type="text" class="form-control" name="url" id="field_url"
+                        [(ngModel)]="session.url" maxlength="1000"/>
+                    <div [hidden]="!(editForm.controls.url?.dirty && editForm.controls.url?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.url?.errors?.maxlength">
+                        This field cannot be longer than 1000 characters.
+                        </small>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_dataType">Data Type</label>

@@ -90,6 +90,9 @@ public class SessionQueryService extends QueryService<Session> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Session_.name));
             }
+            if (criteria.getUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUrl(), Session_.url));
+            }
             if (criteria.getDataTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDataTypeId(),
                     root -> root.join(Session_.dataType, JoinType.LEFT).get(DataType_.id)));

@@ -51,6 +51,10 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'annotation',
                 loadChildren: './annotation/annotation.module#MaAnnotationModule'
+            },
+            {
+                path: 'session',
+                loadChildren: './session/session.module#MaSessionModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

@@ -62,6 +62,9 @@ public class SessionResourceIntTest {
     private static final String DEFAULT_SOURCE_FILE_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_SOURCE_FILE_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_URL = "BBBBBBBBBB";
+
     @Autowired
     private SessionRepository sessionRepository;
 
@@ -127,7 +130,8 @@ public class SessionResourceIntTest {
         Session session = new Session()
             .name(DEFAULT_NAME)
             .sourceFile(DEFAULT_SOURCE_FILE)
-            .sourceFileContentType(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
+            .sourceFileContentType(DEFAULT_SOURCE_FILE_CONTENT_TYPE)
+            .url(DEFAULT_URL);
         return session;
     }
 
@@ -154,6 +158,7 @@ public class SessionResourceIntTest {
         assertThat(testSession.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testSession.getSourceFile()).isEqualTo(DEFAULT_SOURCE_FILE);
         assertThat(testSession.getSourceFileContentType()).isEqualTo(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
+        assertThat(testSession.getUrl()).isEqualTo(DEFAULT_URL);
 
         // Validate the Session in Elasticsearch
         verify(mockSessionSearchRepository, times(1)).save(testSession);
@@ -194,7 +199,8 @@ public class SessionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
     
     @Test
@@ -210,7 +216,8 @@ public class SessionResourceIntTest {
             .andExpect(jsonPath("$.id").value(session.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.sourceFileContentType").value(DEFAULT_SOURCE_FILE_CONTENT_TYPE))
-            .andExpect(jsonPath("$.sourceFile").value(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE)));
+            .andExpect(jsonPath("$.sourceFile").value(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE)))
+            .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()));
     }
 
     @Test
@@ -250,6 +257,45 @@ public class SessionResourceIntTest {
 
         // Get all the sessionList where name is null
         defaultSessionShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByUrlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where url equals to DEFAULT_URL
+        defaultSessionShouldBeFound("url.equals=" + DEFAULT_URL);
+
+        // Get all the sessionList where url equals to UPDATED_URL
+        defaultSessionShouldNotBeFound("url.equals=" + UPDATED_URL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByUrlIsInShouldWork() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where url in DEFAULT_URL or UPDATED_URL
+        defaultSessionShouldBeFound("url.in=" + DEFAULT_URL + "," + UPDATED_URL);
+
+        // Get all the sessionList where url equals to UPDATED_URL
+        defaultSessionShouldNotBeFound("url.in=" + UPDATED_URL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllSessionsByUrlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        sessionRepository.saveAndFlush(session);
+
+        // Get all the sessionList where url is not null
+        defaultSessionShouldBeFound("url.specified=true");
+
+        // Get all the sessionList where url is null
+        defaultSessionShouldNotBeFound("url.specified=false");
     }
 
     @Test
@@ -299,7 +345,8 @@ public class SessionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
 
         // Check, that the count call also returns 1
         restSessionMockMvc.perform(get("/api/sessions/count?sort=id,desc&" + filter))
@@ -351,7 +398,8 @@ public class SessionResourceIntTest {
         updatedSession
             .name(UPDATED_NAME)
             .sourceFile(UPDATED_SOURCE_FILE)
-            .sourceFileContentType(UPDATED_SOURCE_FILE_CONTENT_TYPE);
+            .sourceFileContentType(UPDATED_SOURCE_FILE_CONTENT_TYPE)
+            .url(UPDATED_URL);
 
         restSessionMockMvc.perform(put("/api/sessions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -365,6 +413,7 @@ public class SessionResourceIntTest {
         assertThat(testSession.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSession.getSourceFile()).isEqualTo(UPDATED_SOURCE_FILE);
         assertThat(testSession.getSourceFileContentType()).isEqualTo(UPDATED_SOURCE_FILE_CONTENT_TYPE);
+        assertThat(testSession.getUrl()).isEqualTo(UPDATED_URL);
 
         // Validate the Session in Elasticsearch
         verify(mockSessionSearchRepository, times(1)).save(testSession);
@@ -426,7 +475,8 @@ public class SessionResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(session.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))));
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
     }
 
     @Test

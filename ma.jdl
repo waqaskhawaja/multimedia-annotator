@@ -13,6 +13,7 @@ entity Scenario{
 entity Session{
     name String,
     sourceFile Blob
+    url String maxlength(1000)
 }
 
 entity DataRecord{

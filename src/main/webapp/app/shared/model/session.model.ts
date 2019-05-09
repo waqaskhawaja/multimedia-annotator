@@ -6,6 +6,7 @@ export interface ISession {
     name?: string;
     sourceFileContentType?: string;
     sourceFile?: any;
+    url?: string;
     dataType?: IDataType;
     scenario?: IScenario;
 }
@@ -16,6 +17,7 @@ export class Session implements ISession {
         public name?: string,
         public sourceFileContentType?: string,
         public sourceFile?: any,
+        public url?: string,
         public dataType?: IDataType,
         public scenario?: IScenario
     ) {}

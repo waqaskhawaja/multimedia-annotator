@@ -16,6 +16,11 @@
                         {{session.sourceFileContentType}}, {{byteSize(session.sourceFile)}}
                     </div>
                 </dd>
+                <dt><span></span></dt>
+                <dd>
+<!--                    <span>{{session.url}}</span>-->
+                    <span [innerHTML]="embedVideo(session.url)"></span>
+                </dd>
                 <dt><span>Data Type</span></dt>
                 <dd>
                     <div *ngIf="session.dataType">

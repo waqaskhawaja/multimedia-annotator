@@ -26,6 +26,8 @@ public class SessionCriteria implements Serializable {
 
     private StringFilter name;
 
+    private StringFilter url;
+
     private LongFilter dataTypeId;
 
     private LongFilter scenarioId;
@@ -44,6 +46,14 @@ public class SessionCriteria implements Serializable {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getUrl() {
+        return url;
+    }
+
+    public void setUrl(StringFilter url) {
+        this.url = url;
     }
 
     public LongFilter getDataTypeId() {
@@ -75,6 +85,7 @@ public class SessionCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(url, that.url) &&
             Objects.equals(dataTypeId, that.dataTypeId) &&
             Objects.equals(scenarioId, that.scenarioId);
     }
@@ -84,6 +95,7 @@ public class SessionCriteria implements Serializable {
         return Objects.hash(
         id,
         name,
+        url,
         dataTypeId,
         scenarioId
         );
@@ -94,6 +106,7 @@ public class SessionCriteria implements Serializable {
         return "SessionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (url != null ? "url=" + url + ", " : "") +
                 (dataTypeId != null ? "dataTypeId=" + dataTypeId + ", " : "") +
                 (scenarioId != null ? "scenarioId=" + scenarioId + ", " : "") +
             "}";

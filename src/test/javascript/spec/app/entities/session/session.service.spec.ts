@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(SessionService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Session(0, 'AAAAAAA', 'image/png', 'AAAAAAA');
+            elemDefault = new Session(0, 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -56,7 +56,8 @@ describe('Service Tests', () => {
                 const returnedFromService = Object.assign(
                     {
                         name: 'BBBBBB',
-                        sourceFile: 'BBBBBB'
+                        sourceFile: 'BBBBBB',
+                        url: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -74,7 +75,8 @@ describe('Service Tests', () => {
                 const returnedFromService = Object.assign(
                     {
                         name: 'BBBBBB',
-                        sourceFile: 'BBBBBB'
+                        sourceFile: 'BBBBBB',
+                        url: 'BBBBBB'
                     },
                     elemDefault
                 );

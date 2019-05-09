@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
+import { EmbedVideoService } from 'ngx-embed-video';
 
 import { ISession } from 'app/shared/model/session.model';
 
@@ -11,12 +12,16 @@ import { ISession } from 'app/shared/model/session.model';
 export class SessionDetailComponent implements OnInit {
     session: ISession;
 
-    constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {}
+    constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute, private embedService: EmbedVideoService) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ session }) => {
             this.session = session;
         });
+    }
+
+    embedVideo(url) {
+        return this.embedService.embed(url);
     }
 
     byteSize(field) {

@@ -4,6 +4,7 @@ package pk.waqaskhawaja.ma.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
@@ -33,6 +34,10 @@ public class Session implements Serializable {
 
     @Column(name = "source_file_content_type")
     private String sourceFileContentType;
+
+    @Size(max = 1000)
+    @Column(name = "url", length = 1000)
+    private String url;
 
     @ManyToOne
     @JsonIgnoreProperties("sessions")
@@ -90,6 +95,19 @@ public class Session implements Serializable {
         this.sourceFileContentType = sourceFileContentType;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public Session url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public DataType getDataType() {
         return dataType;
     }
@@ -144,6 +162,7 @@ public class Session implements Serializable {
             ", name='" + getName() + "'" +
             ", sourceFile='" + getSourceFile() + "'" +
             ", sourceFileContentType='" + getSourceFileContentType() + "'" +
+            ", url='" + getUrl() + "'" +
             "}";
     }
 }
