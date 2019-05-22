@@ -31,6 +31,8 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="sourceFile"><span>Source File</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="url"><span>Url</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="resourceType.name"><span>Resource Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="analysisSession.name"><span>Analysis Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
@@ -40,6 +42,11 @@
             <tr *ngFor="let analysisSessionResource of analysisSessionResources ;trackBy: trackId">
                 <td><a [routerLink]="['/analysis-session-resource', analysisSessionResource.id, 'view' ]">{{analysisSessionResource.id}}</a></td>
                 <td>{{analysisSessionResource.name}}</td>
+                <td>
+                    <a *ngIf="analysisSessionResource.sourceFile" (click)="openFile(analysisSessionResource.sourceFileContentType, analysisSessionResource.sourceFile)">open</a>
+                    <span *ngIf="analysisSessionResource.sourceFile">{{analysisSessionResource.sourceFileContentType}}, {{byteSize(analysisSessionResource.sourceFile)}}</span>
+                </td>
+                <td>{{analysisSessionResource.url}}</td>
                 <td>
                     <div *ngIf="analysisSessionResource.resourceType">
                         <a [routerLink]="['../resource-type', analysisSessionResource.resourceType?.id, 'view' ]" >{{analysisSessionResource.resourceType?.name}}</a>

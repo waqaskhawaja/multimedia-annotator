@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/ht
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IAnalysisSession } from 'app/shared/model/analysis-session.model';
 import { AccountService } from 'app/core';
@@ -37,7 +37,6 @@ export class AnalysisSessionComponent implements OnInit, OnDestroy {
         protected jhiAlertService: JhiAlertService,
         protected accountService: AccountService,
         protected activatedRoute: ActivatedRoute,
-        protected dataUtils: JhiDataUtils,
         protected router: Router,
         protected eventManager: JhiEventManager
     ) {
@@ -144,14 +143,6 @@ export class AnalysisSessionComponent implements OnInit, OnDestroy {
 
     trackId(index: number, item: IAnalysisSession) {
         return item.id;
-    }
-
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
-    }
-
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
     }
 
     registerChangeInAnalysisSessions() {

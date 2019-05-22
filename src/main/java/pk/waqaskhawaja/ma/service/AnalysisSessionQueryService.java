@@ -90,9 +90,6 @@ public class AnalysisSessionQueryService extends QueryService<AnalysisSession> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AnalysisSession_.name));
             }
-            if (criteria.getUrl() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getUrl(), AnalysisSession_.url));
-            }
             if (criteria.getAnalysisScenarioId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAnalysisScenarioId(),
                     root -> root.join(AnalysisSession_.analysisScenario, JoinType.LEFT).get(AnalysisScenario_.id)));

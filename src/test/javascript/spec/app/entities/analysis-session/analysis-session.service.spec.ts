@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(AnalysisSessionService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new AnalysisSession(0, 'AAAAAAA', 'image/png', 'AAAAAAA', 'AAAAAAA');
+            elemDefault = new AnalysisSession(0, 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -55,9 +55,7 @@ describe('Service Tests', () => {
             it('should update a AnalysisSession', async () => {
                 const returnedFromService = Object.assign(
                     {
-                        name: 'BBBBBB',
-                        sourceFile: 'BBBBBB',
-                        url: 'BBBBBB'
+                        name: 'BBBBBB'
                     },
                     elemDefault
                 );
@@ -74,9 +72,7 @@ describe('Service Tests', () => {
             it('should return a list of AnalysisSession', async () => {
                 const returnedFromService = Object.assign(
                     {
-                        name: 'BBBBBB',
-                        sourceFile: 'BBBBBB',
-                        url: 'BBBBBB'
+                        name: 'BBBBBB'
                     },
                     elemDefault
                 );

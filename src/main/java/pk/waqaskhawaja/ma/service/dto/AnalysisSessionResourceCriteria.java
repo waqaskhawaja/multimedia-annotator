@@ -26,6 +26,8 @@ public class AnalysisSessionResourceCriteria implements Serializable {
 
     private StringFilter name;
 
+    private StringFilter url;
+
     private LongFilter resourceTypeId;
 
     private LongFilter analysisSessionId;
@@ -44,6 +46,14 @@ public class AnalysisSessionResourceCriteria implements Serializable {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getUrl() {
+        return url;
+    }
+
+    public void setUrl(StringFilter url) {
+        this.url = url;
     }
 
     public LongFilter getResourceTypeId() {
@@ -75,6 +85,7 @@ public class AnalysisSessionResourceCriteria implements Serializable {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(url, that.url) &&
             Objects.equals(resourceTypeId, that.resourceTypeId) &&
             Objects.equals(analysisSessionId, that.analysisSessionId);
     }
@@ -84,6 +95,7 @@ public class AnalysisSessionResourceCriteria implements Serializable {
         return Objects.hash(
         id,
         name,
+        url,
         resourceTypeId,
         analysisSessionId
         );
@@ -94,6 +106,7 @@ public class AnalysisSessionResourceCriteria implements Serializable {
         return "AnalysisSessionResourceCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (url != null ? "url=" + url + ", " : "") +
                 (resourceTypeId != null ? "resourceTypeId=" + resourceTypeId + ", " : "") +
                 (analysisSessionId != null ? "analysisSessionId=" + analysisSessionId + ", " : "") +
             "}";

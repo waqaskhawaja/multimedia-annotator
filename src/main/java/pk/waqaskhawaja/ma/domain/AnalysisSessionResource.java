@@ -4,6 +4,7 @@ package pk.waqaskhawaja.ma.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 import java.io.Serializable;
@@ -26,6 +27,17 @@ public class AnalysisSessionResource implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    @Lob
+    @Column(name = "source_file")
+    private byte[] sourceFile;
+
+    @Column(name = "source_file_content_type")
+    private String sourceFileContentType;
+
+    @Size(max = 1000)
+    @Column(name = "url", length = 1000)
+    private String url;
 
     @ManyToOne
     @JsonIgnoreProperties("analysisSessionResources")
@@ -55,6 +67,45 @@ public class AnalysisSessionResource implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getSourceFile() {
+        return sourceFile;
+    }
+
+    public AnalysisSessionResource sourceFile(byte[] sourceFile) {
+        this.sourceFile = sourceFile;
+        return this;
+    }
+
+    public void setSourceFile(byte[] sourceFile) {
+        this.sourceFile = sourceFile;
+    }
+
+    public String getSourceFileContentType() {
+        return sourceFileContentType;
+    }
+
+    public AnalysisSessionResource sourceFileContentType(String sourceFileContentType) {
+        this.sourceFileContentType = sourceFileContentType;
+        return this;
+    }
+
+    public void setSourceFileContentType(String sourceFileContentType) {
+        this.sourceFileContentType = sourceFileContentType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public AnalysisSessionResource url(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public ResourceType getResourceType() {
@@ -109,6 +160,9 @@ public class AnalysisSessionResource implements Serializable {
         return "AnalysisSessionResource{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", sourceFile='" + getSourceFile() + "'" +
+            ", sourceFileContentType='" + getSourceFileContentType() + "'" +
+            ", url='" + getUrl() + "'" +
             "}";
     }
 }

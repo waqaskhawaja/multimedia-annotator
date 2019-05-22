@@ -35,6 +35,14 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'interaction-type',
                 loadChildren: './interaction-type/interaction-type.module#MaInteractionTypeModule'
+            },
+            {
+                path: 'analysis-session',
+                loadChildren: './analysis-session/analysis-session.module#MaAnalysisSessionModule'
+            },
+            {
+                path: 'analysis-session-resource',
+                loadChildren: './analysis-session-resource/analysis-session-resource.module#MaAnalysisSessionResourceModule'
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

@@ -27,6 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -53,6 +54,14 @@ public class AnalysisSessionResourceResourceIntTest {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final byte[] DEFAULT_SOURCE_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_SOURCE_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_SOURCE_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_SOURCE_FILE_CONTENT_TYPE = "image/png";
+
+    private static final String DEFAULT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_URL = "BBBBBBBBBB";
 
     @Autowired
     private AnalysisSessionResourceRepository analysisSessionResourceRepository;
@@ -110,7 +119,10 @@ public class AnalysisSessionResourceResourceIntTest {
      */
     public static AnalysisSessionResource createEntity(EntityManager em) {
         AnalysisSessionResource analysisSessionResource = new AnalysisSessionResource()
-            .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME)
+            .sourceFile(DEFAULT_SOURCE_FILE)
+            .sourceFileContentType(DEFAULT_SOURCE_FILE_CONTENT_TYPE)
+            .url(DEFAULT_URL);
         return analysisSessionResource;
     }
 
@@ -135,6 +147,9 @@ public class AnalysisSessionResourceResourceIntTest {
         assertThat(analysisSessionResourceList).hasSize(databaseSizeBeforeCreate + 1);
         AnalysisSessionResource testAnalysisSessionResource = analysisSessionResourceList.get(analysisSessionResourceList.size() - 1);
         assertThat(testAnalysisSessionResource.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAnalysisSessionResource.getSourceFile()).isEqualTo(DEFAULT_SOURCE_FILE);
+        assertThat(testAnalysisSessionResource.getSourceFileContentType()).isEqualTo(DEFAULT_SOURCE_FILE_CONTENT_TYPE);
+        assertThat(testAnalysisSessionResource.getUrl()).isEqualTo(DEFAULT_URL);
 
         // Validate the AnalysisSessionResource in Elasticsearch
         verify(mockAnalysisSessionResourceSearchRepository, times(1)).save(testAnalysisSessionResource);
@@ -173,7 +188,10 @@ public class AnalysisSessionResourceResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(analysisSessionResource.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
     
     @Test
@@ -187,7 +205,10 @@ public class AnalysisSessionResourceResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(analysisSessionResource.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.sourceFileContentType").value(DEFAULT_SOURCE_FILE_CONTENT_TYPE))
+            .andExpect(jsonPath("$.sourceFile").value(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE)))
+            .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()));
     }
 
     @Test
@@ -227,6 +248,45 @@ public class AnalysisSessionResourceResourceIntTest {
 
         // Get all the analysisSessionResourceList where name is null
         defaultAnalysisSessionResourceShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnalysisSessionResourcesByUrlIsEqualToSomething() throws Exception {
+        // Initialize the database
+        analysisSessionResourceRepository.saveAndFlush(analysisSessionResource);
+
+        // Get all the analysisSessionResourceList where url equals to DEFAULT_URL
+        defaultAnalysisSessionResourceShouldBeFound("url.equals=" + DEFAULT_URL);
+
+        // Get all the analysisSessionResourceList where url equals to UPDATED_URL
+        defaultAnalysisSessionResourceShouldNotBeFound("url.equals=" + UPDATED_URL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnalysisSessionResourcesByUrlIsInShouldWork() throws Exception {
+        // Initialize the database
+        analysisSessionResourceRepository.saveAndFlush(analysisSessionResource);
+
+        // Get all the analysisSessionResourceList where url in DEFAULT_URL or UPDATED_URL
+        defaultAnalysisSessionResourceShouldBeFound("url.in=" + DEFAULT_URL + "," + UPDATED_URL);
+
+        // Get all the analysisSessionResourceList where url equals to UPDATED_URL
+        defaultAnalysisSessionResourceShouldNotBeFound("url.in=" + UPDATED_URL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnalysisSessionResourcesByUrlIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        analysisSessionResourceRepository.saveAndFlush(analysisSessionResource);
+
+        // Get all the analysisSessionResourceList where url is not null
+        defaultAnalysisSessionResourceShouldBeFound("url.specified=true");
+
+        // Get all the analysisSessionResourceList where url is null
+        defaultAnalysisSessionResourceShouldNotBeFound("url.specified=false");
     }
 
     @Test
@@ -274,7 +334,10 @@ public class AnalysisSessionResourceResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(analysisSessionResource.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
 
         // Check, that the count call also returns 1
         restAnalysisSessionResourceMockMvc.perform(get("/api/analysis-session-resources/count?sort=id,desc&" + filter))
@@ -324,7 +387,10 @@ public class AnalysisSessionResourceResourceIntTest {
         // Disconnect from session so that the updates on updatedAnalysisSessionResource are not directly saved in db
         em.detach(updatedAnalysisSessionResource);
         updatedAnalysisSessionResource
-            .name(UPDATED_NAME);
+            .name(UPDATED_NAME)
+            .sourceFile(UPDATED_SOURCE_FILE)
+            .sourceFileContentType(UPDATED_SOURCE_FILE_CONTENT_TYPE)
+            .url(UPDATED_URL);
 
         restAnalysisSessionResourceMockMvc.perform(put("/api/analysis-session-resources")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -336,6 +402,9 @@ public class AnalysisSessionResourceResourceIntTest {
         assertThat(analysisSessionResourceList).hasSize(databaseSizeBeforeUpdate);
         AnalysisSessionResource testAnalysisSessionResource = analysisSessionResourceList.get(analysisSessionResourceList.size() - 1);
         assertThat(testAnalysisSessionResource.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAnalysisSessionResource.getSourceFile()).isEqualTo(UPDATED_SOURCE_FILE);
+        assertThat(testAnalysisSessionResource.getSourceFileContentType()).isEqualTo(UPDATED_SOURCE_FILE_CONTENT_TYPE);
+        assertThat(testAnalysisSessionResource.getUrl()).isEqualTo(UPDATED_URL);
 
         // Validate the AnalysisSessionResource in Elasticsearch
         verify(mockAnalysisSessionResourceSearchRepository, times(1)).save(testAnalysisSessionResource);
@@ -395,7 +464,10 @@ public class AnalysisSessionResourceResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(analysisSessionResource.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].sourceFileContentType").value(hasItem(DEFAULT_SOURCE_FILE_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
     }
 
     @Test

@@ -9,17 +9,6 @@
                 <dd>
                     <span>{{analysisSession.name}}</span>
                 </dd>
-                <dt><span>Source File</span></dt>
-                <dd>
-                    <div *ngIf="analysisSession.sourceFile">
-                        <a (click)="openFile(analysisSession.sourceFileContentType, analysisSession.sourceFile)">open</a>
-                        {{analysisSession.sourceFileContentType}}, {{byteSize(analysisSession.sourceFile)}}
-                    </div>
-                </dd>
-                <dt><span>Url</span></dt>
-                <dd>
-                    <span>{{analysisSession.url}}</span>
-                </dd>
                 <dt><span>Analysis Scenario</span></dt>
                 <dd>
                     <div *ngIf="analysisSession.analysisScenario">

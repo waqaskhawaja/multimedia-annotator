@@ -31,8 +31,6 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="sourceFile"><span>Source File</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="url"><span>Url</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="analysisScenario.name"><span>Analysis Scenario</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -41,11 +39,6 @@
             <tr *ngFor="let analysisSession of analysisSessions ;trackBy: trackId">
                 <td><a [routerLink]="['/analysis-session', analysisSession.id, 'view' ]">{{analysisSession.id}}</a></td>
                 <td>{{analysisSession.name}}</td>
-                <td>
-                    <a *ngIf="analysisSession.sourceFile" (click)="openFile(analysisSession.sourceFileContentType, analysisSession.sourceFile)">open</a>
-                    <span *ngIf="analysisSession.sourceFile">{{analysisSession.sourceFileContentType}}, {{byteSize(analysisSession.sourceFile)}}</span>
-                </td>
-                <td>{{analysisSession.url}}</td>
                 <td>
                     <div *ngIf="analysisSession.analysisScenario">
                         <a [routerLink]="['../analysis-scenario', analysisSession.analysisScenario?.id, 'view' ]" >{{analysisSession.analysisScenario?.name}}</a>

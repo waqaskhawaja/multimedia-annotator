@@ -15,13 +15,13 @@ entity AnalysisScenario{
 }
 
 entity AnalysisSession{
-    name String,
-    sourceFile Blob
-    url String maxlength(1000)
+    name String
 }
 
 entity AnalysisSessionResource{
     name String
+    sourceFile Blob
+    url String maxlength(1000)
 }
 
 entity InteractionRecord{

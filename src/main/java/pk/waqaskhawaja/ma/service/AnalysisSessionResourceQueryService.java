@@ -90,6 +90,9 @@ public class AnalysisSessionResourceQueryService extends QueryService<AnalysisSe
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AnalysisSessionResource_.name));
             }
+            if (criteria.getUrl() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUrl(), AnalysisSessionResource_.url));
+            }
             if (criteria.getResourceTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getResourceTypeId(),
                     root -> root.join(AnalysisSessionResource_.resourceType, JoinType.LEFT).get(ResourceType_.id)));

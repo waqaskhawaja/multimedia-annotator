@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { JhiAlertService } from 'ng-jhipster';
 import { IAnalysisSession } from 'app/shared/model/analysis-session.model';
 import { AnalysisSessionService } from './analysis-session.service';
 import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
@@ -20,7 +20,6 @@ export class AnalysisSessionUpdateComponent implements OnInit {
     analysisscenarios: IAnalysisScenario[];
 
     constructor(
-        protected dataUtils: JhiDataUtils,
         protected jhiAlertService: JhiAlertService,
         protected analysisSessionService: AnalysisSessionService,
         protected analysisScenarioService: AnalysisScenarioService,
@@ -39,18 +38,6 @@ export class AnalysisSessionUpdateComponent implements OnInit {
                 map((response: HttpResponse<IAnalysisScenario[]>) => response.body)
             )
             .subscribe((res: IAnalysisScenario[]) => (this.analysisscenarios = res), (res: HttpErrorResponse) => this.onError(res.message));
-    }
-
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
-    }
-
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
-    }
-
-    setFileData(event, entity, field, isImage) {
-        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
     previousState() {

@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -53,7 +54,7 @@ public class AnalysisSessionResourceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/analysis-session-resources")
-    public ResponseEntity<AnalysisSessionResource> createAnalysisSessionResource(@RequestBody AnalysisSessionResource analysisSessionResource) throws URISyntaxException {
+    public ResponseEntity<AnalysisSessionResource> createAnalysisSessionResource(@Valid @RequestBody AnalysisSessionResource analysisSessionResource) throws URISyntaxException {
         log.debug("REST request to save AnalysisSessionResource : {}", analysisSessionResource);
         if (analysisSessionResource.getId() != null) {
             throw new BadRequestAlertException("A new analysisSessionResource cannot already have an ID", ENTITY_NAME, "idexists");
@@ -74,7 +75,7 @@ public class AnalysisSessionResourceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/analysis-session-resources")
-    public ResponseEntity<AnalysisSessionResource> updateAnalysisSessionResource(@RequestBody AnalysisSessionResource analysisSessionResource) throws URISyntaxException {
+    public ResponseEntity<AnalysisSessionResource> updateAnalysisSessionResource(@Valid @RequestBody AnalysisSessionResource analysisSessionResource) throws URISyntaxException {
         log.debug("REST request to update AnalysisSessionResource : {}", analysisSessionResource);
         if (analysisSessionResource.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

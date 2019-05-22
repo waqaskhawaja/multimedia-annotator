@@ -25,6 +25,17 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="source_file" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="source_file_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="url" type="varchar(1000)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="resource_type_id" type="bigint">
                 <constraints nullable="true" />
             </column>

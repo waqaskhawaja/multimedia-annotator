@@ -4,19 +4,6 @@
         {
             "fieldName": "name",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "sourceFile",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "any"
-        },
-        {
-            "fieldName": "url",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": 1000
         }
     ],
     "relationships": [
