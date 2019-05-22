@@ -5,25 +5,6 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114626_added_entity_DataType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114627_added_entity_InteractionType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114628_added_entity_Scenario.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114629_added_entity_Session.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114630_added_entity_DataRecord.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094535_added_entity_AnnotationType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094536_added_entity_AnnotationSession.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094537_added_entity_Annotation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20190507114629_added_entity_constraints_Session.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190507114630_added_entity_constraints_DataRecord.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094535_added_entity_constraints_AnnotationType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094536_added_entity_constraints_AnnotationSession.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20190509094537_added_entity_constraints_Annotation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-
-    <!-- seed data for scenario, interaction and data types -->
-    <include file="config/liquibase/changelog/20190424134600_master_seed_data.xml" relativeToChangelogFile="false"/>
-
-    <include file="config/liquibase/changelog/20190502150800_increase_data_record_column_text_width.xml" relativeToChangelogFile="false"/>
-<!--    <include file="config/liquibase/changelog/20190705164100_added_column_name_session.xml" relativeToChangelogFile="false"/>-->
 </databaseChangeLog>

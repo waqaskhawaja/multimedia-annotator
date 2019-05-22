@@ -29,6 +29,7 @@
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
-        "enableTranslation": false
+        "enableTranslation": false,
+        "enableHibernateCache": false
     }
 }
