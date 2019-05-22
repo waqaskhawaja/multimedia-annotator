@@ -20,4 +20,9 @@
     <include file="config/liquibase/changelog/20190509094536_added_entity_constraints_AnnotationSession.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20190509094537_added_entity_constraints_Annotation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+
+
+
+    <!-- seed data for scenario, interaction and data types -->
+    <include file="config/liquibase/changelog/20190424134600_master_seed_data.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
