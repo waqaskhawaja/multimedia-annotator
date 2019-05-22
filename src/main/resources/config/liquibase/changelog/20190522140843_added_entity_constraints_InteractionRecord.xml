@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity InteractionRecord.
+    -->
+    <changeSet id="20190522140843-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="interaction_type_id"
+                                 baseTableName="interaction_record"
+                                 constraintName="fk_interaction_record_interaction_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="interaction_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="analysis_session_resource_id"
+                                 baseTableName="interaction_record"
+                                 constraintName="fk_interaction_record_analysis_session_resource_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="analysis_session_resource"/>
+
+    </changeSet>
+</databaseChangeLog>

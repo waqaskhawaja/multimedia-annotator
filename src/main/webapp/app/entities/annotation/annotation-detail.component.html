@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="annotation">
+            <h2><span>Annotation</span> {{annotation.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Start</span></dt>
+                <dd>
+                    <span>{{annotation.start}}</span>
+                </dd>
+                <dt><span>End</span></dt>
+                <dd>
+                    <span>{{annotation.end}}</span>
+                </dd>
+                <dt><span>Annotation Text</span></dt>
+                <dd>
+                    <span>{{annotation.annotationText}}</span>
+                </dd>
+                <dt><span>Annotation Session</span></dt>
+                <dd>
+                    <div *ngIf="annotation.annotationSession">
+                        <a [routerLink]="['/annotation-session', annotation.annotationSession?.id, 'view']">{{annotation.annotationSession?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span>Interaction Record</span></dt>
+                <dd>
+                    <span *ngFor="let interactionRecord of annotation.interactionRecords; let last = last">
+                        <a [routerLink]="['/interaction-record', interactionRecord?.id, 'view' ]">{{interactionRecord.text}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/annotation', annotation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -24,9 +24,9 @@
         },
         {
             "relationshipType": "many-to-many",
-            "otherEntityName": "dataRecord",
+            "otherEntityName": "interactionRecord",
             "otherEntityRelationshipName": "annotation",
-            "relationshipName": "dataRecord",
+            "relationshipName": "interactionRecord",
             "otherEntityField": "text",
             "ownerSide": true
         }

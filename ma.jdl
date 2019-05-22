@@ -1,0 +1,78 @@
+entity ResourceType{
+    name String
+}
+
+entity InteractionType{
+    name String
+}
+
+entity AnnotationType{
+    name String maxlength(100)
+}
+
+entity AnalysisScenario{
+    name String
+}
+
+entity AnalysisSession{
+    name String,
+    sourceFile Blob
+    url String maxlength(1000)
+}
+
+entity AnalysisSessionResource{
+    name String
+}
+
+entity InteractionRecord{
+    duration Integer
+    text String
+    sourceId String
+    time Integer
+}
+
+entity AnnotationSession{
+    start Instant
+    end Instant
+    name String
+}
+
+entity Annotation{
+    start Instant
+    end Instant
+    annotationText String
+}
+
+relationship ManyToOne{
+    AnalysisSessionResource{resourceType(name)} to ResourceType
+    AnalysisSessionResource{analysisSession(name)} to AnalysisSession
+}
+
+relationship ManyToOne{
+    InteractionRecord{interactionType(name)} to InteractionType{interactionRecord}
+    InteractionRecord{analysisSessionResource(name)} to AnalysisSessionResource
+}
+
+relationship ManyToOne{
+    AnalysisSession{analysisScenario(name)} to AnalysisScenario{analysisSession}
+}
+
+relationship ManyToOne{
+    AnnotationType{parent(name)} to AnnotationType
+}
+
+relationship ManyToOne{
+    Annotation{annotationSession(name)} to AnnotationSession
+}
+
+relationship ManyToMany{
+    Annotation{interactionRecord(text)} to InteractionRecord{annotation}
+}
+
+relationship ManyToOne{
+    AnnotationSession{analysisSession(name)} to AnalysisSession
+    AnnotationSession{annotator(login)} to User
+}
+
+paginate * with pager
+filter *

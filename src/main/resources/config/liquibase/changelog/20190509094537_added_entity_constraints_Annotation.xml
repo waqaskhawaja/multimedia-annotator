@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Annotation.
+    -->
+    <changeSet id="20190509094537-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="annotation_session_id"
+                                 baseTableName="annotation"
+                                 constraintName="fk_annotation_annotation_session_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="annotation_session"/>
+
+        <addForeignKeyConstraint baseColumnNames="annotation_id"
+                                 baseTableName="annotation_interaction_record"
+                                 constraintName="fk_annotation_interaction_record_annotation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="annotation"/>
+        <addForeignKeyConstraint baseColumnNames="interaction_record_id"
+                                 baseTableName="annotation_interaction_record"
+                                 constraintName="fk_annotation_interaction_record_interaction_record_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="interaction_record"/>
+        
+    </changeSet>
+</databaseChangeLog>

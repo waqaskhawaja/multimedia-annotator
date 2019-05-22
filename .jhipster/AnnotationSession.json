@@ -17,9 +17,9 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "session",
+            "otherEntityName": "analysisSession",
             "otherEntityRelationshipName": "annotationSession",
-            "relationshipName": "session",
+            "relationshipName": "analysisSession",
             "otherEntityField": "name"
         },
         {
