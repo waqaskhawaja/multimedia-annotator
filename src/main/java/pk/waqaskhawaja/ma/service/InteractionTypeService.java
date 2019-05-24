@@ -72,6 +72,18 @@ public class InteractionTypeService {
     }
 
     /**
+     * Get one interactionType by name.
+     *
+     * @param name the name of the entity
+     * @return the entity
+     */
+    @Transactional(readOnly = true)
+    public Optional<InteractionType> findByName(String name) {
+        log.debug("Request to get InteractionType : {}", name);
+        return interactionTypeRepository.findByName(name);
+    }
+
+    /**
      * Delete the interactionType by id.
      *
      * @param id the id of the entity

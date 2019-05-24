@@ -1,6 +1,12 @@
 package pk.waqaskhawaja.ma.web.rest;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import pk.waqaskhawaja.ma.domain.AnalysisSession;
 import pk.waqaskhawaja.ma.domain.AnalysisSessionResource;
+import pk.waqaskhawaja.ma.domain.InteractionRecord;
 import pk.waqaskhawaja.ma.service.AnalysisSessionResourceService;
+import pk.waqaskhawaja.ma.service.InteractionRecordService;
+import pk.waqaskhawaja.ma.service.InteractionTypeService;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
@@ -17,11 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -38,12 +45,17 @@ public class AnalysisSessionResourceResource {
     private static final String ENTITY_NAME = "analysisSessionResource";
 
     private final AnalysisSessionResourceService analysisSessionResourceService;
+    private final InteractionRecordService interactionRecordService;
+    private final InteractionTypeService interactionTypeService;
 
     private final AnalysisSessionResourceQueryService analysisSessionResourceQueryService;
 
-    public AnalysisSessionResourceResource(AnalysisSessionResourceService analysisSessionResourceService, AnalysisSessionResourceQueryService analysisSessionResourceQueryService) {
+    public AnalysisSessionResourceResource(AnalysisSessionResourceService analysisSessionResourceService, AnalysisSessionResourceQueryService analysisSessionResourceQueryService,
+                                           InteractionRecordService interactionRecordService, InteractionTypeService interactionTypeService) {
         this.analysisSessionResourceService = analysisSessionResourceService;
         this.analysisSessionResourceQueryService = analysisSessionResourceQueryService;
+        this.interactionRecordService = interactionRecordService;
+        this.interactionTypeService = interactionTypeService;
     }
 
     /**
@@ -56,10 +68,58 @@ public class AnalysisSessionResourceResource {
     @PostMapping("/analysis-session-resources")
     public ResponseEntity<AnalysisSessionResource> createAnalysisSessionResource(@Valid @RequestBody AnalysisSessionResource analysisSessionResource) throws URISyntaxException {
         log.debug("REST request to save AnalysisSessionResource : {}", analysisSessionResource);
+
         if (analysisSessionResource.getId() != null) {
             throw new BadRequestAlertException("A new analysisSessionResource cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        Set<InteractionRecord> interactionRecords = new HashSet<>();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode uploadedJson = null;
+
+        if(analysisSessionResource.getResourceType().getName().equals("Interaction Log")){
+            String jsonString = new String(analysisSessionResource.getSourceFile());
+
+            try {
+                uploadedJson = mapper.readTree(jsonString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Consumer<JsonNode> data = (JsonNode node) -> {
+                Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
+                InteractionRecord interactionRecord = new InteractionRecord();
+                while(jsonIterator.hasNext()) {
+                    Map.Entry<String, JsonNode> entry = jsonIterator.next();
+                    String key = entry.getKey();
+                    switch(key){
+                        case "duration":
+                            interactionRecord.setDuration(entry.getValue().asInt());
+                            break;
+                        case "Text":
+                            interactionRecord.setText(entry.getValue().asText());
+                            break;
+                        case "InteractionType":
+                            interactionRecord.setInteractionType(interactionTypeService.findByName(entry.getValue().asText()).get());
+                            break;
+                        case "ID":
+                            interactionRecord.setSourceId(entry.getValue().asText());
+                            break;
+                        case "time":
+                            interactionRecord.setTime(entry.getValue().asInt());
+                            break;
+                        default:
+                    }
+                }
+                interactionRecord.setAnalysisSessionResource(analysisSessionResource);
+                interactionRecords.add(interactionRecord);
+            };
+            uploadedJson.forEach(data);
+        }
+
         AnalysisSessionResource result = analysisSessionResourceService.save(analysisSessionResource);
+        interactionRecords.forEach(interactionRecord -> interactionRecordService.save(interactionRecord));
+
         return ResponseEntity.created(new URI("/api/analysis-session-resources/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
