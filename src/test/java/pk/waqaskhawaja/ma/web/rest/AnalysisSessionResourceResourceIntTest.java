@@ -8,8 +8,9 @@ import pk.waqaskhawaja.ma.domain.AnalysisSession;
 import pk.waqaskhawaja.ma.repository.AnalysisSessionResourceRepository;
 import pk.waqaskhawaja.ma.repository.search.AnalysisSessionResourceSearchRepository;
 import pk.waqaskhawaja.ma.service.AnalysisSessionResourceService;
+import pk.waqaskhawaja.ma.service.InteractionRecordService;
+import pk.waqaskhawaja.ma.service.InteractionTypeService;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
-import pk.waqaskhawaja.ma.service.dto.AnalysisSessionResourceCriteria;
 import pk.waqaskhawaja.ma.service.AnalysisSessionResourceQueryService;
 
 import org.junit.Before;
@@ -95,6 +96,12 @@ public class AnalysisSessionResourceResourceIntTest {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private InteractionRecordService interactionRecordService;
+
+    @Autowired
+    private InteractionTypeService interactionTypeService;
+
     private MockMvc restAnalysisSessionResourceMockMvc;
 
     private AnalysisSessionResource analysisSessionResource;
@@ -102,7 +109,8 @@ public class AnalysisSessionResourceResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AnalysisSessionResourceResource analysisSessionResourceResource = new AnalysisSessionResourceResource(analysisSessionResourceService, analysisSessionResourceQueryService);
+        final AnalysisSessionResourceResource analysisSessionResourceResource = new AnalysisSessionResourceResource(
+            analysisSessionResourceService, analysisSessionResourceQueryService, interactionRecordService, interactionTypeService);
         this.restAnalysisSessionResourceMockMvc = MockMvcBuilders.standaloneSetup(analysisSessionResourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
