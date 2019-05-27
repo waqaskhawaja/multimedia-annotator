@@ -19,6 +19,9 @@
                 <dt><span>Url</span></dt>
                 <dd>
                     <span>{{analysisSessionResource.url}}</span>
+                    <p>
+                        <span [innerHTML]="embedVideo(analysisSessionResource.url)"></span>
+                    </p>
                 </dd>
                 <dt><span>Resource Type</span></dt>
                 <dd>

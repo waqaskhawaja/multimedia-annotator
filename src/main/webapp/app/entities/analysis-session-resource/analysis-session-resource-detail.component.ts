@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiDataUtils } from 'ng-jhipster';
+import { EmbedVideoService } from 'ngx-embed-video';
 
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
 
@@ -11,12 +12,16 @@ import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-reso
 export class AnalysisSessionResourceDetailComponent implements OnInit {
     analysisSessionResource: IAnalysisSessionResource;
 
-    constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {}
+    constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute, protected embedService: EmbedVideoService) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ analysisSessionResource }) => {
             this.analysisSessionResource = analysisSessionResource;
         });
+    }
+
+    embedVideo(url) {
+        return this.embedService.embed(url);
     }
 
     byteSize(field) {
