@@ -8,8 +8,8 @@ Before you can build this project, you must install and configure the following 
 
 1.  [Node.js][]: We use Node to run a development web server and build the project.
     Depending on your system, you can install Node either from source or as a pre-packaged bundle.
-2.  [Docker][]: Use the following command to run database.
-    `https://arxiv.org/abs/1801.05076`
+2.  [Docker](https://docs.docker.com/install/): Use the following command to run database.
+    `docker run -d -p 5432:5432 -e POSTGRES_DB=multimedia_annotator postgres`
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
