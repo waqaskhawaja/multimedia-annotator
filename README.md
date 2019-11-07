@@ -1,6 +1,6 @@
-# ma
+# Multimedia Annotator
 
-This application was generated using JHipster 5.8.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.8.2](https://www.jhipster.tech/documentation-archive/v5.8.2).
+This application is for annotating the Analytic Provenance dataset available [here](https://arxiv.org/abs/1801.05076).
 
 ## Development
 
@@ -8,6 +8,8 @@ Before you can build this project, you must install and configure the following 
 
 1.  [Node.js][]: We use Node to run a development web server and build the project.
     Depending on your system, you can install Node either from source or as a pre-packaged bundle.
+2.  [Docker][]: Use the following command to run database.
+    `https://arxiv.org/abs/1801.05076`
 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
