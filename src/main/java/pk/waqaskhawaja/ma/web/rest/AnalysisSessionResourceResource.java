@@ -187,6 +187,19 @@ public class AnalysisSessionResourceResource {
     }
 
     /**
+     * GET  /analysis-session-resources/video-by-analysis-session:analysisSessionId : get the "analysisSessionId" analysisSessionResource.
+     *
+     * @param analysisSessionId the id of the analysisSession to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the analysisSessionResource, or with status 404 (Not Found)
+     */
+    @GetMapping("/analysis-session-resources/video-by-analysis-session/{analysisSessionId}")
+    public ResponseEntity<AnalysisSessionResource> getAnalysisSessionVideoResourceByAnalysisSession(@PathVariable Long analysisSessionId) {
+        log.debug("REST request to get AnalysisSessionResourceByAnalysisSessionId : {}", analysisSessionId);
+        Optional<AnalysisSessionResource> analysisSessionResource = analysisSessionResourceService.findVideoByAnalysisSessionId(analysisSessionId);
+        return ResponseUtil.wrapOrNotFound(analysisSessionResource);
+    }
+
+    /**
      * DELETE  /analysis-session-resources/:id : delete the "id" analysisSessionResource.
      *
      * @param id the id of the analysisSessionResource to delete

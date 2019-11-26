@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pk.waqaskhawaja.ma.service.util.RandomUtil;
 
 import java.util.Optional;
 
@@ -28,9 +29,13 @@ public class AnalysisSessionResourceService {
 
     private final AnalysisSessionResourceSearchRepository analysisSessionResourceSearchRepository;
 
-    public AnalysisSessionResourceService(AnalysisSessionResourceRepository analysisSessionResourceRepository, AnalysisSessionResourceSearchRepository analysisSessionResourceSearchRepository) {
+    private final ResourceTypeService resourceTypeService;
+
+    public AnalysisSessionResourceService(AnalysisSessionResourceRepository analysisSessionResourceRepository, AnalysisSessionResourceSearchRepository analysisSessionResourceSearchRepository,
+                                          ResourceTypeService resourceTypeService) {
         this.analysisSessionResourceRepository = analysisSessionResourceRepository;
         this.analysisSessionResourceSearchRepository = analysisSessionResourceSearchRepository;
+        this.resourceTypeService = resourceTypeService;
     }
 
     /**
@@ -69,6 +74,19 @@ public class AnalysisSessionResourceService {
     public Optional<AnalysisSessionResource> findOne(Long id) {
         log.debug("Request to get AnalysisSessionResource : {}", id);
         return analysisSessionResourceRepository.findById(id);
+    }
+
+    /**
+     * Get one analysisSessionResource by AnalysisSession.
+     *
+     * @param analysisSessionId the id of the entity
+     * @return the entity
+     */
+    @Transactional(readOnly = true)
+    public Optional<AnalysisSessionResource> findVideoByAnalysisSessionId(Long analysisSessionId) {
+        log.debug("Request to get AnalysisSessionResource : {}", analysisSessionId);
+        Long videoResourceTypeId = resourceTypeService.findByName(RandomUtil.RESOURCE_VIDEO_TYPE_NAME).get().getId();
+        return analysisSessionResourceRepository.findByAnalysisSessionIdAndResourceTypeId(analysisSessionId,videoResourceTypeId);
     }
 
     /**
