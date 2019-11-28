@@ -27,6 +27,13 @@
                 <dd>
                     {{annotationSession.annotator?.login}}
                 </dd>
+                <dt><span>Url</span></dt>
+                <dd>
+                    <span>{{analysisSessionResource.url}}</span>
+                    <p>
+                        <span [innerHTML]="embedVideo(analysisSessionResource.url)"></span>
+                    </p>
+                </dd>
             </dl>
 
             <button type="submit"

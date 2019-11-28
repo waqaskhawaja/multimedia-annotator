@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { EmbedVideoService } from 'ngx-embed-video';
 import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
 import { AnnotationSessionService } from './annotation-session.service';
+import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -10,16 +11,25 @@ import { AnnotationSessionService } from './annotation-session.service';
 })
 export class AnnotationSessionDetailComponent implements OnInit {
     annotationSession: IAnnotationSession;
+    analysisSessionResource: IAnalysisSessionResource;
 
-    constructor(protected activatedRoute: ActivatedRoute, protected annotationSessionService: AnnotationSessionService) {}
+    constructor(
+        protected activatedRoute: ActivatedRoute,
+        protected annotationSessionService: AnnotationSessionService,
+        protected embedService: EmbedVideoService
+    ) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
             this.annotationSession = annotationSession;
         });
-        this.annotationSessionService
-            .findVideoByAnalysisSession(this.annotationSession.analysisSession.id)
-            .subscribe(res => console.log(res));
+        this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
+            this.analysisSessionResource = res.body;
+        });
+    }
+
+    embedVideo(url) {
+        return this.embedService.embed(url);
     }
 
     previousState() {
