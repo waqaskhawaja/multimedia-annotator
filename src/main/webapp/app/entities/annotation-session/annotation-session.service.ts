@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
+import { AnalysisSessionResourceService } from 'app/entities/analysis-session-resource/analysis-session-resource.service';
 
 type EntityResponseType = HttpResponse<IAnnotationSession>;
 type EntityArrayResponseType = HttpResponse<IAnnotationSession[]>;
@@ -17,7 +18,7 @@ export class AnnotationSessionService {
     public resourceUrl = SERVER_API_URL + 'api/annotation-sessions';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/annotation-sessions';
 
-    constructor(protected http: HttpClient) {}
+    constructor(protected http: HttpClient, protected analysisSessionResourceService: AnalysisSessionResourceService) {}
 
     create(annotationSession: IAnnotationSession): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(annotationSession);
@@ -37,6 +38,10 @@ export class AnnotationSessionService {
         return this.http
             .get<IAnnotationSession>(`${this.resourceUrl}/${id}`, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    }
+
+    findVideoByAnalysisSession(analysisSessionId: number): Observable<EntityResponseType> {
+        return this.analysisSessionResourceService.findVideoByAnalysisSession(analysisSessionId);
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
