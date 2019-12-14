@@ -4,6 +4,7 @@ import { EmbedVideoService } from 'ngx-embed-video';
 import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
 import { AnnotationSessionService } from './annotation-session.service';
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
+import { Options } from 'ng5-slider';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -12,6 +13,12 @@ import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-reso
 export class AnnotationSessionDetailComponent implements OnInit {
     annotationSession: IAnnotationSession;
     analysisSessionResource: IAnalysisSessionResource;
+
+    value: number = 100;
+    options: Options = {
+        floor: 0,
+        ceil: 200
+    };
 
     constructor(
         protected activatedRoute: ActivatedRoute,

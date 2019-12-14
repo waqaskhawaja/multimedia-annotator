@@ -26,13 +26,12 @@
                 <dt><span>Annotator</span></dt>
                 <dd>
                     {{annotationSession.annotator?.login}}
-                </dd>
-                <dt><span>Url</span></dt>
-                <dd>
-                    <span>{{analysisSessionResource.url}}</span>
+                </dd>                
+                <dd>                    
                     <p>
                         <span [innerHTML]="embedVideo(analysisSessionResource.url)"></span>
                     </p>
+                    <span><ng5-slider [(value)]="value" [options]="options"></ng5-slider></span>
                 </dd>
             </dl>
 

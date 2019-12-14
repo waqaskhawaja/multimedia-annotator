@@ -7,6 +7,7 @@ import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { EmbedVideo } from 'ngx-embed-video';
+import { Ng5SliderModule } from 'ng5-slider';
 
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
@@ -25,6 +26,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
 
 @NgModule({
     imports: [
+        Ng5SliderModule,
         BrowserModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({
