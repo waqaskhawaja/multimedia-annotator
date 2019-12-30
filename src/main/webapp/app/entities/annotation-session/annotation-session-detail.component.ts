@@ -15,6 +15,8 @@ export class AnnotationSessionDetailComponent implements OnInit {
     analysisSessionResource: IAnalysisSessionResource;
 
     value: number = 100;
+    videoId: string;
+
     options: Options = {
         floor: 0,
         ceil: 200
@@ -32,11 +34,26 @@ export class AnnotationSessionDetailComponent implements OnInit {
         });
         this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
             this.analysisSessionResource = res.body;
+            this.getVideoStartEnd(this.analysisSessionResource.url);
         });
     }
 
-    embedVideo(url) {
+    embedVideo(url: string) {
         return this.embedService.embed(url);
+    }
+
+    getVideoStartEnd(url: string) {
+        this.videoId = this.youtubeVideoIdFromURL(url);
+        this.annotationSessionService.findVideoStatsById(this.videoId).subscribe(res => {
+            console.log(res.items[0].contentDetails.duration);
+        });
+    }
+
+    //  https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+    youtubeVideoIdFromURL(url) {
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+        var match = url.match(regExp);
+        return match && match[7].length == 11 ? match[7] : false;
     }
 
     previousState() {
