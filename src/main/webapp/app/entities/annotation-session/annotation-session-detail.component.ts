@@ -16,6 +16,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     value: number = 100;
     videoId: string;
+    end: any;
 
     options: Options = {
         floor: 0,
@@ -45,15 +46,28 @@ export class AnnotationSessionDetailComponent implements OnInit {
     getVideoStartEnd(url: string) {
         this.videoId = this.youtubeVideoIdFromURL(url);
         this.annotationSessionService.findVideoStatsById(this.videoId).subscribe(res => {
-            console.log(res.items[0].contentDetails.duration);
+            console.log(this.convertTime(res.items[0].contentDetails.duration));
         });
     }
 
-    //  https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
-    youtubeVideoIdFromURL(url) {
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-        var match = url.match(regExp);
-        return match && match[7].length == 11 ? match[7] : false;
+    // https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+    youtubeVideoIdFromURL(url: string) {
+        let splitted = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+        return splitted[2] !== undefined ? splitted[2].split(/[^0-9a-z_\-]/i)[0] : splitted[0];
+    }
+
+    convertTime(youtubeTime: string) {
+        let durations = youtubeTime.match(/(\d+)(?=[MHS])/gi) || [];
+        let miliseconds = Number(durations[0]) + 60 * 60 * 1000 + Number(durations[1]) * 60 * 1000 + Number(durations[2]) * 1000;
+        let formatted = durations
+            .map(function(item) {
+                if (item.length < 2) {
+                    return '0' + item;
+                }
+                return item;
+            })
+            .join(':');
+        return miliseconds;
     }
 
     previousState() {

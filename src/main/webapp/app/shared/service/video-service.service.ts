@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class VideoServiceService {
 
     constructor(private httpClient: HttpClient) {}
 
-    getDuration(videoId: string): Observable<any[]> {
+    getDuration(videoId: string): Observable<any> {
         return this.httpClient.get(this.BASE_URL + this.API_PREFIX + this.API_KEY + this.VIDEO_PREFIX + videoId);
     }
 }
