@@ -4,7 +4,7 @@ import { EmbedVideoService } from 'ngx-embed-video';
 import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
 import { AnnotationSessionService } from './annotation-session.service';
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
-import { Options } from 'ng5-slider';
+import { Options, LabelType, ChangeContext } from 'ng5-slider';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -20,7 +20,11 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     options: Options = {
         floor: 0,
-        ceil: 200
+        ceil: 0,
+        step: 1000,
+        translate: (value: number, label: LabelType): string => {
+            return this.getYoutubeLikeTimeDisplay(value); // this will translate label to time stamp.
+        }
     };
 
     constructor(
@@ -35,7 +39,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
         });
         this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
             this.analysisSessionResource = res.body;
-            this.getVideoStartEnd(this.analysisSessionResource.url);
+            this.setSliderEnd(this.analysisSessionResource.url);
         });
     }
 
@@ -43,10 +47,12 @@ export class AnnotationSessionDetailComponent implements OnInit {
         return this.embedService.embed(url);
     }
 
-    getVideoStartEnd(url: string) {
-        this.videoId = this.youtubeVideoIdFromURL(url);
+    setSliderEnd(url: string) {
+        const newOptions = Object.assign({}, this.options);
+        this.videoId = this.youtubeVideoIdFromURL(this.analysisSessionResource.url);
         this.annotationSessionService.findVideoStatsById(this.videoId).subscribe(res => {
-            console.log(this.convertTime(res.items[0].contentDetails.duration));
+            newOptions.ceil = this.convertYoutubeVideoLengthToMiliseconds(res.items[0].contentDetails.duration);
+            this.options = newOptions;
         });
     }
 
@@ -56,7 +62,29 @@ export class AnnotationSessionDetailComponent implements OnInit {
         return splitted[2] !== undefined ? splitted[2].split(/[^0-9a-z_\-]/i)[0] : splitted[0];
     }
 
-    convertTime(youtubeTime: string) {
+    getYoutubeLikeTimeDisplay(millisec: number) {
+        let hoursToShow: string;
+        let minutesToShow: string;
+        let secondsToShow: string;
+
+        const seconds = Math.floor((millisec / 1000) % 60);
+        const minutes = Math.floor((millisec / (1000 * 60)) % 60);
+        const hours = Math.floor((millisec / (1000 * 60 * 60)) % 24);
+
+        secondsToShow = String(seconds >= 10 ? seconds : '0' + seconds);
+
+        //no hours
+        if (hours < 1) {
+            minutesToShow = String(minutes);
+            return minutesToShow + ':' + secondsToShow;
+        } else {
+            minutesToShow = String(minutes >= 10 ? minutes : '0' + minutes);
+            hoursToShow = String(hours);
+            return hoursToShow + ':' + minutesToShow + ':' + secondsToShow;
+        }
+    }
+
+    convertYoutubeVideoLengthToMiliseconds(youtubeTime: string): number {
         let durations = youtubeTime.match(/(\d+)(?=[MHS])/gi) || [];
         let miliseconds = Number(durations[0]) + 60 * 60 * 1000 + Number(durations[1]) * 60 * 1000 + Number(durations[2]) * 1000;
         let formatted = durations
