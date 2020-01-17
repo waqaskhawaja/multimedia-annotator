@@ -34,6 +34,7 @@
         "swagger-ui": ">=3.23.11",
         "tslib": "1.9.3",
         "yt-player": "^3.4.3",
+        "yt-player-angular": "^3.5.1",
         "zone.js": "0.8.29"
     },
     "devDependencies": {
