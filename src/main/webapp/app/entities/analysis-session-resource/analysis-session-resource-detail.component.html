@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="analysisSessionResource">
+            <h2><span>Analysis Session Resource</span> {{analysisSessionResource.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Name</span></dt>
+                <dd>
+                    <span>{{analysisSessionResource.name}}</span>
+                </dd>
+                <dt><span>Source File</span></dt>
+                <dd>
+                    <div *ngIf="analysisSessionResource.sourceFile">
+                        <a (click)="openFile(analysisSessionResource.sourceFileContentType, analysisSessionResource.sourceFile)">open</a>
+                        {{analysisSessionResource.sourceFileContentType}}, {{byteSize(analysisSessionResource.sourceFile)}}
+                    </div>
+                </dd>
+                <dt><span>Url</span></dt>
+                <dd>
+                    <span>{{analysisSessionResource.url}}</span>
+                </dd>
+                <dt><span>Resource Type</span></dt>
+                <dd>
+                    <div *ngIf="analysisSessionResource.resourceType">
+                        <a [routerLink]="['/resource-type', analysisSessionResource.resourceType?.id, 'view']">{{analysisSessionResource.resourceType?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span>Analysis Session</span></dt>
+                <dd>
+                    <div *ngIf="analysisSessionResource.analysisSession">
+                        <a [routerLink]="['/analysis-session', analysisSessionResource.analysisSession?.id, 'view']">{{analysisSessionResource.analysisSession?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/analysis-session-resource', analysisSessionResource.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

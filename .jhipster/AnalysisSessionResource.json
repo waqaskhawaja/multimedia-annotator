@@ -1,0 +1,47 @@
+{
+    "name": "AnalysisSessionResource",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sourceFile",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "url",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 1000
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resourceType",
+            "otherEntityRelationshipName": "analysisSessionResource",
+            "relationshipName": "resourceType",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "analysisSession",
+            "otherEntityRelationshipName": "analysisSessionResource",
+            "relationshipName": "analysisSession",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20190522140842",
+    "entityTableName": "analysis_session_resource",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

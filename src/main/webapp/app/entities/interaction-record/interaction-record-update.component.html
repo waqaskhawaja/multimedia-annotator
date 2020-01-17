@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-interaction-record-heading">Create or edit a Interaction Record</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!interactionRecord.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="interactionRecord.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_duration">Duration</label>
+                    <input type="number" class="form-control" name="duration" id="field_duration"
+                        [(ngModel)]="interactionRecord.duration" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_text">Text</label>
+                    <input type="text" class="form-control" name="text" id="field_text"
+                        [(ngModel)]="interactionRecord.text" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_sourceId">Source Id</label>
+                    <input type="text" class="form-control" name="sourceId" id="field_sourceId"
+                        [(ngModel)]="interactionRecord.sourceId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_time">Time</label>
+                    <input type="number" class="form-control" name="time" id="field_time"
+                        [(ngModel)]="interactionRecord.time" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_interactionType">Interaction Type</label>
+                    <select class="form-control" id="field_interactionType" name="interactionType" [(ngModel)]="interactionRecord.interactionType" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="interactionTypeOption.id === interactionRecord.interactionType?.id ? interactionRecord.interactionType : interactionTypeOption" *ngFor="let interactionTypeOption of interactiontypes; trackBy: trackInteractionTypeById">{{interactionTypeOption.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_analysisSessionResource">Analysis Session Resource</label>
+                    <select class="form-control" id="field_analysisSessionResource" name="analysisSessionResource" [(ngModel)]="interactionRecord.analysisSessionResource" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="analysisSessionResourceOption.id === interactionRecord.analysisSessionResource?.id ? interactionRecord.analysisSessionResource : analysisSessionResourceOption" *ngFor="let analysisSessionResourceOption of analysissessionresources; trackBy: trackAnalysisSessionResourceById">{{analysisSessionResourceOption.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

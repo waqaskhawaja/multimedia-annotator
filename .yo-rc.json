@@ -1,0 +1,35 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "pk.waqaskhawaja.ma"
+    },
+    "jhipsterVersion": "5.8.2",
+    "applicationType": "monolith",
+    "baseName": "ma",
+    "packageName": "pk.waqaskhawaja.ma",
+    "packageFolder": "pk/waqaskhawaja/ma",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MDZmM2EwMzNmYjkyY2ZjZmVhZWU2MmM4NjFmZTFiYzQ1MzFmMDA4YjZiYTg3NDBlNjRlM2QzNTYyZDA4YWNhZDMzYzY1YmNkOTBlNGEyNjNiYzQ4ZTg1ZTAxY2Y2ZWVjYTM4Zjk5MjVmNjBmNzE2NjQzMzhhMjEzODU1NmMxNjc=",
+    "clientFramework": "angularX",
+    "useSass": false,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "enableHibernateCache": false
+  }
+}

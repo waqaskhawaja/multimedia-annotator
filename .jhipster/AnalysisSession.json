@@ -1,0 +1,27 @@
+{
+    "name": "AnalysisSession",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "analysisScenario",
+            "otherEntityRelationshipName": "analysisSession",
+            "relationshipName": "analysisScenario",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20190522140841",
+    "entityTableName": "analysis_session",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

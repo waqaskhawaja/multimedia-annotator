@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="interactionRecord">
+            <h2><span>Interaction Record</span> {{interactionRecord.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Duration</span></dt>
+                <dd>
+                    <span>{{interactionRecord.duration}}</span>
+                </dd>
+                <dt><span>Text</span></dt>
+                <dd>
+                    <span>{{interactionRecord.text}}</span>
+                </dd>
+                <dt><span>Source Id</span></dt>
+                <dd>
+                    <span>{{interactionRecord.sourceId}}</span>
+                </dd>
+                <dt><span>Time</span></dt>
+                <dd>
+                    <span>{{interactionRecord.time}}</span>
+                </dd>
+                <dt><span>Interaction Type</span></dt>
+                <dd>
+                    <div *ngIf="interactionRecord.interactionType">
+                        <a [routerLink]="['/interaction-type', interactionRecord.interactionType?.id, 'view']">{{interactionRecord.interactionType?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span>Analysis Session Resource</span></dt>
+                <dd>
+                    <div *ngIf="interactionRecord.analysisSessionResource">
+                        <a [routerLink]="['/analysis-session-resource', interactionRecord.analysisSessionResource?.id, 'view']">{{interactionRecord.analysisSessionResource?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/interaction-record', interactionRecord.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

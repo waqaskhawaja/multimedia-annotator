@@ -1,0 +1,54 @@
+{
+    "name": "InteractionRecord",
+    "fields": [
+        {
+            "fieldName": "duration",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "text",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sourceId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "time",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "interactionType",
+            "otherEntityRelationshipName": "interactionRecord",
+            "relationshipName": "interactionType",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "analysisSessionResource",
+            "otherEntityRelationshipName": "interactionRecord",
+            "relationshipName": "analysisSessionResource",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "annotation",
+            "otherEntityRelationshipName": "interactionRecord",
+            "relationshipName": "annotation",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190522140843",
+    "entityTableName": "interaction_record",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

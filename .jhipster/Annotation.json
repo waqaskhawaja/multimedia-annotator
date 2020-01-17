@@ -1,0 +1,43 @@
+{
+    "name": "Annotation",
+    "fields": [
+        {
+            "fieldName": "start",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "end",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "annotationText",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "annotationSession",
+            "otherEntityRelationshipName": "annotation",
+            "relationshipName": "annotationSession",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "interactionRecord",
+            "otherEntityRelationshipName": "annotation",
+            "relationshipName": "interactionRecord",
+            "otherEntityField": "text",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190509094537",
+    "entityTableName": "annotation",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

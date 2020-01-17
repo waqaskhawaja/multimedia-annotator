@@ -1,0 +1,26 @@
+{
+    "name": "DataType",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "session",
+            "otherEntityRelationshipName": "dataType",
+            "relationshipName": "session"
+        }
+    ],
+    "changelogDate": "20190507114626",
+    "entityTableName": "data_type",
+    "dto": "no",
+    "pagination": "pager",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}
