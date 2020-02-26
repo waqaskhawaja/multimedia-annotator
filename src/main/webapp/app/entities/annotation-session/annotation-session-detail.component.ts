@@ -44,6 +44,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
             this.setSliderEnd(this.analysisSessionResource.url);
             this.ytPlayerService.play();
         });
+        this.setSliderEnd(this.analysisSessionResource.url);
     }
 
     embedVideo(url: string) {
