@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -138,6 +139,14 @@ public class InteractionRecordResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+
+    @DeleteMapping("/deleteAll/interaction-records")
+    public String deleteAll()
+    {
+        interactionRecordService.deleteAllRecord();
+        return "All Records Deleted";
+    }
+
     /**
      * SEARCH  /_search/interaction-records?query=:query : search for the interactionRecord corresponding
      * to the query.
@@ -154,4 +163,60 @@ public class InteractionRecordResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+
+
+
+
+    /**
+     * SEARCH  /_search/interaction-records?query=:query : search for the interactionRecord corresponding
+     * to the query.
+     *
+     *
+     * @param time the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/interaction-records/getByTime")
+    public InteractionRecord searchInteractionRecordByTime(@RequestParam Integer time) {
+        log.debug("REST request to search for a page of InteractionRecords for time {}", time);
+   /*     Page<InteractionRecord> page = interactionRecordService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/interaction-records");
+        return ResponseEntity.ok().headers(headers).body(page.getContent());*/
+        return  interactionRecordService.searchByTime(time);
+
+
+    }
+
+
+
+
+    /**
+     * SEARCH  /_search/interaction-records?query=:query : search for the interactionRecord corresponding
+     * to the query.
+     *
+     *
+     * @param duration the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/interaction-records/getByDuration")
+    public InteractionRecord searchInteractionRecordByDuration(@RequestParam Integer duration) {
+        log.debug("REST request to search for a page of InteractionRecords for time {}", duration);
+        return  interactionRecordService.searchByDuration(duration);
+
+    }
+
+
+    /**
+     * SEARCH  /_search/interaction-records?query=:query : search for the interactionRecord corresponding
+     * to the query.
+     *
+     *
+     * @param duration the pagination information
+     * @return the result of the search
+     */
+    @GetMapping("/interaction-records/getListByDuration")
+    public List<String> searchInteractionRecordListByDuration(@RequestParam Integer duration) {
+        log.debug("REST request to search for a page of InteractionRecords for time {}", duration);
+        return  interactionRecordService.searchListByDuration(duration);
+
+    }
 }

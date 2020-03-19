@@ -1,7 +1,6 @@
 package pk.waqaskhawaja.ma.web.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pk.waqaskhawaja.ma.domain.AnalysisSession;
 import pk.waqaskhawaja.ma.domain.AnalysisSessionResource;
 import pk.waqaskhawaja.ma.domain.InteractionRecord;
 import pk.waqaskhawaja.ma.service.AnalysisSessionResourceService;
@@ -18,20 +17,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing AnalysisSessionResource.
@@ -86,6 +84,11 @@ public class AnalysisSessionResourceResource {
                 e.printStackTrace();
             }
 
+
+            List<Integer> arrayOfInteractionRecord = new ArrayList<>();
+            List <Integer> arrayOfIn= new ArrayList<>();
+
+            final int i = 0;
             Consumer<JsonNode> data = (JsonNode node) -> {
                 Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
                 InteractionRecord interactionRecord = new InteractionRecord();
@@ -94,7 +97,22 @@ public class AnalysisSessionResourceResource {
                     String key = entry.getKey();
                     switch(key){
                         case "duration":
-                            interactionRecord.setDuration(entry.getValue().asInt());
+                            arrayOfIn.add(entry.getValue().asInt());
+                            Integer value  = arrayOfIn.stream().mapToInt(k-> k.intValue()).sum();
+                            try {
+                                FileWriter writer = new FileWriter("/opt/jsondata/duration.txt", true);
+                                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+                                bufferedWriter.write("duration");
+                                bufferedWriter.write("\r\n");   // write new line
+                                bufferedWriter.write(value.toString());
+                                bufferedWriter.write("\r\n");   // write new line
+                                bufferedWriter.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            interactionRecord.setDuration(value);
                             break;
                         case "Text":
                             interactionRecord.setText(entry.getValue().asText());

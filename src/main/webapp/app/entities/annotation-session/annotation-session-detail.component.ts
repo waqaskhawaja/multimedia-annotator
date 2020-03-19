@@ -6,6 +6,8 @@ import { AnnotationSessionService } from './annotation-session.service';
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
 import { Options, LabelType, ChangeContext } from 'ng5-slider';
 import { YtPlayerService, PlayerOptions } from 'yt-player-angular';
+import { InteractionRecordService } from 'app/entities/interaction-record';
+import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -14,26 +16,25 @@ import { YtPlayerService, PlayerOptions } from 'yt-player-angular';
 export class AnnotationSessionDetailComponent implements OnInit {
     annotationSession: IAnnotationSession;
     analysisSessionResource: IAnalysisSessionResource;
-
-    value: number = 100;
+    player: YT.Player;
+    private id: string = 'YJ4nfAZ_ZXg';
+    value: number = 0;
     videoId: string;
     end: any;
-
-    options: Options = {
-        floor: 0,
-        ceil: 0,
-        step: 1000,
-        translate: (value: number, label: LabelType): string => {
-            return this.getYoutubeLikeTimeDisplay(value); // this will translate label to time stamp.
-        }
-    };
+    max: number;
+    sliderEnable: boolean;
+    interactionRecord: IInteractionRecord;
+    options: Options;
 
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
         protected embedService: EmbedVideoService,
+        protected interactionRecordService: InteractionRecordService,
         private ytPlayerService: YtPlayerService
-    ) {}
+    ) {
+        this.sliderEnable = false;
+    }
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
@@ -104,5 +105,47 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     previousState() {
         window.history.back();
+    }
+
+    savePlayer(player) {
+        this.player = player;
+    }
+
+    playVideo() {
+        this.player.playVideo();
+        this.max = this.player.getDuration();
+        this.initializeSlider(this.max);
+        this.sliderEnable = true;
+    }
+
+    pauseVideo() {
+        this.player.pauseVideo();
+    }
+
+    onStateChange(event) {
+        console.log('player state', event.data);
+    }
+
+    fastForward(value: number) {
+        this.player.seekTo(value, true);
+        this.getTextFromInteractionRecord(value);
+    }
+
+    initializeSlider(maxSize: number) {
+        this.options = {
+            floor: 0,
+            ceil: maxSize
+        };
+    }
+
+    getTextFromInteractionRecord(time: number) {
+        this.interactionRecordService.findByDuration(time).subscribe(res => {
+            this.interactionRecord = res.body;
+        });
+
+        const inputTag = document.getElementById('text_area') as HTMLInputElement;
+        if (this.interactionRecord != null) {
+            inputTag.value = inputTag.value + '\n' + this.interactionRecord.text;
+        }
     }
 }
