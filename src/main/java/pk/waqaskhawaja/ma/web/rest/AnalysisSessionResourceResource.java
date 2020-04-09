@@ -98,9 +98,9 @@ public class AnalysisSessionResourceResource {
                     switch(key){
                         case "duration":
                             arrayOfIn.add(entry.getValue().asInt());
-                            Integer value  = arrayOfIn.stream().mapToInt(k-> k.intValue()).sum();
+                            Integer value  = arrayOfIn.stream().mapToInt(valueToAdd-> valueToAdd.intValue()).sum();
                             try {
-                                FileWriter writer = new FileWriter("/opt/jsondata/duration.txt", true);
+                                FileWriter writer = new FileWriter("/temp/jsondata/duration.txt", true);
                                 BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
                                 bufferedWriter.write("duration");
