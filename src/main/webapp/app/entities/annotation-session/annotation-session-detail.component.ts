@@ -17,8 +17,8 @@ export class AnnotationSessionDetailComponent implements OnInit {
     annotationSession: IAnnotationSession;
     analysisSessionResource: IAnalysisSessionResource;
     player: YT.Player;
-    private id: string = 'YJ4nfAZ_ZXg';
-    value: number = 0;
+    private id: string;
+    value: number;
     videoId: string;
     end: any;
     max: number;
@@ -37,6 +37,9 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.id = 'YJ4nfAZ_ZXg';
+        this.value = 0;
+
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
             this.annotationSession = annotationSession;
         });
@@ -63,7 +66,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     // https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
     youtubeVideoIdFromURL(url: string) {
-        let splitted = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+        const splitted = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
         return splitted[2] !== undefined ? splitted[2].split(/[^0-9a-z_\-]/i)[0] : splitted[0];
     }
 
@@ -78,7 +81,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
         secondsToShow = String(seconds >= 10 ? seconds : '0' + seconds);
 
-        //no hours
+        // no hours
         if (hours < 1) {
             minutesToShow = String(minutes);
             return minutesToShow + ':' + secondsToShow;
@@ -90,9 +93,9 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     convertYoutubeVideoLengthToMiliseconds(youtubeTime: string): number {
-        let durations = youtubeTime.match(/(\d+)(?=[MHS])/gi) || [];
-        let miliseconds = Number(durations[0]) + 60 * 60 * 1000 + Number(durations[1]) * 60 * 1000 + Number(durations[2]) * 1000;
-        let formatted = durations
+        const durations = youtubeTime.match(/(\d+)(?=[MHS])/gi) || [];
+        const miliseconds = Number(durations[0]) + 60 * 60 * 1000 + Number(durations[1]) * 60 * 1000 + Number(durations[2]) * 1000;
+        const formatted = durations
             .map(function(item) {
                 if (item.length < 2) {
                     return '0' + item;

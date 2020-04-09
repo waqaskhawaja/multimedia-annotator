@@ -44,7 +44,6 @@ export class JhiLoginModalComponent implements AfterViewInit {
     }
 
     login() {
-        debugger;
         this.loginService
             .login({
                 username: this.username,
