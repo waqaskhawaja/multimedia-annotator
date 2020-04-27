@@ -11,7 +11,7 @@
                     <div class="col-lg-2">
                         <dt><span class="float-right">Annotation Session Name</span></dt>
                     </div>
-                    <div class="col-log-2">
+                    <div class="col-lg-2">
                         <dd>
                             <span>{{annotationSession.name}}</span>
                         </dd>
@@ -20,7 +20,7 @@
                     <div class="col-lg-2">
                         <dt><span class="float-right">Linked Analysis Session Name</span></dt>
                     </div>
-                    <div class="col-log-2">
+                    <div class="col-lg-2">
                         <dd>
                             <div *ngIf="annotationSession.analysisSession">
                                 <a
@@ -32,7 +32,7 @@
                     <div class="col-lg-2">
                         <dt><span class="float-right">Annotator</span></dt>
                     </div>
-                    <div class="col-log-2">
+                    <div class="col-lg-2">
                         <dd>
                             {{annotationSession.annotator?.login}}
                         </dd>
@@ -40,29 +40,38 @@
                 </div>
             </dl>
 
-            <hr/>
+            <hr />
 
-            <div class="row-lg">
+            
                 <div class="row">
                     <div class="col-lg-6">
-                        <youtube-player [videoId]="id" (ready)="savePlayer($event)" (change)="onStateChange($event)">
-                        </youtube-player>
-
-                        <button class="btn btn-primary" (click)="playVideo()">Play</button>
-                        <button class="btn btn-danger" (click)="pauseVideo()">Pause</button>
-
-                        <div *ngIf="sliderEnable">
-                            <ng5-slider [(value)]="value" [options]="options" (userChange)="fastForward(value)">
-                            </ng5-slider>
+                        <div class="row">
+                            <youtube-player [videoId]="id" (ready)="savePlayer($event)"
+                                (change)="onStateChange($event)">
+                            </youtube-player>
+                        </div>
+                        <div class="row">
+                            <div class="btn-toolbar" role="toolbar">
+                                <button type="button" class="btn btn-primary"
+                                    (click)="playVideo()"><span>Play</span></button>
+                                <button type="button" class="btn btn-danger"
+                                    (click)="pauseVideo()"><span>Pause</span></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="w-100" *ngIf="sliderEnable">
+                                <ng5-slider [(value)]="value" [options]="options" (userChange)="fastForward(value)">
+                                </ng5-slider>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <textarea id="text_area" class="textareaStyled"></textarea>
                     </div>
                 </div>
-            </div>
+            
 
-            <div class="row-lg mt-5">
+            <div class="row mt-5">
 
                 <button type="submit" (click)="previousState()" class="btn btn-info">
                     <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>

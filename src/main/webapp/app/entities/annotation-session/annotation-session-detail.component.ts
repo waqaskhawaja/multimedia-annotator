@@ -5,7 +5,6 @@ import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
 import { AnnotationSessionService } from './annotation-session.service';
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
 import { Options, LabelType, ChangeContext } from 'ng5-slider';
-import { YtPlayerService, PlayerOptions } from 'yt-player-angular';
 import { InteractionRecordService } from 'app/entities/interaction-record';
 import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
 
@@ -30,8 +29,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
         protected embedService: EmbedVideoService,
-        protected interactionRecordService: InteractionRecordService,
-        private ytPlayerService: YtPlayerService
+        protected interactionRecordService: InteractionRecordService
     ) {
         this.sliderEnable = false;
     }
@@ -46,7 +44,6 @@ export class AnnotationSessionDetailComponent implements OnInit {
         this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
             this.analysisSessionResource = res.body;
             this.setSliderEnd(this.analysisSessionResource.url);
-            this.ytPlayerService.play();
         });
         this.setSliderEnd(this.analysisSessionResource.url);
     }

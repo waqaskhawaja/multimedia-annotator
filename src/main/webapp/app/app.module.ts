@@ -9,7 +9,7 @@ import { NgJhipsterModule } from 'ng-jhipster';
 import { EmbedVideo } from 'ngx-embed-video';
 import { Ng5SliderModule } from 'ng5-slider';
 import { YtPlayerAngularModule } from 'yt-player-angular';
-
+import { YouTubePlayerModule } from '@angular/youtube-player';
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
@@ -27,6 +27,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
 
 @NgModule({
     imports: [
+        YouTubePlayerModule,
         YtPlayerAngularModule,
         Ng5SliderModule,
         BrowserModule,
