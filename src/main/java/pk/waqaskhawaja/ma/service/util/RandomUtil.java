@@ -9,6 +9,8 @@ public final class RandomUtil {
 
     private static final int DEF_COUNT = 20;
 
+    public static final String RESOURCE_VIDEO_TYPE_NAME = "Video";
+
     private RandomUtil() {
     }
 

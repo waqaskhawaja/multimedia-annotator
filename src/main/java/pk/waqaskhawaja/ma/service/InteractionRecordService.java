@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -93,4 +95,42 @@ public class InteractionRecordService {
     public Page<InteractionRecord> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of InteractionRecords for query {}", query);
         return interactionRecordSearchRepository.search(queryStringQuery(query), pageable);    }
+
+
+
+
+    @Transactional(readOnly = true)
+    public InteractionRecord searchByTime(Integer time) {
+        log.debug("Request to search for a page of InteractionRecords for query {}", time);
+        return interactionRecordRepository.findOneByTime(time);
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public InteractionRecord searchByDuration(Integer duration) {
+        log.debug("Request to search for a page of InteractionRecords for query {}", duration);
+        return interactionRecordRepository.findByDuration(duration);
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public List<String> searchListByDuration(Integer duration) {
+        log.debug("Request to search for a page of InteractionRecords for query {}", duration);
+
+        List<InteractionRecord> interactionRecordsList =  interactionRecordRepository.findListByDuration(duration);
+        List<String> Text = interactionRecordsList.stream().map(interactionRecord -> interactionRecord.getText()).collect(Collectors.toList());
+        return Text;
+    }
+
+
+    public void deleteAllRecord() {
+        log.debug("Request to delete All InteractionRecord : {}");
+        interactionRecordRepository.deleteAll();
+        interactionRecordSearchRepository.deleteAll();
+    }
+
+
+
 }

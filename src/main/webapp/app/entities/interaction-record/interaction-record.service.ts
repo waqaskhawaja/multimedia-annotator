@@ -7,12 +7,16 @@ import { createRequestOption } from 'app/shared';
 import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
 
 type EntityResponseType = HttpResponse<IInteractionRecord>;
+type EntityResponseTypeString = HttpResponse<String[]>;
 type EntityArrayResponseType = HttpResponse<IInteractionRecord[]>;
 
 @Injectable({ providedIn: 'root' })
 export class InteractionRecordService {
     public resourceUrl = SERVER_API_URL + 'api/interaction-records';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/interaction-records';
+    public resourceSearchUrlForGetRecordByTime = SERVER_API_URL + 'api/interaction-records/getByTime';
+    public resourceSearchUrlForGetRecordByDuration = SERVER_API_URL + 'api/interaction-records/getByDuration';
+    public resourceSearchUrlForGetRecordListByDuration = SERVER_API_URL + 'api/interaction-records/getListByDuration';
 
     constructor(protected http: HttpClient) {}
 
@@ -40,5 +44,15 @@ export class InteractionRecordService {
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<IInteractionRecord[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    }
+
+    findByTime(time: number): Observable<EntityResponseType> {
+        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByTime}?time=${time}`, { observe: 'response' });
+    }
+
+    findByDuration(duration: number): Observable<EntityResponseType> {
+        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByDuration}?duration=${duration}`, {
+            observe: 'response'
+        });
     }
 }

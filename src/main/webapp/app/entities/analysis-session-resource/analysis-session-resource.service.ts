@@ -28,6 +28,12 @@ export class AnalysisSessionResourceService {
         return this.http.get<IAnalysisSessionResource>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
+    findVideoByAnalysisSession(analysisSessionId: number): Observable<EntityResponseType> {
+        return this.http.get<IAnalysisSessionResource>(`${this.resourceUrl}/video-by-analysis-session/${analysisSessionId}`, {
+            observe: 'response'
+        });
+    }
+
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<IAnalysisSessionResource[]>(this.resourceUrl, { params: options, observe: 'response' });

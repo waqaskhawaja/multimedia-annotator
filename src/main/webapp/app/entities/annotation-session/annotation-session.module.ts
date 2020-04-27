@@ -1,6 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgxYoutubePlayerModule } from 'ngx-youtube-player';
 
+import { Ng5SliderModule } from 'ng5-slider';
 import { MaSharedModule } from 'app/shared';
 import {
     AnnotationSessionComponent,
@@ -15,7 +17,7 @@ import {
 const ENTITY_STATES = [...annotationSessionRoute, ...annotationSessionPopupRoute];
 
 @NgModule({
-    imports: [MaSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [Ng5SliderModule, MaSharedModule, NgxYoutubePlayerModule.forRoot(), RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         AnnotationSessionComponent,
         AnnotationSessionDetailComponent,

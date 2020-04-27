@@ -25,4 +25,5 @@
 
     <!-- seed data for scenario, interaction and data types -->
     <include file="config/liquibase/changelog/20190424134600_master_seed_data.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20191121143600_added_seed_data_analysis_session.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

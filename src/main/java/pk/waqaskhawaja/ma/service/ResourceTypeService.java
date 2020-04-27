@@ -72,6 +72,18 @@ public class ResourceTypeService {
     }
 
     /**
+     * Get one resourceType by name.
+     *
+     * @param name the name of the entity
+     * @return the entity
+     */
+    @Transactional(readOnly = true)
+    public Optional<ResourceType> findByName(String name) {
+        log.debug("Request to get ResourceType : {}", name);
+        return resourceTypeRepository.findByName(name);
+    }
+
+    /**
      * Delete the resourceType by id.
      *
      * @param id the id of the entity
