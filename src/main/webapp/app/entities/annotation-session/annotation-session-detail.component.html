@@ -47,7 +47,9 @@
                     <div class="col-lg-6">
                         <div class="row">
                             <youtube-player [videoId]="id" (ready)="savePlayer($event)"
-                                (change)="onStateChange($event)">
+                                (change)="onStateChange($event)"
+                                [width]="800"
+                                [height]="400">
                             </youtube-player>
                         </div>
                         <div class="row">
