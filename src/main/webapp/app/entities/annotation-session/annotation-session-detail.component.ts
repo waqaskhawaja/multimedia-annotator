@@ -8,10 +8,19 @@ import { Options, LabelType, ChangeContext } from 'ng5-slider';
 import { YtPlayerService, PlayerOptions } from 'yt-player-angular';
 import { InteractionRecordService } from 'app/entities/interaction-record';
 import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
-    templateUrl: './annotation-session-detail.component.html'
+    templateUrl: './annotation-session-detail.component.html',
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+        ])
+    ]
 })
 export class AnnotationSessionDetailComponent implements OnInit {
     annotationSession: IAnnotationSession;
@@ -28,7 +37,10 @@ export class AnnotationSessionDetailComponent implements OnInit {
     text: Array<String> = [];
 
     options: Options;
-
+    ELEMENT_DATA: IInteractionRecord[];
+    displayedColumns: string[] = ['select', 'id', 'text', 'interaction'];
+    dataSource: any;
+    expandedElement: IInteractionRecord | null;
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
@@ -146,14 +158,15 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     getTextFromInteractionRecord(time: number) {
         this.interactionRecordService.findByDuration(time).subscribe(res => {
-            this.interactionRecordArray = res.body;
-
+            this.ELEMENT_DATA = res.body;
+            this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+            /*
             const inputTag = document.getElementById('text_area') as HTMLInputElement;
             if (this.interactionRecordArray != null) {
                 for (let i = 0; i < this.interactionRecordArray.length; i++) {
                     inputTag.value = inputTag.value + '\n' + this.interactionRecordArray[i].interactionType.name;
                 }
-            }
+            }*/
         });
     }
 }

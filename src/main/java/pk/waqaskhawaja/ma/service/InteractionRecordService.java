@@ -34,6 +34,7 @@ public class InteractionRecordService {
         this.interactionRecordRepository = interactionRecordRepository;
         this.interactionRecordSearchRepository = interactionRecordSearchRepository;
     }
+    private  static double numbertoAdd  = 0.1;
 
     /**
      * Save a interactionRecord.
@@ -118,10 +119,7 @@ public class InteractionRecordService {
     @Transactional(readOnly = true)
     public List<InteractionRecord> searchListByDuration(Integer duration) {
         log.debug("Request to search for a page of InteractionRecords for query {}", duration);
-
-
-        return interactionRecordRepository.findListByDuration(duration);
-
+        return interactionRecordRepository.findAll().stream().filter(interactionRecord -> interactionRecord.getDuration()<=duration).collect(Collectors.toList());
     }
 
 
