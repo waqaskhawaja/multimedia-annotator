@@ -48,8 +48,8 @@
                     <div class="row">
                         <youtube-player [videoId]="id" (ready)="savePlayer($event)"
                                         (change)="onStateChange($event)"
-                                        [width]="800"
-                                        [height]="400">
+                                        [width]="600"
+                                        [height]="300">
                         </youtube-player>
                     </div>
                     <div class="row">
@@ -75,19 +75,15 @@
 
                 <!--<textarea id="text_area" class="textareaStyled"></textarea>-->
 
-
                     <div class="row">
-                        <div class="col-lg-12">
-
                             <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
 
                                 <!-- Checkbox Column -->
 
-                                <ng-container class="col-lg-3" matColumnDef="select">
+                                <ng-container matColumnDef="select">
 
                                     <th mat-header-cell *matHeaderCellDef>
                                         <mat-checkbox >
-
                                         </mat-checkbox>
                                     </th>
                                     <td mat-cell *matCellDef="let row">
@@ -97,24 +93,19 @@
                                 </ng-container>
 
                                 <!-- Position Column -->
-                                <ng-container  class="col-lg-3"  matColumnDef="id">
+                                <ng-container matColumnDef="id">
                                     <th mat-header-cell *matHeaderCellDef> ID </th>
                                     <td mat-cell *matCellDef="let element"> {{element.id}} </td>
                                 </ng-container>
 
-
-
                                 <!-- Weight Column -->
-                                <ng-container  class="col-lg-3" matColumnDef="text">
+                                <ng-container matColumnDef="text">
                                     <th mat-header-cell *matHeaderCellDef> Text </th>
                                     <td mat-cell *matCellDef="let element"> {{element.text}} </td>
                                 </ng-container>
 
-
-
-
                                 <!-- Weight Column -->
-                                <ng-container  class="col-lg-3" matColumnDef="interaction">
+                                <ng-container matColumnDef="interaction">
                                     <th mat-header-cell *matHeaderCellDef> Interaction </th>
                                     <td mat-cell *matCellDef="let element"> {{element.interactionType.name}} </td>
                                 </ng-container>
@@ -138,9 +129,7 @@
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                                    class="example-element-row"
-                                    [class.example-expanded-row]="expandedElement === row"
-                                    (click)="expandedElement = expandedElement === row ? null : row">
+                                    (click)="selection.toggle(row)">
                                 </tr>
                               <!--  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
 
@@ -148,7 +137,7 @@
 
 
 
-                        </div>
+                        
                     </div>
 
 
