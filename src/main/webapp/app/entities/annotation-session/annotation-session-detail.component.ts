@@ -35,6 +35,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
     interactionRecordArray: IInteractionRecord[];
     text: Array<String> = [];
 
+    autoMove: number;
     options: Options;
     ELEMENT_DATA: IInteractionRecord[];
     displayedColumns: string[] = ['select', 'id', 'text', 'interaction'];
@@ -143,6 +144,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     fastForward(value: number) {
         this.player.seekTo(value, true);
+        this.value = value;
         this.getTextFromInteractionRecord(value);
     }
 
