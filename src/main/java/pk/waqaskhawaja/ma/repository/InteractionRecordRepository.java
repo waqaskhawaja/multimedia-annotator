@@ -15,6 +15,7 @@ import java.util.List;
 public interface InteractionRecordRepository extends JpaRepository<InteractionRecord, Long>, JpaSpecificationExecutor<InteractionRecord> {
 
   public InteractionRecord findOneByTime(Integer  time);
+  public List<InteractionRecord> findAllByTime(Integer  time);
   public InteractionRecord findByDuration(Integer duration);
   public List<InteractionRecord> findListByDuration(Integer duration);
 

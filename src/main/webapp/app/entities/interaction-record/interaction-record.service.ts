@@ -46,12 +46,15 @@ export class InteractionRecordService {
         return this.http.get<IInteractionRecord[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
     }
 
-    findByTime(time: number): Observable<EntityResponseType> {
-        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByTime}?time=${time}`, { observe: 'response' });
+    findByTime(time: number): Observable<EntityArrayResponseType> {
+        const centiSecond = time * 10;
+        return this.http.get<IInteractionRecord[]>(`${this.resourceSearchUrlForGetRecordByTime}?time=${centiSecond}`, {
+            observe: 'response'
+        });
     }
 
-    findByDuration(duration: number): Observable<EntityResponseType> {
-        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByDuration}?duration=${duration}`, {
+    findByDuration(duration: number): Observable<EntityArrayResponseType> {
+        return this.http.get<IInteractionRecord[]>(`${this.resourceSearchUrlForGetRecordListByDuration}?duration=${duration}`, {
             observe: 'response'
         });
     }

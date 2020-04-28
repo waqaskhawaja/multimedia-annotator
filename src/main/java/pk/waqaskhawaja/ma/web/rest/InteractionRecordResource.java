@@ -176,12 +176,12 @@ public class InteractionRecordResource {
      * @return the result of the search
      */
     @GetMapping("/interaction-records/getByTime")
-    public InteractionRecord searchInteractionRecordByTime(@RequestParam Integer time) {
+    public List<InteractionRecord> searchInteractionRecordByTime(@RequestParam Integer time) {
         log.debug("REST request to search for a page of InteractionRecords for time {}", time);
    /*     Page<InteractionRecord> page = interactionRecordService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/interaction-records");
         return ResponseEntity.ok().headers(headers).body(page.getContent());*/
-        return  interactionRecordService.searchByTime(time);
+        return  interactionRecordService.searchAllByTime(time);
 
 
     }
@@ -214,7 +214,7 @@ public class InteractionRecordResource {
      * @return the result of the search
      */
     @GetMapping("/interaction-records/getListByDuration")
-    public List<String> searchInteractionRecordListByDuration(@RequestParam Integer duration) {
+    public List<InteractionRecord> searchInteractionRecordListByDuration(@RequestParam Integer duration) {
         log.debug("REST request to search for a page of InteractionRecords for time {}", duration);
         return  interactionRecordService.searchListByDuration(duration);
 

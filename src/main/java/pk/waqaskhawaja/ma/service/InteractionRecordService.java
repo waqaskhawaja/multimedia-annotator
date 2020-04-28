@@ -116,12 +116,12 @@ public class InteractionRecordService {
 
 
     @Transactional(readOnly = true)
-    public List<String> searchListByDuration(Integer duration) {
+    public List<InteractionRecord> searchListByDuration(Integer duration) {
         log.debug("Request to search for a page of InteractionRecords for query {}", duration);
 
-        List<InteractionRecord> interactionRecordsList =  interactionRecordRepository.findListByDuration(duration);
-        List<String> Text = interactionRecordsList.stream().map(interactionRecord -> interactionRecord.getText()).collect(Collectors.toList());
-        return Text;
+
+        return interactionRecordRepository.findListByDuration(duration);
+
     }
 
 
@@ -131,6 +131,13 @@ public class InteractionRecordService {
         interactionRecordSearchRepository.deleteAll();
     }
 
+
+
+    @Transactional(readOnly = true)
+    public List<InteractionRecord> searchAllByTime(Integer time) {
+        log.debug("Request to search for a page of InteractionRecords for query {}", time);
+        return interactionRecordRepository.findAllByTime(time);
+    }
 
 
 }

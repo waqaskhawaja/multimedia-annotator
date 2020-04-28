@@ -24,6 +24,9 @@ export class AnnotationSessionDetailComponent implements OnInit {
     max: number;
     sliderEnable: boolean;
     interactionRecord: IInteractionRecord;
+    interactionRecordArray: IInteractionRecord[];
+    text: Array<String> = [];
+
     options: Options;
 
     constructor(
@@ -143,12 +146,14 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     getTextFromInteractionRecord(time: number) {
         this.interactionRecordService.findByDuration(time).subscribe(res => {
-            this.interactionRecord = res.body;
-        });
+            this.interactionRecordArray = res.body;
 
-        const inputTag = document.getElementById('text_area') as HTMLInputElement;
-        if (this.interactionRecord != null) {
-            inputTag.value = inputTag.value + '\n' + this.interactionRecord.text;
-        }
+            const inputTag = document.getElementById('text_area') as HTMLInputElement;
+            if (this.interactionRecordArray != null) {
+                for (let i = 0; i < this.interactionRecordArray.length; i++) {
+                    inputTag.value = inputTag.value + '\n' + this.interactionRecordArray[i].interactionType.name;
+                }
+            }
+        });
     }
 }
