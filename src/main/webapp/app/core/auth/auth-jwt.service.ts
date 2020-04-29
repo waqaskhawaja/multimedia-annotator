@@ -27,7 +27,6 @@ export class AuthServerProvider {
             if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
                 const jwt = bearerToken.slice(7, bearerToken.length);
                 this.storeAuthenticationToken(jwt, credentials.rememberMe);
-                alert(jwt);
                 return jwt;
             }
         }

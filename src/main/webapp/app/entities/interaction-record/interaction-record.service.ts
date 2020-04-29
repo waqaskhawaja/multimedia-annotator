@@ -13,6 +13,7 @@ type EntityArrayResponseType = HttpResponse<IInteractionRecord[]>;
 @Injectable({ providedIn: 'root' })
 export class InteractionRecordService {
     public resourceUrl = SERVER_API_URL + 'api/interaction-records';
+    public resourceUrlToGetAllRecords = SERVER_API_URL + 'api/interaction-records/all';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/interaction-records';
     public resourceSearchUrlForGetRecordByTime = SERVER_API_URL + 'api/interaction-records/getByTime';
     public resourceSearchUrlForGetRecordByDuration = SERVER_API_URL + 'api/interaction-records/getByDuration';
@@ -53,9 +54,13 @@ export class InteractionRecordService {
         });
     }
 
-    findByDuration(duration: number): Observable<EntityArrayResponseType> {
-        return this.http.get<IInteractionRecord[]>(`${this.resourceSearchUrlForGetRecordListByDuration}?duration=${duration}`, {
+    findByDuration(duration: number): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceSearchUrlForGetRecordListByDuration}?duration=${duration}`, {
             observe: 'response'
         });
+    }
+
+    getAllRecords(): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceUrlToGetAllRecords}`, { observe: 'response' });
     }
 }

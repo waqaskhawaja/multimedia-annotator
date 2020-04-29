@@ -9,6 +9,8 @@ import { InteractionRecordService } from 'app/entities/interaction-record';
 import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { interval } from 'rxjs';
+import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -32,15 +34,19 @@ export class AnnotationSessionDetailComponent implements OnInit {
     max: number;
     sliderEnable: boolean;
     interactionRecord: IInteractionRecord;
-    interactionRecordArray: IInteractionRecord[];
     text: Array<String> = [];
 
-    autoMove: number;
+    initializationSlider: Boolean;
     options: Options;
-    ELEMENT_DATA: IInteractionRecord[];
-    displayedColumns: string[] = ['select', 'id', 'text', 'interaction'];
+    ELEMENT_DATA: IInteractionRecordDto[];
+    displayedColumns: string[] = ['select', 'id', 'interaction'];
     dataSource: any;
     expandedElement: IInteractionRecord | null;
+    curSec: number;
+    sub: any;
+    sliderStartingValue: number;
+    interactionRecordDto: InteractionRecordDto[] = [];
+
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
@@ -48,12 +54,15 @@ export class AnnotationSessionDetailComponent implements OnInit {
         protected interactionRecordService: InteractionRecordService
     ) {
         this.sliderEnable = false;
+        this.initializationSlider = true;
+        this.curSec = 0;
+        this.sliderStartingValue = 0;
     }
 
     ngOnInit() {
         this.id = 'YJ4nfAZ_ZXg';
         this.value = 0;
-
+        this.getAllRecords();
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
             this.annotationSession = annotationSession;
         });
@@ -130,12 +139,16 @@ export class AnnotationSessionDetailComponent implements OnInit {
     playVideo() {
         this.player.playVideo();
         this.max = this.player.getDuration();
-        this.initializeSlider(this.max);
+        if (this.initializationSlider) {
+            this.initializeSlider(this.max);
+        }
         this.sliderEnable = true;
+        this.startTimer(this.value);
     }
 
     pauseVideo() {
         this.player.pauseVideo();
+        this.sub.unsubscribe();
     }
 
     onStateChange(event) {
@@ -144,8 +157,11 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     fastForward(value: number) {
         this.player.seekTo(value, true);
+        this.sub.unsubscribe();
         this.value = value;
-        this.getTextFromInteractionRecord(value);
+        this.sliderStartingValue = value;
+        this.startTimer(this.sliderStartingValue);
+        this.getDataFromAllRecord(value);
     }
 
     initializeSlider(maxSize: number) {
@@ -153,19 +169,56 @@ export class AnnotationSessionDetailComponent implements OnInit {
             floor: 0,
             ceil: maxSize
         };
+        this.initializationSlider = false;
     }
 
+    /*
     getTextFromInteractionRecord(time: number) {
         this.interactionRecordService.findByDuration(time).subscribe(res => {
             this.ELEMENT_DATA = res.body;
-            this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-            /*
+            if(this.ELEMENT_DATA.length>this.check) {
+                this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+                this.check= this.check+1;
+            }/!*
             const inputTag = document.getElementById('text_area') as HTMLInputElement;
             if (this.interactionRecordArray != null) {
                 for (let i = 0; i < this.interactionRecordArray.length; i++) {
                     inputTag.value = inputTag.value + '\n' + this.interactionRecordArray[i].interactionType.name;
                 }
-            }*/
+            }*!/
         });
+    }*/
+
+    startTimer(value: number) {
+        const timer$ = interval(1000);
+
+        this.sub = timer$.subscribe(sec => {
+            if (value === 0) {
+                this.value = 0 + sec;
+            } else {
+                this.value = value + sec;
+            }
+            //this.getTextFromInteractionRecord(this.value);
+            this.getDataFromAllRecord(this.value);
+            this.curSec = sec;
+
+            if (this.curSec === this.max) {
+                this.sub.unsubscribe();
+            }
+        });
+    }
+
+    getAllRecords() {
+        this.interactionRecordService.getAllRecords().subscribe(res => {
+            this.interactionRecordDto = res.body;
+        });
+    }
+
+    getDataFromAllRecord(index: number) {
+        this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.duration <= index);
+
+        if (this.ELEMENT_DATA != null) {
+            this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        }
     }
 }

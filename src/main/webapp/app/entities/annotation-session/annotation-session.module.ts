@@ -16,6 +16,7 @@ import {
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const ENTITY_STATES = [...annotationSessionRoute, ...annotationSessionPopupRoute];
 
@@ -26,7 +27,8 @@ const ENTITY_STATES = [...annotationSessionRoute, ...annotationSessionPopupRoute
         NgxYoutubePlayerModule.forRoot(),
         RouterModule.forChild(ENTITY_STATES),
         MatTableModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatProgressBarModule
     ],
     exports: [MatTableModule, MatCheckboxModule],
 

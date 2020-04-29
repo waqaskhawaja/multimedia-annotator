@@ -66,21 +66,23 @@
                             </ng5-slider>
                         </div>
                     </div>
+
+
+
                 </div>
 
 
 
 
-                <div class="col-lg-6">
+                <div class="col-lg-6 mat-elevation-z8 example-container">
 
                 <!--<textarea id="text_area" class="textareaStyled"></textarea>-->
 
-                    <div class="row">
-                            <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+                     <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
 
                                 <!-- Checkbox Column -->
 
-                                <ng-container matColumnDef="select">
+                                <ng-container matColumnDef="select" class="col-lg-2">
 
                                     <th mat-header-cell *matHeaderCellDef>
                                         <mat-checkbox >
@@ -93,51 +95,53 @@
                                 </ng-container>
 
                                 <!-- Position Column -->
-                                <ng-container matColumnDef="id">
+                                <ng-container matColumnDef="id" class="col-lg-2">
                                     <th mat-header-cell *matHeaderCellDef> ID </th>
                                     <td mat-cell *matCellDef="let element"> {{element.id}} </td>
                                 </ng-container>
 
                                 <!-- Weight Column -->
-                                <ng-container matColumnDef="text">
-                                    <th mat-header-cell *matHeaderCellDef> Text </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.text}} </td>
-                                </ng-container>
-
-                                <!-- Weight Column -->
-                                <ng-container matColumnDef="interaction">
+                                <ng-container matColumnDef="interaction" class="col-lg-2">
                                     <th mat-header-cell *matHeaderCellDef> Interaction </th>
                                     <td mat-cell *matCellDef="let element"> {{element.interactionType.name}} </td>
                                 </ng-container>
 
 
 
-                                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-                               <!-- <ng-container matColumnDef="expandedDetail">
+                             <!--    Expanded Content Column - The detail row is made up of this one column that spans across all columns-->
+                                <ng-container matColumnDef="expandedDetail">
                                     <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
                                         <div class="example-element-detail"
                                              [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                                            <div class="example-element-diagram">
-                                                <div class="example-element-id"> {{element.id}} </div>
-                                                <div class="example-element-text"> {{element.text}} </div>
-                                                <div class="example-element-interaction"> {{element.interactionType.name}} </div>
+                                            <div>
+                                                <span class="example-element-description-attribution"> -- Text </span>
+                                                <div class="example-element-description"> {{element.text}} </div>
                                             </div>
                                         </div>
                                     </td>
-                                </ng-container>-->
+                                </ng-container>
+
 
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                                    (click)="selection.toggle(row)">
-                                </tr>
-                              <!--  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>-->
+                            <!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                    class="example-element-row"
+                                    [class.example-expanded-row]="expandedElement === row"
+                                    (click)="expandedElement = expandedElement === row ? null : row">
+                                </tr>-->
+
+                         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                             class="example-element-row"
+                             [class.example-expanded-row]="expandedElement === element"
+                             (click)="expandedElement = expandedElement === element ? null : element">
+                         </tr>
+                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
                             </table>
 
 
 
-                        
+
                     </div>
 
 
@@ -163,4 +167,5 @@
             </div>
         </div>
     </div>
-</div>
+
+
