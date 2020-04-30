@@ -1,6 +1,7 @@
 package pk.waqaskhawaja.ma.web.rest;
 import pk.waqaskhawaja.ma.domain.InteractionRecord;
 import pk.waqaskhawaja.ma.service.InteractionRecordService;
+import pk.waqaskhawaja.ma.service.dto.InteractionRecordDTO;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
@@ -101,6 +102,11 @@ public class InteractionRecordResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+
+
+
+
+
     /**
     * GET  /interaction-records/count : count all the interactionRecords.
     *
@@ -176,12 +182,12 @@ public class InteractionRecordResource {
      * @return the result of the search
      */
     @GetMapping("/interaction-records/getByTime")
-    public InteractionRecord searchInteractionRecordByTime(@RequestParam Integer time) {
+    public List<InteractionRecord> searchInteractionRecordByTime(@RequestParam Integer time) {
         log.debug("REST request to search for a page of InteractionRecords for time {}", time);
    /*     Page<InteractionRecord> page = interactionRecordService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/interaction-records");
         return ResponseEntity.ok().headers(headers).body(page.getContent());*/
-        return  interactionRecordService.searchByTime(time);
+        return  interactionRecordService.searchAllByTime(time);
 
 
     }
@@ -214,9 +220,25 @@ public class InteractionRecordResource {
      * @return the result of the search
      */
     @GetMapping("/interaction-records/getListByDuration")
-    public List<String> searchInteractionRecordListByDuration(@RequestParam Integer duration) {
+    public List<InteractionRecordDTO> searchInteractionRecordListByDuration(@RequestParam Integer duration) {
         log.debug("REST request to search for a page of InteractionRecords for time {}", duration);
         return  interactionRecordService.searchListByDuration(duration);
 
     }
+
+    /**
+     *
+     * Get All Records of Interaction Records
+     * @return return List of All InteractionRecordDto
+     * */
+
+    @GetMapping("/interaction-records/all")
+    public List<InteractionRecordDTO> getAllInteractionRecordsAll() {
+        return interactionRecordService.getAllRecords();
+    }
+
+
+
+
+
 }

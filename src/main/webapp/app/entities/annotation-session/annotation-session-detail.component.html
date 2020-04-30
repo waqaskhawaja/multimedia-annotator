@@ -42,36 +42,117 @@
 
             <hr />
 
-            
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <youtube-player [videoId]="id" (ready)="savePlayer($event)"
-                                (change)="onStateChange($event)"
-                                [width]="800"
-                                [height]="400">
-                            </youtube-player>
-                        </div>
-                        <div class="row">
-                            <div class="btn-toolbar" role="toolbar">
-                                <button type="button" class="btn btn-primary"
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <youtube-player [videoId]="id" (ready)="savePlayer($event)"
+                                        (change)="onStateChange($event)"
+                                        [width]="600"
+                                        [height]="300">
+                        </youtube-player>
+                    </div>
+                    <div class="row">
+                        <div class="btn-toolbar" role="toolbar">
+                            <button type="button" class="btn btn-primary"
                                     (click)="playVideo()"><span>Play</span></button>
-                                <button type="button" class="btn btn-danger"
+                            <button type="button" class="btn btn-danger"
                                     (click)="pauseVideo()"><span>Pause</span></button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="w-100" *ngIf="sliderEnable">
-                                <ng5-slider [(value)]="value" [options]="options" (userChange)="fastForward(value)">
-                                </ng5-slider>
-                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <textarea id="text_area" class="textareaStyled"></textarea>
+                    <div class="row">
+                        <div class="w-100" *ngIf="sliderEnable">
+                            <ng5-slider [(value)]="value" [options]="options" (userChange)="fastForward(value)">
+                            </ng5-slider>
+                        </div>
                     </div>
+
+
+
                 </div>
-            
+
+
+
+
+                <div class="col-lg-6 mat-elevation-z8 example-container">
+
+                <!--<textarea id="text_area" class="textareaStyled"></textarea>-->
+
+                     <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+
+                                <!-- Checkbox Column -->
+
+                                <ng-container matColumnDef="select" class="col-lg-2">
+
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <mat-checkbox >
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <mat-checkbox>
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="id" class="col-lg-2">
+                                    <th mat-header-cell *matHeaderCellDef> ID </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                                </ng-container>
+
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="interaction" class="col-lg-2">
+                                    <th mat-header-cell *matHeaderCellDef> Interaction </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.interactionType.name}} </td>
+                                </ng-container>
+
+
+
+                             <!--    Expanded Content Column - The detail row is made up of this one column that spans across all columns-->
+                                <ng-container matColumnDef="expandedDetail">
+                                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                                        <div class="example-element-detail"
+                                             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                            <div>
+                                                <span class="example-element-description-attribution"> -- Text </span>
+                                                <div class="example-element-description"> {{element.text}} </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </ng-container>
+
+
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                                    class="example-element-row"
+                                    [class.example-expanded-row]="expandedElement === row"
+                                    (click)="expandedElement = expandedElement === row ? null : row">
+                                </tr>-->
+
+                         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                             class="example-element-row"
+                             [class.example-expanded-row]="expandedElement === element"
+                             (click)="expandedElement = expandedElement === element ? null : element">
+                         </tr>
+                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+                            </table>
+
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+
 
             <div class="row mt-5">
 
@@ -80,10 +161,11 @@
                 </button>
 
                 <button type="button" [routerLink]="['/annotation-session', annotationSession.id, 'edit']"
-                    class="btn btn-primary">
+                        class="btn btn-primary">
                     <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
                 </button>
             </div>
         </div>
     </div>
-</div>
+
+

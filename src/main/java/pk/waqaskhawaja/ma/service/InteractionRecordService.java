@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pk.waqaskhawaja.ma.service.dto.InteractionRecordDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class InteractionRecordService {
         this.interactionRecordRepository = interactionRecordRepository;
         this.interactionRecordSearchRepository = interactionRecordSearchRepository;
     }
+    private  static double numbertoAdd  = 0.1;
 
     /**
      * Save a interactionRecord.
@@ -113,18 +115,23 @@ public class InteractionRecordService {
         return interactionRecordRepository.findByDuration(duration);
     }
 
-
-
+    /**
+     *
+     * Search All InteractionRecord which are present before duration {RequestParam} and convert them to InteractionRecordDto
+     * @param duration
+     * @return Return List all InteractionRecordDto before duration
+     *
+     * */
     @Transactional(readOnly = true)
-    public List<String> searchListByDuration(Integer duration) {
+    public List<InteractionRecordDTO> searchListByDuration(Integer duration) {
         log.debug("Request to search for a page of InteractionRecords for query {}", duration);
-
-        List<InteractionRecord> interactionRecordsList =  interactionRecordRepository.findListByDuration(duration);
-        List<String> Text = interactionRecordsList.stream().map(interactionRecord -> interactionRecord.getText()).collect(Collectors.toList());
-        return Text;
+        return interactionRecordRepository.findAll().stream().filter(interactionRecord -> interactionRecord.getDuration()<=duration)
+            .map(interactionRecord -> new InteractionRecordDTO(interactionRecord.getId(),interactionRecord.getDuration(),interactionRecord.getText(),interactionRecord.getSourceId(),
+                    interactionRecord.getTime(),interactionRecord.getInteractionType())).collect(Collectors.toList());
     }
 
 
+    /**Delete All InteractionRecords*/
     public void deleteAllRecord() {
         log.debug("Request to delete All InteractionRecord : {}");
         interactionRecordRepository.deleteAll();
@@ -133,4 +140,28 @@ public class InteractionRecordService {
 
 
 
+    /**Search By time
+     * @param time Search all List of InteractionRecord by time
+     * @return Return List of Interaction Records
+     * */
+    @Transactional(readOnly = true)
+    public List<InteractionRecord> searchAllByTime(Integer time) {
+        log.debug("Request to search for a page of InteractionRecords for query {}", time);
+        return interactionRecordRepository.findAllByTime(time);
+    }
+
+
+
+    /**
+     * Get All InteractionRecord and Convert them to InteractionRecordDto
+     * @return Return List of All InteractionRecordDto
+     * */
+    @Transactional(readOnly = true)
+    public List<InteractionRecordDTO> getAllRecords()
+    {
+        return interactionRecordRepository.findAll().stream().map(interactionRecord->
+            new InteractionRecordDTO(interactionRecord.getId(),interactionRecord.getDuration(),interactionRecord.getText(),interactionRecord.getSourceId(),
+                                    interactionRecord.getTime(),interactionRecord.getInteractionType()))
+                                    .collect(Collectors.toList());
+    }
 }

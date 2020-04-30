@@ -13,6 +13,7 @@ type EntityArrayResponseType = HttpResponse<IInteractionRecord[]>;
 @Injectable({ providedIn: 'root' })
 export class InteractionRecordService {
     public resourceUrl = SERVER_API_URL + 'api/interaction-records';
+    public resourceUrlToGetAllRecords = SERVER_API_URL + 'api/interaction-records/all';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/interaction-records';
     public resourceSearchUrlForGetRecordByTime = SERVER_API_URL + 'api/interaction-records/getByTime';
     public resourceSearchUrlForGetRecordByDuration = SERVER_API_URL + 'api/interaction-records/getByDuration';
@@ -46,13 +47,20 @@ export class InteractionRecordService {
         return this.http.get<IInteractionRecord[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
     }
 
-    findByTime(time: number): Observable<EntityResponseType> {
-        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByTime}?time=${time}`, { observe: 'response' });
-    }
-
-    findByDuration(duration: number): Observable<EntityResponseType> {
-        return this.http.get<IInteractionRecord>(`${this.resourceSearchUrlForGetRecordByDuration}?duration=${duration}`, {
+    findByTime(time: number): Observable<EntityArrayResponseType> {
+        const centiSecond = time * 10;
+        return this.http.get<IInteractionRecord[]>(`${this.resourceSearchUrlForGetRecordByTime}?time=${centiSecond}`, {
             observe: 'response'
         });
+    }
+
+    findByDuration(duration: number): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceSearchUrlForGetRecordListByDuration}?duration=${duration}`, {
+            observe: 'response'
+        });
+    }
+
+    getAllRecords(): Observable<HttpResponse<any>> {
+        return this.http.get<any>(`${this.resourceUrlToGetAllRecords}`, { observe: 'response' });
     }
 }

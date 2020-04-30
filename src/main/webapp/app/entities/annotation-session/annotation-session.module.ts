@@ -13,11 +13,25 @@ import {
     annotationSessionRoute,
     annotationSessionPopupRoute
 } from './';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const ENTITY_STATES = [...annotationSessionRoute, ...annotationSessionPopupRoute];
 
 @NgModule({
-    imports: [Ng5SliderModule, MaSharedModule, NgxYoutubePlayerModule.forRoot(), RouterModule.forChild(ENTITY_STATES)],
+    imports: [
+        Ng5SliderModule,
+        MaSharedModule,
+        NgxYoutubePlayerModule.forRoot(),
+        RouterModule.forChild(ENTITY_STATES),
+        MatTableModule,
+        MatCheckboxModule,
+        MatProgressBarModule
+    ],
+    exports: [MatTableModule, MatCheckboxModule],
+
     declarations: [
         AnnotationSessionComponent,
         AnnotationSessionDetailComponent,
