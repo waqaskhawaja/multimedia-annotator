@@ -1,0 +1,49 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="dataSet">
+            <h2><span>Data Set</span> {{dataSet.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Title</span></dt>
+                <dd>
+                    <span>{{dataSet.title}}</span>
+                </dd>
+                <dt><span>Date</span></dt>
+                <dd>
+                    <span>{{dataSet.date}}</span>
+                </dd>
+                <dt><span>Type</span></dt>
+                <dd>
+                    <span>{{dataSet.type}}</span>
+                </dd>
+                <dt><span>Contents</span></dt>
+                <dd>
+                    <span>{{dataSet.contents}}</span>
+                </dd>
+                <dt><span>Identifier</span></dt>
+                <dd>
+                    <span>{{dataSet.identifier}}</span>
+                </dd>
+                <dt><span>Annotation Session</span></dt>
+                <dd>
+                    <div *ngIf="dataSet.annotationSession">
+                        <a [routerLink]="['/annotation-session', dataSet.annotationSession?.id, 'view']">{{dataSet.annotationSession?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/data-set', dataSet.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,10 @@
 package pk.waqaskhawaja.ma.service;
 
 import pk.waqaskhawaja.ma.domain.Annotation;
+import pk.waqaskhawaja.ma.domain.AnnotationSession;
+import pk.waqaskhawaja.ma.domain.InteractionRecord;
 import pk.waqaskhawaja.ma.repository.AnnotationRepository;
+import pk.waqaskhawaja.ma.repository.InteractionRecordRepository;
 import pk.waqaskhawaja.ma.repository.search.AnnotationSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -24,13 +30,20 @@ public class AnnotationService {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationService.class);
 
+
+    private final InteractionRecordRepository interactionRecordRepository;
+
     private final AnnotationRepository annotationRepository;
 
     private final AnnotationSearchRepository annotationSearchRepository;
 
-    public AnnotationService(AnnotationRepository annotationRepository, AnnotationSearchRepository annotationSearchRepository) {
+    private final AnnotationSessionService annotationSessionService;
+
+    public AnnotationService(AnnotationRepository annotationRepository, AnnotationSearchRepository annotationSearchRepository, InteractionRecordRepository interactionRecordRepository, AnnotationSessionService annotationSessionService) {
         this.annotationRepository = annotationRepository;
         this.annotationSearchRepository = annotationSearchRepository;
+        this.interactionRecordRepository = interactionRecordRepository;
+        this.annotationSessionService = annotationSessionService;
     }
 
     /**
@@ -66,7 +79,7 @@ public class AnnotationService {
     public Page<Annotation> findAllWithEagerRelationships(Pageable pageable) {
         return annotationRepository.findAllWithEagerRelationships(pageable);
     }
-    
+
 
     /**
      * Get one annotation by id.
@@ -102,4 +115,42 @@ public class AnnotationService {
     public Page<Annotation> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Annotations for query {}", query);
         return annotationSearchRepository.search(queryStringQuery(query), pageable);    }
+
+
+    public String saveAndConvertFromInteractionDtoToAnnotation(Long[]  interactionRecordDTO, String Text, Long annotationID) {
+        int lengthOfArray = interactionRecordDTO.length;
+        List<InteractionRecord> interactionRecordList = new ArrayList<>();
+        Instant instant = Instant.now();
+
+        AnnotationSession annotationSession = annotationSessionService.findOne(annotationID).orElse(null);
+
+
+        for (Long id:interactionRecordDTO) {
+            InteractionRecord interactionRecord =    interactionRecordRepository.findById(id).orElse(null);
+            if(interactionRecord!=null){
+                interactionRecordList.add(interactionRecord);
+            }
+        }
+
+
+        if (lengthOfArray > 0)
+        {
+            for(int i=0; i<lengthOfArray; i++)
+            {
+
+                Annotation annotation = new Annotation();
+                annotation.setAnnotationText(Text);
+                if(annotationSession.getId()!=null){
+                    annotation.setAnnotationSession(annotationSession);
+                }
+                annotation.setStart(instant);
+                annotation.setEnd(instant);
+                annotationRepository.save(annotation);
+            }
+
+        }
+        return "Saved";
+    }
+
+
 }

@@ -1,31 +1,26 @@
 {
-    "name": "AnnotationType",
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "annotationSession",
+            "otherEntityName": "annotationSession",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
     "fields": [
         {
             "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": 100
+            "fieldType": "String"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "annotationType",
-            "otherEntityRelationshipName": "annotationType",
-            "relationshipName": "parent",
-            "otherEntityField": "name"
-        }
-    ],
-    "changelogDate": "20190509094535",
-    "entityTableName": "annotation_type",
+    "changelogDate": "20200430114637",
     "dto": "no",
-    "pagination": "pager",
+    "searchEngine": "elasticsearch",
     "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "clientRootFolder": "",
-    "applications": "*"
+    "entityTableName": "annotation_type",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
 }

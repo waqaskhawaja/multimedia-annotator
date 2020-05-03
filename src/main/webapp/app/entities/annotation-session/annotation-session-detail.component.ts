@@ -11,13 +11,23 @@ import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { interval } from 'rxjs';
 import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Annotation } from 'app/shared/model/annotation.model';
+import { AnnotationService } from 'app/entities/annotation';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SelectionModel } from '@angular/cdk/collections';
+import { HttpResponse } from '@angular/common/http';
+import { IDataSetResource } from 'app/shared/model/data-set-resource.model';
+import { DataSet, IDataSet } from 'app/shared/model/data-set.model';
+import { DataSetService } from 'app/entities/data-set/data-set.service';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
+    styleUrls: ['./annotation-session.css'],
     templateUrl: './annotation-session-detail.component.html',
     animations: [
         trigger('detailExpand', [
-            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
             state('expanded', style({ height: '*' })),
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
         ])
@@ -41,39 +51,58 @@ export class AnnotationSessionDetailComponent implements OnInit {
     ELEMENT_DATA: IInteractionRecordDto[];
     displayedColumns: string[] = ['select', 'id', 'interaction'];
     dataSource: any;
-    expandedElement: IInteractionRecord | null;
+    expandedElement: IDataSet | null;
     curSec: number;
     sub: any;
     sliderStartingValue: number;
     interactionRecordDto: InteractionRecordDto[] = [];
+    firstChecked: number;
+    secondChecked: number;
+    firstElement: InteractionRecordDto;
+    annotationToSave: Array<InteractionRecordDto> = [];
+    idArray: Array<any> = [];
+    selectedRowsBetweenTwoCheckBox: Array<InteractionRecordDto> = [];
+    dataSets: IDataSet[];
+    dataToStore: Array<InteractionRecordDto> = [];
+
+    inLineFormEnable: Boolean;
+    durationInSeconds: number = 2;
+    selection = new SelectionModel<IInteractionRecordDto>(true, []);
 
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
         protected embedService: EmbedVideoService,
-        protected interactionRecordService: InteractionRecordService
+        protected interactionRecordService: InteractionRecordService,
+        protected annotationService: AnnotationService,
+        private _snackBar: MatSnackBar,
+        protected dataSetService: DataSetService
     ) {
         this.sliderEnable = false;
         this.initializationSlider = true;
         this.curSec = 0;
         this.sliderStartingValue = 0;
+        this.secondChecked = 0;
+        this.firstChecked = null;
+        this.inLineFormEnable = false;
     }
 
     ngOnInit() {
         this.id = 'YJ4nfAZ_ZXg';
         this.value = 0;
         this.getAllRecords();
+        this.getAllDataSet();
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
             this.annotationSession = annotationSession;
         });
         this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
             this.analysisSessionResource = res.body;
-            this.setSliderEnd(this.analysisSessionResource.url);
+            //this.setSliderEnd(this.analysisSessionResource.url);
         });
-        this.setSliderEnd(this.analysisSessionResource.url);
+        /* this.setSliderEnd(this.analysisSessionResource.url);*/
     }
 
-    embedVideo(url: string) {
+    /* embedVideo(url: string) {
         return this.embedService.embed(url);
     }
 
@@ -126,7 +155,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
             })
             .join(':');
         return miliseconds;
-    }
+    }*/
 
     previousState() {
         window.history.back();
@@ -216,9 +245,89 @@ export class AnnotationSessionDetailComponent implements OnInit {
 
     getDataFromAllRecord(index: number) {
         this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.duration <= index);
+        this.dataToStore = this.ELEMENT_DATA.filter(value1 => value1.interactionType.name === 'Reading');
 
+        debugger;
+        if (this.dataToStore.length > 0) {
+            let sourceID = this.dataToStore[0].sourceId.split(' ').join('');
+            const result = this.dataSets.filter(value1 => value1.identifier === 'ArmsDealing24');
+            if (sourceID === 'Armsdealing24') {
+                this.expandedElement = result[0];
+                //      this.dataToStore.pop();
+            }
+        }
         if (this.ELEMENT_DATA != null) {
             this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
         }
+    }
+
+    getName(e: MatCheckboxChange, checkedVal: any, interactionRecord: InteractionRecordDto) {
+        if (e.checked) {
+            if (this.firstChecked === null) {
+                this.firstChecked = checkedVal;
+                this.firstElement = interactionRecord;
+            } else if (this.firstChecked != null) {
+                this.secondChecked = checkedVal;
+                this.selectedRowsBetweenTwoCheckBox = this.ELEMENT_DATA.filter(
+                    value => value.id >= this.firstElement.id && value.id <= interactionRecord.id
+                );
+
+                for (let i = 0; i < this.selectedRowsBetweenTwoCheckBox.length; i++) {
+                    this.idArray.push(this.selectedRowsBetweenTwoCheckBox[i].id);
+                    this.dataSource.data
+                        .filter(value => value.index >= this.firstChecked && value.index <= checkedVal)
+                        .forEach(var1 => this.selection.selected);
+                }
+            }
+        } else {
+            if (this.firstChecked === checkedVal) {
+                this.firstChecked = null;
+                this.firstElement = null;
+            } else if (this.secondChecked === checkedVal) {
+                alert('before del len' + this.selectedRowsBetweenTwoCheckBox.length);
+                for (let k = 0; k < this.selectedRowsBetweenTwoCheckBox.length; k++) {
+                    this.selectedRowsBetweenTwoCheckBox.pop();
+                    alert('del elemnet' + k);
+                }
+
+                alert('after del len' + this.selectedRowsBetweenTwoCheckBox.length);
+
+                for (let i = 0; i <= this.idArray.length; i++) {
+                    this.idArray.pop();
+                }
+            }
+        }
+    }
+
+    saveAnnotation() {
+        const inputTag = document.getElementById('inputText') as HTMLInputElement;
+        if (inputTag != null) {
+            if (this.annotationToSave != null) {
+                this.annotationService
+                    .saveAnnotation(this.idArray, inputTag.value, this.annotationSessionService.getSessionValue())
+                    .subscribe();
+                /*  this._snackBar.open("Annotation Created", this.annotationSessionService.getSessionValue(), {
+                      duration: 2000,
+                  });*/
+                this._snackBar.open('Annotation Created', this.annotationSessionService.getSessionValue(), {
+                    duration: 4000
+                });
+            }
+        } else {
+        }
+    }
+
+    getInLineForm() {
+        this.inLineFormEnable = true;
+    }
+
+    hideInLineForm() {
+        this.inLineFormEnable = false;
+    }
+
+    getAllDataSet() {
+        this.dataSetService.query().subscribe((res: HttpResponse<IDataSet[]>) => {
+            this.dataSets = res.body;
+        });
     }
 }
