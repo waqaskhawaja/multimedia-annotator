@@ -152,16 +152,31 @@
 
 
                          <ng-container matColumnDef="expandedDetail">
+
                              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
                                  <div class="example-element-detail"
                                       [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                                     <table width="100%">
+
+                                     <table mat-table [dataSource]="dataSource2">
+
+
+                                         <ng-container matColumnDef="contents">
+                                             <th mat-header-cell *matHeaderCellDef> Contents. </th>
+                                             <td mat-cell *matCellDef="let element2"> {{element2.contents}} </td>
+                                         </ng-container>
+
+
+
+                                         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                                         <tr mat-row *matRowDef="let row2; columns: displayedColumns2;"></tr>
+                                    <!-- <table width="100%">
                                          <tr class="example-detail-row">
                                              <td align="left">{{element.text}}</td>
                                          </tr>
 
+                                     </table>-->
                                      </table>
-                                 </div>
+                                     </div>
                              </td>
                          </ng-container>
 
@@ -181,12 +196,10 @@
                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                              class="example-element-row"
                              [class.example-expanded-row]="expandedElement === row"
-                             (click)="expandedElement = row"
+                             (click)="exapndRow($event,row)"
                          >
                          </tr>
                          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-
-                         <mat-paginator [pageSizeOptions]="[7, 15, 20]" showFirstLastButtons></mat-paginator>
 
                             </table>
 

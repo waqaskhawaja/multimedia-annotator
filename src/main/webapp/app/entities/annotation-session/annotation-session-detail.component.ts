@@ -27,7 +27,7 @@ import { DataSetService } from 'app/entities/data-set/data-set.service';
     templateUrl: './annotation-session-detail.component.html',
     animations: [
         trigger('detailExpand', [
-            state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
             state('expanded', style({ height: '*' })),
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
         ])
@@ -49,8 +49,12 @@ export class AnnotationSessionDetailComponent implements OnInit {
     initializationSlider: Boolean;
     options: Options;
     ELEMENT_DATA: IInteractionRecordDto[];
+    ELEMENT_DATA2: IDataSet[];
+
     displayedColumns: string[] = ['select', 'id', 'interaction'];
+    displayedColumns2 = ['contents'];
     dataSource: any;
+    dataSource2: any;
     expandedElement: IDataSet | null;
     curSec: number;
     sub: any;
@@ -64,11 +68,14 @@ export class AnnotationSessionDetailComponent implements OnInit {
     selectedRowsBetweenTwoCheckBox: Array<InteractionRecordDto> = [];
     dataSets: IDataSet[];
     dataToStore: Array<InteractionRecordDto> = [];
+    result: IDataSet[];
+    objStore: IDataSet[];
 
+    contexts: Boolean;
     inLineFormEnable: Boolean;
     durationInSeconds: number = 2;
     selection = new SelectionModel<IInteractionRecordDto>(true, []);
-
+    storeArray: Array<IDataSet> = [];
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
@@ -85,6 +92,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
         this.secondChecked = 0;
         this.firstChecked = null;
         this.inLineFormEnable = false;
+        this.contexts = false;
     }
 
     ngOnInit() {
@@ -246,15 +254,39 @@ export class AnnotationSessionDetailComponent implements OnInit {
     getDataFromAllRecord(index: number) {
         this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.duration <= index);
         this.dataToStore = this.ELEMENT_DATA.filter(value1 => value1.interactionType.name === 'Reading');
+        let storeArrayDataSet = new Set();
+        /*if(this.dataToStore.length>1) {
+            let sourceID0 = this.dataToStore[0].sourceId.split(' ').join('').toLowerCase();
+            let sourceID1 = this.dataToStore[1].sourceId.split(' ').join('').toLowerCase();
+            const result0 = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID0);
+            const result = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID1);
+        }
 
-        debugger;
+        */
         if (this.dataToStore.length > 0) {
-            let sourceID = this.dataToStore[0].sourceId.split(' ').join('');
-            const result = this.dataSets.filter(value1 => value1.identifier === 'ArmsDealing24');
-            if (sourceID === 'Armsdealing24') {
-                this.expandedElement = result[0];
-                //      this.dataToStore.pop();
+            for (let i = 0; i < this.dataToStore.length; i++) {
+                debugger;
+                let sourceID = this.dataToStore[i].sourceId
+                    .split(' ')
+                    .join('')
+                    .toLowerCase();
+
+                this.result = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID);
+
+                storeArrayDataSet.add(this.result[i]);
+                /*    for(let k=1; k<arr+1; k++){
+
+                    this.result[k] = this.objStore[k-1];
+                }*/
+
+                if (this.result.length > 0) {
+                    this.ELEMENT_DATA2 = this.result;
+                    this.dataSource2 = new MatTableDataSource(this.ELEMENT_DATA2);
+                    //      this.dataToStore.pop();
+                }
             }
+            debugger;
+            storeArrayDataSet;
         }
         if (this.ELEMENT_DATA != null) {
             this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
@@ -329,5 +361,11 @@ export class AnnotationSessionDetailComponent implements OnInit {
         this.dataSetService.query().subscribe((res: HttpResponse<IDataSet[]>) => {
             this.dataSets = res.body;
         });
+    }
+
+    exapndRow(e: Event, data: IInteractionRecordDto) {
+        if (data.interactionType.name.toLowerCase() === 'reading') {
+            this.expandedElement = this.expandedElement === data ? null : data;
+        }
     }
 }
