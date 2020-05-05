@@ -39,7 +39,6 @@ export class AnnotationSessionDetailComponent implements OnInit {
     player: YT.Player;
     private id: string;
     value: number;
-    videoId: string;
     end: any;
     max: number;
     sliderEnable: boolean;
@@ -71,6 +70,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
     result: IDataSet[];
     objStore: IDataSet[];
 
+    index: number;
     contexts: Boolean;
     inLineFormEnable: Boolean;
     durationInSeconds: number = 2;
@@ -174,7 +174,13 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     playVideo() {
-        this.player.playVideo();
+        const currentTime = this.player.getCurrentTime();
+        if (currentTime <= 0) {
+            this.player.seekTo(1, true);
+        } else {
+            this.player.playVideo();
+            this.player.seekTo(this.value, true);
+        }
         this.max = this.player.getDuration();
         if (this.initializationSlider) {
             this.initializeSlider(this.max);
@@ -252,17 +258,15 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     getDataFromAllRecord(index: number) {
-        this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.duration <= index);
+        const toCentiSec = index * 10;
+        /*
+
+        const toCentiSec= index*100;
+*/
+        this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.time <= toCentiSec);
         this.dataToStore = this.ELEMENT_DATA.filter(value1 => value1.interactionType.name === 'Reading');
         let storeArrayDataSet = new Set();
-        /*if(this.dataToStore.length>1) {
-            let sourceID0 = this.dataToStore[0].sourceId.split(' ').join('').toLowerCase();
-            let sourceID1 = this.dataToStore[1].sourceId.split(' ').join('').toLowerCase();
-            const result0 = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID0);
-            const result = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID1);
-        }
 
-        */
         if (this.dataToStore.length > 0) {
             for (let i = 0; i < this.dataToStore.length; i++) {
                 let sourceID = this.dataToStore[i].sourceId
@@ -284,39 +288,57 @@ export class AnnotationSessionDetailComponent implements OnInit {
         }
     }
 
-    getName(e: MatCheckboxChange, checkedVal: any, interactionRecord: InteractionRecordDto) {
+    getName(e: MatCheckboxChange, rowIndex: any, interactionRecord: InteractionRecordDto) {
         if (e.checked) {
             if (this.firstChecked === null) {
-                this.firstChecked = checkedVal;
+                this.firstChecked = rowIndex;
                 this.firstElement = interactionRecord;
             } else if (this.firstChecked != null) {
-                this.secondChecked = checkedVal;
+                this.secondChecked = rowIndex;
+
+                let secondElementSelected = interactionRecord;
                 this.selectedRowsBetweenTwoCheckBox = this.ELEMENT_DATA.filter(
-                    value => value.id >= this.firstElement.id && value.id <= interactionRecord.id
+                    value => value.id >= this.firstElement.id && value.id <= secondElementSelected.id
                 );
 
                 for (let i = 0; i < this.selectedRowsBetweenTwoCheckBox.length; i++) {
                     this.idArray.push(this.selectedRowsBetweenTwoCheckBox[i].id);
-                    this.dataSource.data
-                        .filter(value => value.index >= this.firstChecked && value.index <= checkedVal)
-                        .forEach(var1 => this.selection.selected);
                 }
+
+                for (let i = this.firstChecked; i <= this.secondChecked; i++) {
+                    debugger;
+                    if (!this.selection.isSelected(this.selectedRowsBetweenTwoCheckBox[this.firstChecked])) {
+                        for (let j = 0; j < this.selectedRowsBetweenTwoCheckBox.length; j++) {
+                            this.selection.select(this.selectedRowsBetweenTwoCheckBox[j]);
+                        }
+                    }
+                }
+
+                console.log(this.selection);
             }
         } else {
-            if (this.firstChecked === checkedVal) {
+            if (this.firstChecked === rowIndex) {
                 this.firstChecked = null;
                 this.firstElement = null;
-            } else if (this.secondChecked === checkedVal) {
-                alert('before del len' + this.selectedRowsBetweenTwoCheckBox.length);
-                for (let k = 0; k < this.selectedRowsBetweenTwoCheckBox.length; k++) {
-                    this.selectedRowsBetweenTwoCheckBox.pop();
-                    alert('del elemnet' + k);
+            } else if (this.secondChecked === rowIndex) {
+                for (let i = 0; i < this.ELEMENT_DATA.length; i++) {
+                    this.selection.deselect(this.ELEMENT_DATA[i]);
                 }
 
-                alert('after del len' + this.selectedRowsBetweenTwoCheckBox.length);
+                while (this.selectedRowsBetweenTwoCheckBox.length > 0) {
+                    this.selectedRowsBetweenTwoCheckBox.pop();
+                }
 
-                for (let i = 0; i <= this.idArray.length; i++) {
+                while (this.idArray.length > 0) {
                     this.idArray.pop();
+                }
+
+                this.secondChecked = null;
+                this.firstChecked = null;
+                this.firstElement = null;
+            } else {
+                for (let i = 0; i < this.ELEMENT_DATA.length; i++) {
+                    this.selection.deselect(this.ELEMENT_DATA[i]);
                 }
             }
         }

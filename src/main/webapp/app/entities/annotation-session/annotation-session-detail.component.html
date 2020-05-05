@@ -124,7 +124,7 @@
                                      </mat-checkbox>
                                  </th>
                                  <td mat-cell *matCellDef="let row ; let i = dataIndex;">
-                                     <mat-checkbox   [checked]="selection.isSelected(row)"  (change)="getName($event,i,row)">
+                                     <mat-checkbox   [checked]="this.selection.isSelected(row)"  (change)="getName($event,i,row)">
                                      </mat-checkbox>
                                  </td>
                              </ng-container>
@@ -157,7 +157,7 @@
                                  <div class="example-element-detail"
                                       [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
-                                     <table mat-table [dataSource]="dataSource2">
+                                     <table mat-table [dataSource]="dataSource2" multiTemplateDataRows>
 
 
                                          <ng-container matColumnDef="contents">
