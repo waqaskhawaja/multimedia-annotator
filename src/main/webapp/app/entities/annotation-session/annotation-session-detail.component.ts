@@ -49,7 +49,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
     initializationSlider: Boolean;
     options: Options;
     ELEMENT_DATA: IInteractionRecordDto[];
-    ELEMENT_DATA2: IDataSet[];
+    ELEMENT_DATA2: Array<IDataSet> = [];
 
     displayedColumns: string[] = ['select', 'id', 'interaction'];
     displayedColumns2 = ['contents'];
@@ -265,28 +265,19 @@ export class AnnotationSessionDetailComponent implements OnInit {
         */
         if (this.dataToStore.length > 0) {
             for (let i = 0; i < this.dataToStore.length; i++) {
-                debugger;
                 let sourceID = this.dataToStore[i].sourceId
                     .split(' ')
                     .join('')
                     .toLowerCase();
 
                 this.result = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID);
-
-                storeArrayDataSet.add(this.result[i]);
-                /*    for(let k=1; k<arr+1; k++){
-
-                    this.result[k] = this.objStore[k-1];
-                }*/
+                storeArrayDataSet.add(this.result[0]);
 
                 if (this.result.length > 0) {
-                    this.ELEMENT_DATA2 = this.result;
+                    this.ELEMENT_DATA2 = Array.from(storeArrayDataSet);
                     this.dataSource2 = new MatTableDataSource(this.ELEMENT_DATA2);
-                    //      this.dataToStore.pop();
                 }
             }
-            debugger;
-            storeArrayDataSet;
         }
         if (this.ELEMENT_DATA != null) {
             this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
