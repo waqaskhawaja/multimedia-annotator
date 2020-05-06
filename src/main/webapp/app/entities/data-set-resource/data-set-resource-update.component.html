@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-data-set-resource-heading">Create or edit a Data Set Resource</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_sourceFile">Source File</label>
+                    <div>
+                        <div *ngIf="editForm.get('sourceFile').value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('sourceFileContentType').value, editForm.get('sourceFile').value)">open</a><br>
+                            <span class="pull-left">{{editForm.get('sourceFileContentType').value}}, {{byteSize(editForm.get('sourceFile').value)}}</span>
+                            <button type="button" (click)="editForm.patchValue({sourceFile: null});editForm.patchValue({sourceFileContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_sourceFile" (change)="setFileData($event, 'sourceFile', false)"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="sourceFile" id="field_sourceFile"
+                           formControlName="sourceFile"/>
+                    <input type="hidden" class="form-control" name="sourceFileContentType" id="field_sourceFileContentType"
+                           formControlName="sourceFileContentType" />
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

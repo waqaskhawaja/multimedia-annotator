@@ -11,9 +11,19 @@ import { MatTableDataSource } from '@angular/material/table';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { interval } from 'rxjs';
 import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Annotation } from 'app/shared/model/annotation.model';
+import { AnnotationService } from 'app/entities/annotation';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SelectionModel } from '@angular/cdk/collections';
+import { HttpResponse } from '@angular/common/http';
+import { IDataSetResource } from 'app/shared/model/data-set-resource.model';
+import { DataSet, IDataSet } from 'app/shared/model/data-set.model';
+import { DataSetService } from 'app/entities/data-set/data-set.service';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
+    styleUrls: ['./annotation-session.css'],
     templateUrl: './annotation-session-detail.component.html',
     animations: [
         trigger('detailExpand', [
@@ -29,7 +39,6 @@ export class AnnotationSessionDetailComponent implements OnInit {
     player: YT.Player;
     private id: string;
     value: number;
-    videoId: string;
     end: any;
     max: number;
     sliderEnable: boolean;
@@ -39,41 +48,69 @@ export class AnnotationSessionDetailComponent implements OnInit {
     initializationSlider: Boolean;
     options: Options;
     ELEMENT_DATA: IInteractionRecordDto[];
+    ELEMENT_DATA2: Array<IDataSet> = [];
+
     displayedColumns: string[] = ['select', 'id', 'interaction'];
+    displayedColumns2 = ['contents'];
     dataSource: any;
-    expandedElement: IInteractionRecord | null;
+    dataSource2: any;
+    expandedElement: IDataSet | null;
     curSec: number;
     sub: any;
     sliderStartingValue: number;
     interactionRecordDto: InteractionRecordDto[] = [];
+    firstChecked: number;
+    secondChecked: number;
+    firstElement: InteractionRecordDto;
+    annotationToSave: Array<InteractionRecordDto> = [];
+    idArray: Array<any> = [];
+    selectedRowsBetweenTwoCheckBox: Array<InteractionRecordDto> = [];
+    dataSets: IDataSet[];
+    dataToStore: Array<InteractionRecordDto> = [];
+    result: IDataSet[];
+    objStore: IDataSet[];
 
+    index: number;
+    contexts: Boolean;
+    inLineFormEnable: Boolean;
+    durationInSeconds: number = 2;
+    selection = new SelectionModel<IInteractionRecordDto>(true, []);
+    storeArray: Array<IDataSet> = [];
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
         protected embedService: EmbedVideoService,
-        protected interactionRecordService: InteractionRecordService
+        protected interactionRecordService: InteractionRecordService,
+        protected annotationService: AnnotationService,
+        private _snackBar: MatSnackBar,
+        protected dataSetService: DataSetService
     ) {
         this.sliderEnable = false;
         this.initializationSlider = true;
         this.curSec = 0;
         this.sliderStartingValue = 0;
+        this.secondChecked = 0;
+        this.firstChecked = null;
+        this.inLineFormEnable = false;
+        this.contexts = false;
     }
 
     ngOnInit() {
         this.id = 'YJ4nfAZ_ZXg';
         this.value = 0;
         this.getAllRecords();
+        this.getAllDataSet();
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
             this.annotationSession = annotationSession;
         });
         this.annotationSessionService.findVideoByAnalysisSession(this.annotationSession.analysisSession.id).subscribe(res => {
             this.analysisSessionResource = res.body;
-            this.setSliderEnd(this.analysisSessionResource.url);
+            //this.setSliderEnd(this.analysisSessionResource.url);
         });
-        this.setSliderEnd(this.analysisSessionResource.url);
+        /* this.setSliderEnd(this.analysisSessionResource.url);*/
     }
 
-    embedVideo(url: string) {
+    /* embedVideo(url: string) {
         return this.embedService.embed(url);
     }
 
@@ -126,7 +163,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
             })
             .join(':');
         return miliseconds;
-    }
+    }*/
 
     previousState() {
         window.history.back();
@@ -137,7 +174,13 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     playVideo() {
-        this.player.playVideo();
+        const currentTime = this.player.getCurrentTime();
+        if (currentTime <= 0) {
+            this.player.seekTo(1, true);
+        } else {
+            this.player.playVideo();
+            this.player.seekTo(this.value, true);
+        }
         this.max = this.player.getDuration();
         if (this.initializationSlider) {
             this.initializeSlider(this.max);
@@ -215,10 +258,127 @@ export class AnnotationSessionDetailComponent implements OnInit {
     }
 
     getDataFromAllRecord(index: number) {
-        this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.duration <= index);
+        const toCentiSec = index * 10;
+        /*
 
+        const toCentiSec= index*100;
+*/
+        this.ELEMENT_DATA = this.interactionRecordDto.filter(x => x.time <= toCentiSec);
+        this.dataToStore = this.ELEMENT_DATA.filter(value1 => value1.interactionType.name === 'Reading');
+        let storeArrayDataSet = new Set();
+
+        if (this.dataToStore.length > 0) {
+            for (let i = 0; i < this.dataToStore.length; i++) {
+                let sourceID = this.dataToStore[i].sourceId
+                    .split(' ')
+                    .join('')
+                    .toLowerCase();
+
+                this.result = this.dataSets.filter(value1 => value1.identifier.toLowerCase() === sourceID);
+                storeArrayDataSet.add(this.result[0]);
+
+                if (this.result.length > 0) {
+                    this.ELEMENT_DATA2 = Array.from(storeArrayDataSet);
+                    this.dataSource2 = new MatTableDataSource(this.ELEMENT_DATA2);
+                }
+            }
+        }
         if (this.ELEMENT_DATA != null) {
             this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        }
+    }
+
+    getName(e: MatCheckboxChange, rowIndex: any, interactionRecord: InteractionRecordDto) {
+        if (e.checked) {
+            if (this.firstChecked === null) {
+                this.firstChecked = rowIndex;
+                this.firstElement = interactionRecord;
+            } else if (this.firstChecked != null) {
+                this.secondChecked = rowIndex;
+
+                let secondElementSelected = interactionRecord;
+                this.selectedRowsBetweenTwoCheckBox = this.ELEMENT_DATA.filter(
+                    value => value.id >= this.firstElement.id && value.id <= secondElementSelected.id
+                );
+
+                for (let i = 0; i < this.selectedRowsBetweenTwoCheckBox.length; i++) {
+                    this.idArray.push(this.selectedRowsBetweenTwoCheckBox[i].id);
+                }
+
+                for (let i = this.firstChecked; i <= this.secondChecked; i++) {
+                    debugger;
+                    if (!this.selection.isSelected(this.selectedRowsBetweenTwoCheckBox[this.firstChecked])) {
+                        for (let j = 0; j < this.selectedRowsBetweenTwoCheckBox.length; j++) {
+                            this.selection.select(this.selectedRowsBetweenTwoCheckBox[j]);
+                        }
+                    }
+                }
+
+                console.log(this.selection);
+            }
+        } else {
+            if (this.firstChecked === rowIndex) {
+                this.firstChecked = null;
+                this.firstElement = null;
+            } else if (this.secondChecked === rowIndex) {
+                for (let i = 0; i < this.ELEMENT_DATA.length; i++) {
+                    this.selection.deselect(this.ELEMENT_DATA[i]);
+                }
+
+                while (this.selectedRowsBetweenTwoCheckBox.length > 0) {
+                    this.selectedRowsBetweenTwoCheckBox.pop();
+                }
+
+                while (this.idArray.length > 0) {
+                    this.idArray.pop();
+                }
+
+                this.secondChecked = null;
+                this.firstChecked = null;
+                this.firstElement = null;
+            } else {
+                for (let i = 0; i < this.ELEMENT_DATA.length; i++) {
+                    this.selection.deselect(this.ELEMENT_DATA[i]);
+                }
+            }
+        }
+    }
+
+    saveAnnotation() {
+        const inputTag = document.getElementById('inputText') as HTMLInputElement;
+        if (inputTag != null) {
+            if (this.annotationToSave != null) {
+                this.annotationService
+                    .saveAnnotation(this.idArray, inputTag.value, this.annotationSessionService.getSessionValue())
+                    .subscribe();
+                /*  this._snackBar.open("Annotation Created", this.annotationSessionService.getSessionValue(), {
+                      duration: 2000,
+                  });*/
+                this._snackBar.open('Annotation Created', this.annotationSessionService.getSessionValue(), {
+                    duration: 4000
+                });
+            }
+        } else {
+        }
+    }
+
+    getInLineForm() {
+        this.inLineFormEnable = true;
+    }
+
+    hideInLineForm() {
+        this.inLineFormEnable = false;
+    }
+
+    getAllDataSet() {
+        this.dataSetService.query().subscribe((res: HttpResponse<IDataSet[]>) => {
+            this.dataSets = res.body;
+        });
+    }
+
+    exapndRow(e: Event, data: IInteractionRecordDto) {
+        if (data.interactionType.name.toLowerCase() === 'reading') {
+            this.expandedElement = this.expandedElement === data ? null : data;
         }
     }
 }

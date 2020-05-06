@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    
+
     <property name="now" value="current_timestamp" dbms="postgresql"/>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
@@ -29,7 +29,7 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="annotation_text" type="varchar(255)">
+            <column name="annotation_text" type="varchar">
                 <constraints nullable="true" />
             </column>
 
@@ -41,7 +41,7 @@
         </createTable>
         <dropDefaultValue tableName="annotation" columnName="jhi_start" columnDataType="datetime"/>
         <dropDefaultValue tableName="annotation" columnName="jhi_end" columnDataType="datetime"/>
-        
+
         <createTable tableName="annotation_interaction_record">
             <column name="interaction_record_id" type="bigint">
                 <constraints nullable="false"/>
@@ -52,7 +52,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="annotation_id, interaction_record_id" tableName="annotation_interaction_record"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

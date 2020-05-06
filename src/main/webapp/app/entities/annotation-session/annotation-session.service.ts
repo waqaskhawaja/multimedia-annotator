@@ -96,4 +96,12 @@ export class AnnotationSessionService {
         }
         return res;
     }
+
+    createSession(id: any) {
+        sessionStorage.setItem('annotationID', id.valueOf());
+    }
+
+    getSessionValue() {
+        return sessionStorage.getItem('annotationID');
+    }
 }

@@ -1,6 +1,7 @@
 package pk.waqaskhawaja.ma.web.rest;
 import pk.waqaskhawaja.ma.domain.Annotation;
 import pk.waqaskhawaja.ma.service.AnnotationService;
+import pk.waqaskhawaja.ma.service.dto.InteractionRecordDTO;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -152,6 +154,16 @@ public class AnnotationResource {
         Page<Annotation> page = annotationService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/annotations");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+
+
+
+    @PostMapping("/annotations/save")
+    public String saveFromInteractionDto(@RequestParam Long[] interactionRecordDTOS,@RequestParam String Text, @RequestParam Long annotationID)
+    {
+        List<Long> check= Arrays.asList(interactionRecordDTOS);
+       return annotationService.saveAndConvertFromInteractionDtoToAnnotation(interactionRecordDTOS,Text,annotationID);
     }
 
 }

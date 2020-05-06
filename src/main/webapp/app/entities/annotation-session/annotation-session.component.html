@@ -56,9 +56,10 @@
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['/annotation-session', annotationSession.id, 'view' ]"
-                                class="btn btn-info btn-sm">
+                                class="btn btn-info btn-sm" (click)="saveAnnotationId(annotationSession.id)">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline">View</span>
+
                         </button>
                         <button type="submit"
                                 [routerLink]="['/annotation-session', annotationSession.id, 'edit']"

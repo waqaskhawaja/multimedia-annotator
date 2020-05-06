@@ -43,6 +43,18 @@ import { RouterModule } from '@angular/router';
             {
                 path: 'analysis-session-resource',
                 loadChildren: './analysis-session-resource/analysis-session-resource.module#MaAnalysisSessionResourceModule'
+            },
+            {
+                path: 'annotation-type',
+                loadChildren: () => import('./annotation-type/annotation-type.module').then(m => m.MaAnnotationTypeModule)
+            },
+            {
+                path: 'data-set',
+                loadChildren: () => import('./data-set/data-set.module').then(m => m.MaDataSetModule)
+            },
+            {
+                path: 'data-set-resource',
+                loadChildren: () => import('./data-set-resource/data-set-resource.module').then(m => m.MaDataSetResourceModule)
             }
             /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
         ])

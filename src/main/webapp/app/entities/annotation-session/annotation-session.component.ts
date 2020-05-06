@@ -37,6 +37,7 @@ export class AnnotationSessionComponent implements OnInit, OnDestroy {
         protected jhiAlertService: JhiAlertService,
         protected accountService: AccountService,
         protected activatedRoute: ActivatedRoute,
+        protected annotationService: AnnotationSessionService,
         protected router: Router,
         protected eventManager: JhiEventManager
     ) {
@@ -165,5 +166,9 @@ export class AnnotationSessionComponent implements OnInit, OnDestroy {
 
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    saveAnnotationId(id: any) {
+        this.annotationService.createSession(id);
     }
 }

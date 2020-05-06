@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IAnnotation } from 'app/shared/model/annotation.model';
+import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
 
 type EntityResponseType = HttpResponse<IAnnotation>;
 type EntityArrayResponseType = HttpResponse<IAnnotation[]>;
@@ -16,6 +17,7 @@ type EntityArrayResponseType = HttpResponse<IAnnotation[]>;
 export class AnnotationService {
     public resourceUrl = SERVER_API_URL + 'api/annotations';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/annotations';
+    public resourceUrlToSave = SERVER_API_URL + 'api/annotations/save';
 
     constructor(protected http: HttpClient) {}
 
@@ -81,5 +83,13 @@ export class AnnotationService {
             });
         }
         return res;
+    }
+
+    saveAnnotation(interactionRecordDto: any, Text: any, annotationID: any): Observable<any> {
+        const res = interactionRecordDto;
+        return this.http.post<any>(
+            `${this.resourceUrlToSave}?interactionRecordDTOS=${interactionRecordDto}&Text=${Text}&annotationID=${annotationID}`,
+            { observe: 'response' }
+        );
     }
 }
