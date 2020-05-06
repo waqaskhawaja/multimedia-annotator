@@ -1,5 +1,4 @@
 package pk.waqaskhawaja.ma.repository;
-
 import pk.waqaskhawaja.ma.domain.Annotation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,6 @@ import java.util.Optional;
 /**
  * Spring Data  repository for the Annotation entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AnnotationRepository extends JpaRepository<Annotation, Long>, JpaSpecificationExecutor<Annotation> {
 
@@ -21,7 +19,7 @@ public interface AnnotationRepository extends JpaRepository<Annotation, Long>, J
         countQuery = "select count(distinct annotation) from Annotation annotation")
     Page<Annotation> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(value = "select distinct annotation from Annotation annotation left join fetch annotation.interactionRecords")
+    @Query("select distinct annotation from Annotation annotation left join fetch annotation.interactionRecords")
     List<Annotation> findAllWithEagerRelationships();
 
     @Query("select annotation from Annotation annotation left join fetch annotation.interactionRecords where annotation.id =:id")

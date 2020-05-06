@@ -9,12 +9,6 @@
                 <dd>
                     <span>{{annotationType.name}}</span>
                 </dd>
-                <dt><span>Annotation Session</span></dt>
-                <dd>
-                    <div *ngIf="annotationType.annotationSession">
-                        <a [routerLink]="['/annotation-session', annotationType.annotationSession?.id, 'view']">{{annotationType.annotationSession?.id}}</a>
-                    </div>
-                </dd>
             </dl>
 
             <button type="submit"

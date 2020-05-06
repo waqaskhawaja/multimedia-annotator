@@ -10,12 +10,14 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.InstantFilter;
+import org.springframework.data.elasticsearch.core.query.Criteria;
 
 /**
- * Criteria class for the Annotation entity. This class is used in AnnotationResource to
- * receive all the possible filtering options from the Http GET request parameters.
- * For example the following could be a valid requests:
- * <code> /annotations?id.greaterThan=5&amp;attr1.contains=something&amp;attr2.specified=false</code>
+ * Criteria class for the {@link pk.waqaskhawaja.ma.domain.Annotation} entity. This class is used
+ * in {@link pk.waqaskhawaja.ma.web.rest.AnnotationResource} to receive all the possible filtering options from
+ * the Http GET request parameters.
+ * For example the following could be a valid request:
+ * {@code /annotations?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
@@ -95,34 +97,34 @@ public class AnnotationCriteria implements Serializable {
         final AnnotationCriteria that = (AnnotationCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(start, that.start) &&
-            Objects.equals(end, that.end) &&
-            Objects.equals(annotationText, that.annotationText) &&
-            Objects.equals(annotationSessionId, that.annotationSessionId) &&
-            Objects.equals(interactionRecordId, that.interactionRecordId);
+                Objects.equals(start, that.start) &&
+                Objects.equals(end, that.end) &&
+                Objects.equals(annotationText, that.annotationText) &&
+                Objects.equals(annotationSessionId, that.annotationSessionId) &&
+                Objects.equals(interactionRecordId, that.interactionRecordId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-        id,
-        start,
-        end,
-        annotationText,
-        annotationSessionId,
-        interactionRecordId
+            id,
+            start,
+            end,
+            annotationText,
+            annotationSessionId,
+            interactionRecordId
         );
     }
 
     @Override
     public String toString() {
         return "AnnotationCriteria{" +
-                (id != null ? "id=" + id + ", " : "") +
-                (start != null ? "start=" + start + ", " : "") +
-                (end != null ? "end=" + end + ", " : "") +
-                (annotationText != null ? "annotationText=" + annotationText + ", " : "") +
-                (annotationSessionId != null ? "annotationSessionId=" + annotationSessionId + ", " : "") +
-                (interactionRecordId != null ? "interactionRecordId=" + interactionRecordId + ", " : "") +
+            (id != null ? "id=" + id + ", " : "") +
+            (start != null ? "start=" + start + ", " : "") +
+            (end != null ? "end=" + end + ", " : "") +
+            (annotationText != null ? "annotationText=" + annotationText + ", " : "") +
+            (annotationSessionId != null ? "annotationSessionId=" + annotationSessionId + ", " : "") +
+            (interactionRecordId != null ? "interactionRecordId=" + interactionRecordId + ", " : "") +
             "}";
     }
 

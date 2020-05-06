@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
 import { IInteractionRecord } from 'app/shared/model/interaction-record.model';
+import { IAnnotationType } from 'app/shared/model/annotation-type.model';
 
 export interface IAnnotation {
     id?: number;
@@ -9,6 +10,7 @@ export interface IAnnotation {
     annotationText?: string;
     annotationSession?: IAnnotationSession;
     interactionRecords?: IInteractionRecord[];
+    annotationType?: IAnnotationType;
 }
 
 export class Annotation implements IAnnotation {
@@ -18,6 +20,7 @@ export class Annotation implements IAnnotation {
         public end?: Moment,
         public annotationText?: string,
         public annotationSession?: IAnnotationSession,
-        public interactionRecords?: IInteractionRecord[]
+        public interactionRecords?: IInteractionRecord[],
+        public annotationType?: IAnnotationType
     ) {}
 }

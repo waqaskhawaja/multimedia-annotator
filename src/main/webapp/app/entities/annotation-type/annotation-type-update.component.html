@@ -15,13 +15,6 @@
                            formControlName="name"/>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" for="field_annotationSession">Annotation Session</label>
-                    <select class="form-control" id="field_annotationSession" name="annotationSession" formControlName="annotationSession">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="annotationSessionOption.id === editForm.get('annotationSession').value?.id ? editForm.get('annotationSession').value : annotationSessionOption" *ngFor="let annotationSessionOption of annotationsessions; trackBy: trackAnnotationSessionById">{{annotationSessionOption.id}}</option>
-                    </select>
-                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">

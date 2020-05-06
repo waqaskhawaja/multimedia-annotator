@@ -95,4 +95,12 @@ public class AnnotationTypeService {
             .stream(annotationTypeSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public AnnotationType findOneByName(String annotationType)
+    {
+        return annotationTypeRepository.findByName(annotationType);
+    }
+
+
 }
