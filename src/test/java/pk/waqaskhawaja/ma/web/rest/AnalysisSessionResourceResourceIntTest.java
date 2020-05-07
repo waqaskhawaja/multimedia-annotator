@@ -7,11 +7,8 @@ import pk.waqaskhawaja.ma.domain.ResourceType;
 import pk.waqaskhawaja.ma.domain.AnalysisSession;
 import pk.waqaskhawaja.ma.repository.AnalysisSessionResourceRepository;
 import pk.waqaskhawaja.ma.repository.search.AnalysisSessionResourceSearchRepository;
-import pk.waqaskhawaja.ma.service.AnalysisSessionResourceService;
-import pk.waqaskhawaja.ma.service.InteractionRecordService;
-import pk.waqaskhawaja.ma.service.InteractionTypeService;
+import pk.waqaskhawaja.ma.service.*;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
-import pk.waqaskhawaja.ma.service.AnalysisSessionResourceQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -102,6 +99,9 @@ public class AnalysisSessionResourceResourceIntTest {
     @Autowired
     private InteractionTypeService interactionTypeService;
 
+    @Autowired
+    private DataSetService dataSetService;
+
     private MockMvc restAnalysisSessionResourceMockMvc;
 
     private AnalysisSessionResource analysisSessionResource;
@@ -110,7 +110,7 @@ public class AnalysisSessionResourceResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final AnalysisSessionResourceResource analysisSessionResourceResource = new AnalysisSessionResourceResource(
-            analysisSessionResourceService, analysisSessionResourceQueryService, interactionRecordService, interactionTypeService);
+            analysisSessionResourceService, analysisSessionResourceQueryService, interactionRecordService, interactionTypeService,dataSetService);
         this.restAnalysisSessionResourceMockMvc = MockMvcBuilders.standaloneSetup(analysisSessionResourceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -201,7 +201,7 @@ public class AnalysisSessionResourceResourceIntTest {
             .andExpect(jsonPath("$.[*].sourceFile").value(hasItem(Base64Utils.encodeToString(DEFAULT_SOURCE_FILE))))
             .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getAnalysisSessionResource() throws Exception {

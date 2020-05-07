@@ -52,7 +52,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
     ELEMENT_DATA: IInteractionRecordDto[];
     ELEMENT_DATA2: Array<IDataSet> = [];
 
-    displayedColumns: string[] = ['select', 'id', 'interaction'];
+    displayedColumns: string[] = ['select', 'id', 'interaction', 'text'];
     displayedColumns2 = ['contents'];
     dataSource: any;
     dataSource2: any;
