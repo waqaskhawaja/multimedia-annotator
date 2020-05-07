@@ -1,8 +1,7 @@
 package pk.waqaskhawaja.ma.domain;
 
 import org.junit.Before;
-import org.junit.Test;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;import static org.assertj.core.api.Assertions.assertThat;
 import pk.waqaskhawaja.ma.web.rest.TestUtil;
 
 public class AnnotationTypeTest {

@@ -26,6 +26,15 @@
                     <!-- Default input -->
 
                     <div class="form-group">
+                        <label>Annotation Type</label>
+                        <select class="form-control" id="field_annotationType" name="annotationType" (change)="selectChangeHandler($event)">
+                            <option [ngValue]="null"></option>
+                            <option *ngFor="let annotationTypeOption of this.annotationTypes; trackBy: trackAnnotationTypeById">{{annotationTypeOption.name}}</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
                         <label for="inputText">Text</label>
                         <input mdbInput type="text" class="form-control" id="inputText" placeholder="Enter text here..">
                     </div>

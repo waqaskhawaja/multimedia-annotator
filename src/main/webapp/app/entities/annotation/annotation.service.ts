@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
+import { createRequestOption } from 'app/shared/util/request-util';
 import { IAnnotation } from 'app/shared/model/annotation.model';
-import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
 
 type EntityResponseType = HttpResponse<IAnnotation>;
 type EntityArrayResponseType = HttpResponse<IAnnotation[]>;
@@ -85,10 +85,12 @@ export class AnnotationService {
         return res;
     }
 
-    saveAnnotation(interactionRecordDto: any, Text: any, annotationID: any): Observable<any> {
+    saveAnnotation(interactionRecordDto: any, Text: any, annotationID: any, annotationType: any): Observable<any> {
         const res = interactionRecordDto;
         return this.http.post<any>(
-            `${this.resourceUrlToSave}?interactionRecordDTOS=${interactionRecordDto}&Text=${Text}&annotationID=${annotationID}`,
+            `${
+                this.resourceUrlToSave
+            }?interactionRecordDTOS=${interactionRecordDto}&Text=${Text}&annotationID=${annotationID}&annotationType=${annotationType}`,
             { observe: 'response' }
         );
     }

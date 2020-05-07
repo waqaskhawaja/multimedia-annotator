@@ -1,33 +1,31 @@
 package pk.waqaskhawaja.ma.domain;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * A Annotation.
  */
 @Entity
 @Table(name = "annotation")
-@Document(indexName = "annotation")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "annotation")
 public class Annotation implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
-    @Column(name = "jhi_start")
+    @Column(name = "start")
     private Instant start;
 
     @Column(name = "jhi_end")
@@ -45,6 +43,10 @@ public class Annotation implements Serializable {
                joinColumns = @JoinColumn(name = "annotation_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "interaction_record_id", referencedColumnName = "id"))
     private Set<InteractionRecord> interactionRecords = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties("annotations")
+    private AnnotationType annotationType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -131,6 +133,19 @@ public class Annotation implements Serializable {
     public void setInteractionRecords(Set<InteractionRecord> interactionRecords) {
         this.interactionRecords = interactionRecords;
     }
+
+    public AnnotationType getAnnotationType() {
+        return annotationType;
+    }
+
+    public Annotation annotationType(AnnotationType annotationType) {
+        this.annotationType = annotationType;
+        return this;
+    }
+
+    public void setAnnotationType(AnnotationType annotationType) {
+        this.annotationType = annotationType;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -138,19 +153,15 @@ public class Annotation implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Annotation)) {
             return false;
         }
-        Annotation annotation = (Annotation) o;
-        if (annotation.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), annotation.getId());
+        return id != null && id.equals(((Annotation) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

@@ -29,6 +29,12 @@
                         <a [routerLink]="['/interaction-record', interactionRecord?.id, 'view' ]">{{interactionRecord.text}}</a>{{last ? '' : ', '}}
                     </span>
                 </dd>
+                <dt><span>Annotation Type</span></dt>
+                <dd>
+                    <div *ngIf="annotation.annotationType">
+                        <a [routerLink]="['/annotation-type', annotation.annotationType?.id, 'view']">{{annotation.annotationType?.name}}</a>
+                    </div>
+                </dd>
             </dl>
 
             <button type="submit"

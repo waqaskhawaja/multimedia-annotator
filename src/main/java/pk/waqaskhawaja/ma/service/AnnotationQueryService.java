@@ -21,7 +21,7 @@ import pk.waqaskhawaja.ma.repository.search.AnnotationSearchRepository;
 import pk.waqaskhawaja.ma.service.dto.AnnotationCriteria;
 
 /**
- * Service for executing complex queries for Annotation entities in the database.
+ * Service for executing complex queries for {@link Annotation} entities in the database.
  * The main input is a {@link AnnotationCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
  * It returns a {@link List} of {@link Annotation} or a {@link Page} of {@link Annotation} which fulfills the criteria.
@@ -42,7 +42,7 @@ public class AnnotationQueryService extends QueryService<Annotation> {
     }
 
     /**
-     * Return a {@link List} of {@link Annotation} which matches the criteria from the database
+     * Return a {@link List} of {@link Annotation} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -54,7 +54,7 @@ public class AnnotationQueryService extends QueryService<Annotation> {
     }
 
     /**
-     * Return a {@link Page} of {@link Annotation} which matches the criteria from the database
+     * Return a {@link Page} of {@link Annotation} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
@@ -67,7 +67,7 @@ public class AnnotationQueryService extends QueryService<Annotation> {
     }
 
     /**
-     * Return the number of matching entities in the database
+     * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the number of matching entities.
      */
@@ -79,8 +79,13 @@ public class AnnotationQueryService extends QueryService<Annotation> {
     }
 
     /**
-     * Function to convert AnnotationCriteria to a {@link Specification}
+     * Function to convert {@link AnnotationCriteria} to a {@link Specification}
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching {@link Specification} of the entity.
      */
+
+
+
     private Specification<Annotation> createSpecification(AnnotationCriteria criteria) {
         Specification<Annotation> specification = Specification.where(null);
         if (criteria != null) {
@@ -107,4 +112,5 @@ public class AnnotationQueryService extends QueryService<Annotation> {
         }
         return specification;
     }
+
 }

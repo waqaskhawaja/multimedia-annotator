@@ -1,45 +1,50 @@
 <div class="row justify-content-center">
     <div class="col-8">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-annotation-heading">Create or edit an Annotation</h2>
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-annotation-heading">Create or edit a Annotation</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!annotation.id">
+                <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="annotation.id" readonly />
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_start">Start</label>
                     <div class="d-flex">
-                        <input id="field_start" type="datetime-local" class="form-control" name="start" [(ngModel)]="start" placeholder="YYYY-MM-DD HH:mm"
-                        />
+                        <input id="field_start" type="datetime-local" class="form-control" name="start" formControlName="start" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_end">End</label>
                     <div class="d-flex">
-                        <input id="field_end" type="datetime-local" class="form-control" name="end" [(ngModel)]="end" placeholder="YYYY-MM-DD HH:mm"
-                        />
+                        <input id="field_end" type="datetime-local" class="form-control" name="end" formControlName="end" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="field_annotationText">Annotation Text</label>
                     <input type="text" class="form-control" name="annotationText" id="field_annotationText"
-                        [(ngModel)]="annotation.annotationText" />
+                           formControlName="annotationText"/>
                 </div>
 
                 <div class="form-group">
                     <label class="form-control-label" for="field_annotationSession">Annotation Session</label>
-                    <select class="form-control" id="field_annotationSession" name="annotationSession" [(ngModel)]="annotation.annotationSession" >
+                    <select class="form-control" id="field_annotationSession" name="annotationSession" formControlName="annotationSession">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="annotationSessionOption.id === annotation.annotationSession?.id ? annotation.annotationSession : annotationSessionOption" *ngFor="let annotationSessionOption of annotationsessions; trackBy: trackAnnotationSessionById">{{annotationSessionOption.name}}</option>
+                        <option [ngValue]="annotationSessionOption.id === editForm.get('annotationSession').value?.id ? editForm.get('annotationSession').value : annotationSessionOption" *ngFor="let annotationSessionOption of annotationsessions; trackBy: trackAnnotationSessionById">{{annotationSessionOption.name}}</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="field_interactionRecord">Interaction Record</label>
-                    <select class="form-control" id="field_interactionRecord" multiple name="interactionRecord" [(ngModel)]="annotation.interactionRecords">
-                        <option [ngValue]="getSelected(annotation.interactionRecords, interactionRecordOption)" *ngFor="let interactionRecordOption of interactionrecords; trackBy: trackInteractionRecordById">{{interactionRecordOption.text}}</option>
+                    <label for="field_interactionRecords">Interaction Record</label>
+                    <select class="form-control" id="field_interactionRecords" multiple name="interactionRecords" formControlName="interactionRecords">
+                        <option [ngValue]="getSelected(editForm.get('interactionRecords').value, interactionRecordOption)" *ngFor="let interactionRecordOption of interactionrecords; trackBy: trackInteractionRecordById">{{interactionRecordOption.text}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_annotationType">Annotation Type</label>
+                    <select class="form-control" id="field_annotationType" name="annotationType" formControlName="annotationType">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="annotationTypeOption.id === editForm.get('annotationType').value?.id ? editForm.get('annotationType').value : annotationTypeOption" *ngFor="let annotationTypeOption of annotationtypes; trackBy: trackAnnotationTypeById">{{annotationTypeOption.name}}</option>
                     </select>
                 </div>
             </div>
@@ -47,7 +52,7 @@
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
                 </button>
             </div>

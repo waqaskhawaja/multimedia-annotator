@@ -13,13 +13,15 @@ import { interval } from 'rxjs';
 import { IInteractionRecordDto, InteractionRecordDto } from 'app/shared/model/interaction-record-dto.model';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Annotation } from 'app/shared/model/annotation.model';
-import { AnnotationService } from 'app/entities/annotation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpResponse } from '@angular/common/http';
 import { IDataSetResource } from 'app/shared/model/data-set-resource.model';
 import { DataSet, IDataSet } from 'app/shared/model/data-set.model';
 import { DataSetService } from 'app/entities/data-set/data-set.service';
+import { AnnotationService } from 'app/entities/annotation/annotation.service';
+import { AnnotationType, IAnnotationType } from 'app/shared/model/annotation-type.model';
+import { AnnotationTypeService } from 'app/entities/annotation-type/annotation-type.service';
 
 @Component({
     selector: 'jhi-annotation-session-detail',
@@ -76,6 +78,9 @@ export class AnnotationSessionDetailComponent implements OnInit {
     durationInSeconds: number = 2;
     selection = new SelectionModel<IInteractionRecordDto>(true, []);
     storeArray: Array<IDataSet> = [];
+    annotationTypes: AnnotationType[];
+    annotationType: any;
+
     constructor(
         protected activatedRoute: ActivatedRoute,
         protected annotationSessionService: AnnotationSessionService,
@@ -83,7 +88,8 @@ export class AnnotationSessionDetailComponent implements OnInit {
         protected interactionRecordService: InteractionRecordService,
         protected annotationService: AnnotationService,
         private _snackBar: MatSnackBar,
-        protected dataSetService: DataSetService
+        protected dataSetService: DataSetService,
+        protected annotationTypeService: AnnotationTypeService
     ) {
         this.sliderEnable = false;
         this.initializationSlider = true;
@@ -98,6 +104,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
     ngOnInit() {
         this.id = 'YJ4nfAZ_ZXg';
         this.value = 0;
+        this.getAnnotationType();
         this.getAllRecords();
         this.getAllDataSet();
         this.activatedRoute.data.subscribe(({ annotationSession }) => {
@@ -349,7 +356,7 @@ export class AnnotationSessionDetailComponent implements OnInit {
         if (inputTag != null) {
             if (this.annotationToSave != null) {
                 this.annotationService
-                    .saveAnnotation(this.idArray, inputTag.value, this.annotationSessionService.getSessionValue())
+                    .saveAnnotation(this.idArray, inputTag.value, this.annotationSessionService.getSessionValue(), this.annotationType)
                     .subscribe();
                 /*  this._snackBar.open("Annotation Created", this.annotationSessionService.getSessionValue(), {
                       duration: 2000,
@@ -380,5 +387,19 @@ export class AnnotationSessionDetailComponent implements OnInit {
         if (data.interactionType.name.toLowerCase() === 'reading') {
             this.expandedElement = this.expandedElement === data ? null : data;
         }
+    }
+
+    getAnnotationType() {
+        this.annotationTypeService.query().subscribe((res: HttpResponse<IAnnotationType[]>) => {
+            this.annotationTypes = res.body;
+        });
+    }
+    trackAnnotationTypeById(index: number, item: IAnnotationType) {
+        return item.id;
+    }
+
+    selectChangeHandler(event: any) {
+        //update the ui
+        this.annotationType = event.target.value;
     }
 }
