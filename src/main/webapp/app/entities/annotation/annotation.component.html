@@ -4,10 +4,11 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-annotation" [routerLink]="['/annotation/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down" >
-            Create new Annotation
+            Create a new Annotation
             </span>
         </button>
     </h2>
+    <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
     <div class="row">
         <div class="col-sm-12">
@@ -25,16 +26,20 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="annotations">
-        <table class="table table-striped">
+    <div class="alert alert-warning" *ngIf="annotations?.length === 0">
+        <span>No annotations found</span>
+    </div>
+    <div class="table-responsive" *ngIf="annotations?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="start"><span>Start</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="end"><span>End</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="annotationText"><span>Annotation Text</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="annotationSession.name"><span>Annotation Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
+            <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="start"><span>Start</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="end"><span>End</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="annotationText"><span>Annotation Text</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="annotationSession.name"><span>Annotation Session</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="annotationType.name"><span>Annotation Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -45,11 +50,16 @@
                 <td>{{annotation.annotationText}}</td>
                 <td>
                     <div *ngIf="annotation.annotationSession">
-                        <a [routerLink]="['../annotation-session', annotation.annotationSession?.id, 'view' ]" >{{annotation.annotationSession?.name}}</a>
+                        <a [routerLink]="['/annotation-session', annotation.annotationSession?.id, 'view' ]" >{{annotation.annotationSession?.name}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="annotation.annotationType">
+                        <a [routerLink]="['/annotation-type', annotation.annotationType?.id, 'view' ]" >{{annotation.annotationType?.name}}</a>
                     </div>
                 </td>
                 <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
+                    <div class="btn-group">
                         <button type="submit"
                                 [routerLink]="['/annotation', annotation.id, 'view' ]"
                                 class="btn btn-info btn-sm">
@@ -62,10 +72,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/', 'annotation', { outlets: { popup: annotation.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(annotation)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline">Delete</span>
@@ -77,7 +84,7 @@
         </table>
     </div>
     <!-- Pager is not implemented yet, so this is normal pagination instead -->
-    <div *ngIf="annotations && annotations.length">
+    <div [hidden]="annotations?.length === 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

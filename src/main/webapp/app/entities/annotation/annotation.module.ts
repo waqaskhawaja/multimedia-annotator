@@ -1,29 +1,17 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { MaSharedModule } from 'app/shared';
-import {
-    AnnotationComponent,
-    AnnotationDetailComponent,
-    AnnotationUpdateComponent,
-    AnnotationDeletePopupComponent,
-    AnnotationDeleteDialogComponent,
-    annotationRoute,
-    annotationPopupRoute
-} from './';
-
-const ENTITY_STATES = [...annotationRoute, ...annotationPopupRoute];
+import { MaSharedModule } from 'app/shared/shared.module';
+import { AnnotationComponent } from './annotation.component';
+import { AnnotationDetailComponent } from './annotation-detail.component';
+import { AnnotationUpdateComponent } from './annotation-update.component';
+import { AnnotationDeleteDialogComponent } from './annotation-delete-dialog.component';
+import { annotationRoute } from './annotation.route';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    imports: [MaSharedModule, RouterModule.forChild(ENTITY_STATES)],
-    declarations: [
-        AnnotationComponent,
-        AnnotationDetailComponent,
-        AnnotationUpdateComponent,
-        AnnotationDeleteDialogComponent,
-        AnnotationDeletePopupComponent
-    ],
-    entryComponents: [AnnotationComponent, AnnotationUpdateComponent, AnnotationDeleteDialogComponent, AnnotationDeletePopupComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [MaSharedModule, RouterModule.forChild(annotationRoute), ReactiveFormsModule],
+    declarations: [AnnotationComponent, AnnotationDetailComponent, AnnotationUpdateComponent, AnnotationDeleteDialogComponent],
+    entryComponents: [AnnotationDeleteDialogComponent]
 })
 export class MaAnnotationModule {}

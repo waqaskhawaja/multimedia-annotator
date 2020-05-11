@@ -1,4 +1,5 @@
 package pk.waqaskhawaja.ma.repository;
+import pk.waqaskhawaja.ma.domain.Annotation;
 import pk.waqaskhawaja.ma.domain.AnnotationType;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface AnnotationTypeRepository extends JpaRepository<AnnotationType, Long> {
-
+AnnotationType findByName(String name);
 }

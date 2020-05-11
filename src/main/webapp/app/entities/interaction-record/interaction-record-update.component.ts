@@ -11,7 +11,7 @@ import { InteractionTypeService } from 'app/entities/interaction-type';
 import { IAnalysisSessionResource } from 'app/shared/model/analysis-session-resource.model';
 import { AnalysisSessionResourceService } from 'app/entities/analysis-session-resource';
 import { IAnnotation } from 'app/shared/model/annotation.model';
-import { AnnotationService } from 'app/entities/annotation';
+import { AnnotationService } from 'app/entities/annotation/annotation.service';
 
 @Component({
     selector: 'jhi-interaction-record-update',

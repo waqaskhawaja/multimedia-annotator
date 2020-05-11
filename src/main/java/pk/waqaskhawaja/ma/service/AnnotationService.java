@@ -2,6 +2,7 @@ package pk.waqaskhawaja.ma.service;
 
 import pk.waqaskhawaja.ma.domain.Annotation;
 import pk.waqaskhawaja.ma.domain.AnnotationSession;
+import pk.waqaskhawaja.ma.domain.AnnotationType;
 import pk.waqaskhawaja.ma.domain.InteractionRecord;
 import pk.waqaskhawaja.ma.repository.AnnotationRepository;
 import pk.waqaskhawaja.ma.repository.InteractionRecordRepository;
@@ -22,7 +23,7 @@ import java.util.Optional;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
- * Service Implementation for managing Annotation.
+ * Service Implementation for managing {@link Annotation}.
  */
 @Service
 @Transactional
@@ -30,27 +31,30 @@ public class AnnotationService {
 
     private final Logger log = LoggerFactory.getLogger(AnnotationService.class);
 
-
-    private final InteractionRecordRepository interactionRecordRepository;
-
     private final AnnotationRepository annotationRepository;
 
     private final AnnotationSearchRepository annotationSearchRepository;
 
+    private final InteractionRecordRepository interactionRecordRepository;
+
     private final AnnotationSessionService annotationSessionService;
 
-    public AnnotationService(AnnotationRepository annotationRepository, AnnotationSearchRepository annotationSearchRepository, InteractionRecordRepository interactionRecordRepository, AnnotationSessionService annotationSessionService) {
+    private final AnnotationTypeService annotationTypeService;
+
+
+    public AnnotationService(AnnotationRepository annotationRepository, AnnotationSearchRepository annotationSearchRepository, InteractionRecordRepository interactionRecordRepository, AnnotationSessionService annotationSessionService, AnnotationTypeService annotationTypeService) {
         this.annotationRepository = annotationRepository;
         this.annotationSearchRepository = annotationSearchRepository;
         this.interactionRecordRepository = interactionRecordRepository;
         this.annotationSessionService = annotationSessionService;
+        this.annotationTypeService = annotationTypeService;
     }
 
     /**
      * Save a annotation.
      *
-     * @param annotation the entity to save
-     * @return the persisted entity
+     * @param annotation the entity to save.
+     * @return the persisted entity.
      */
     public Annotation save(Annotation annotation) {
         log.debug("Request to save Annotation : {}", annotation);
@@ -62,8 +66,8 @@ public class AnnotationService {
     /**
      * Get all the annotations.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<Annotation> findAll(Pageable pageable) {
@@ -72,9 +76,9 @@ public class AnnotationService {
     }
 
     /**
-     * Get all the Annotation with eager load of many-to-many relationships.
+     * Get all the annotations with eager load of many-to-many relationships.
      *
-     * @return the list of entities
+     * @return the list of entities.
      */
     public Page<Annotation> findAllWithEagerRelationships(Pageable pageable) {
         return annotationRepository.findAllWithEagerRelationships(pageable);
@@ -84,8 +88,8 @@ public class AnnotationService {
     /**
      * Get one annotation by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
     public Optional<Annotation> findOne(Long id) {
@@ -96,7 +100,7 @@ public class AnnotationService {
     /**
      * Delete the annotation by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete Annotation : {}", id);
@@ -107,9 +111,9 @@ public class AnnotationService {
     /**
      * Search for the annotation corresponding to the query.
      *
-     * @param query the query of the search
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param query the query of the search.
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<Annotation> search(String query, Pageable pageable) {
@@ -117,31 +121,39 @@ public class AnnotationService {
         return annotationSearchRepository.search(queryStringQuery(query), pageable);    }
 
 
-    public String saveAndConvertFromInteractionDtoToAnnotation(Long[]  interactionRecordDTO, String Text, Long annotationID) {
-        int lengthOfArray = interactionRecordDTO.length;
+
+
+    public String saveAndConvertFromInteractionDtoToAnnotation(Long[]  interactionRecordDTO, String Text, Long annotationID, String annotationType) {
+        int numberOfSelectedCheckboxs = interactionRecordDTO.length;
         List<InteractionRecord> interactionRecordList = new ArrayList<>();
         Instant instant = Instant.now();
-
+        AnnotationType AnnotationType = annotationTypeService.findOneByName(annotationType);
         AnnotationSession annotationSession = annotationSessionService.findOne(annotationID).orElse(null);
 
 
         for (Long id:interactionRecordDTO) {
-            InteractionRecord interactionRecord =    interactionRecordRepository.findById(id).orElse(null);
+            InteractionRecord interactionRecord =  interactionRecordRepository.findById(id).orElse(null);
             if(interactionRecord!=null){
                 interactionRecordList.add(interactionRecord);
             }
         }
 
 
-        if (lengthOfArray > 0)
+
+
+        if (numberOfSelectedCheckboxs > 0)
         {
-            for(int i=0; i<lengthOfArray; i++)
+            for(int i=0; i<numberOfSelectedCheckboxs; i++)
             {
 
                 Annotation annotation = new Annotation();
                 annotation.setAnnotationText(Text);
                 if(annotationSession.getId()!=null){
                     annotation.setAnnotationSession(annotationSession);
+                }
+                if(AnnotationType.getId()!=null)
+                {
+                    annotation.setAnnotationType(AnnotationType);
                 }
                 annotation.setStart(instant);
                 annotation.setEnd(instant);

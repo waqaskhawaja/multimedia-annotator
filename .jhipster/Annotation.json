@@ -29,6 +29,13 @@
             "relationshipName": "interactionRecord",
             "otherEntityField": "text",
             "ownerSide": true
+        },
+        {
+            "relationshipName": "annotationType",
+            "otherEntityName": "annotationType",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "annotation"
         }
     ],
     "changelogDate": "20190509094537",
@@ -39,5 +46,7 @@
     "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "searchEngine": "elasticsearch",
+    "databaseType": "sql"
 }

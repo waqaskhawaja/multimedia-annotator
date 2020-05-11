@@ -1,5 +1,4 @@
 package pk.waqaskhawaja.ma.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -25,9 +24,6 @@ public class AnnotationType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    private AnnotationSession annotationSession;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -48,19 +44,6 @@ public class AnnotationType implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public AnnotationSession getAnnotationSession() {
-        return annotationSession;
-    }
-
-    public AnnotationType annotationSession(AnnotationSession annotationSession) {
-        this.annotationSession = annotationSession;
-        return this;
-    }
-
-    public void setAnnotationSession(AnnotationSession annotationSession) {
-        this.annotationSession = annotationSession;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

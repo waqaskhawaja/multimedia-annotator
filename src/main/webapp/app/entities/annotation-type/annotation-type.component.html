@@ -35,7 +35,6 @@
             <tr>
             <th scope="col" ><span>ID</span></th>
             <th scope="col" ><span>Name</span></th>
-            <th scope="col" ><span>Annotation Session</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -43,11 +42,6 @@
             <tr *ngFor="let annotationType of annotationTypes ;trackBy: trackId">
                 <td><a [routerLink]="['/annotation-type', annotationType.id, 'view' ]">{{annotationType.id}}</a></td>
                 <td>{{annotationType.name}}</td>
-                <td>
-                    <div *ngIf="annotationType.annotationSession">
-                        <a [routerLink]="['/annotation-session', annotationType.annotationSession?.id, 'view' ]" >{{annotationType.annotationSession?.id}}</a>
-                    </div>
-                </td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

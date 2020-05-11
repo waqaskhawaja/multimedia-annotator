@@ -56,7 +56,6 @@ public class AnnotationTypeResource {
         return ResponseEntity.created(new URI("/api/annotation-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
-
     }
 
     /**
@@ -76,7 +75,7 @@ public class AnnotationTypeResource {
         }
         AnnotationType result = annotationTypeService.save(annotationType);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert( ENTITY_NAME, annotationType.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, annotationType.getId().toString()))
             .body(result);
     }
 
@@ -115,7 +114,7 @@ public class AnnotationTypeResource {
     public ResponseEntity<Void> deleteAnnotationType(@PathVariable Long id) {
         log.debug("REST request to delete AnnotationType : {}", id);
         annotationTypeService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert( ENTITY_NAME, id.toString())).build();
     }
 
     /**
