@@ -2,15 +2,13 @@ package pk.waqaskhawaja.ma.web.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pk.waqaskhawaja.ma.domain.AnalysisSessionResource;
+import pk.waqaskhawaja.ma.domain.DataSet;
 import pk.waqaskhawaja.ma.domain.InteractionRecord;
-import pk.waqaskhawaja.ma.service.AnalysisSessionResourceService;
-import pk.waqaskhawaja.ma.service.InteractionRecordService;
-import pk.waqaskhawaja.ma.service.InteractionTypeService;
+import pk.waqaskhawaja.ma.service.*;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
 import pk.waqaskhawaja.ma.service.dto.AnalysisSessionResourceCriteria;
-import pk.waqaskhawaja.ma.service.AnalysisSessionResourceQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,15 +43,17 @@ public class AnalysisSessionResourceResource {
     private final AnalysisSessionResourceService analysisSessionResourceService;
     private final InteractionRecordService interactionRecordService;
     private final InteractionTypeService interactionTypeService;
+    private final DataSetService dataSetService;
 
     private final AnalysisSessionResourceQueryService analysisSessionResourceQueryService;
 
     public AnalysisSessionResourceResource(AnalysisSessionResourceService analysisSessionResourceService, AnalysisSessionResourceQueryService analysisSessionResourceQueryService,
-                                           InteractionRecordService interactionRecordService, InteractionTypeService interactionTypeService) {
+                                           InteractionRecordService interactionRecordService, InteractionTypeService interactionTypeService , DataSetService dataSetService) {
         this.analysisSessionResourceService = analysisSessionResourceService;
         this.analysisSessionResourceQueryService = analysisSessionResourceQueryService;
         this.interactionRecordService = interactionRecordService;
         this.interactionTypeService = interactionTypeService;
+        this.dataSetService = dataSetService;
     }
 
     /**
@@ -72,6 +72,7 @@ public class AnalysisSessionResourceResource {
         }
 
         Set<InteractionRecord> interactionRecords = new HashSet<>();
+        Set<DataSet> dataSets= new HashSet<>();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode uploadedJson = null;
 
@@ -83,12 +84,8 @@ public class AnalysisSessionResourceResource {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-            List<Integer> arrayOfInteractionRecord = new ArrayList<>();
             List <Integer> arrayOfIn= new ArrayList<>();
 
-            final int i = 0;
             Consumer<JsonNode> data = (JsonNode node) -> {
                 Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
                 InteractionRecord interactionRecord = new InteractionRecord();
@@ -135,12 +132,74 @@ public class AnalysisSessionResourceResource {
             uploadedJson.forEach(data);
         }
 
-        AnalysisSessionResource result = analysisSessionResourceService.save(analysisSessionResource);
-        interactionRecords.forEach(interactionRecord -> interactionRecordService.save(interactionRecord));
 
-        return ResponseEntity.created(new URI("/api/analysis-session-resources/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if(analysisSessionResource.getResourceType().getName().equals("Data Set")){
+            String jsonString = new String(analysisSessionResource.getSourceFile());
+
+            try {
+                uploadedJson = mapper.readTree(jsonString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Consumer<JsonNode> data = (JsonNode node) -> {
+                Iterator<Map.Entry<String, JsonNode>> jsonIterator = node.fields();
+                DataSet dataSet = new DataSet();
+                while(jsonIterator.hasNext()) {
+                    Map.Entry<String, JsonNode> entry = jsonIterator.next();
+                    String key = entry.getKey();
+                    switch(key){
+                        case "id":
+                            dataSet.setIdentifier(entry.getValue().asText());
+                            break;
+
+                        case "title":
+                            dataSet.setTitle(entry.getValue().asText());
+                            break;
+
+
+                        case "date":
+                            break;
+
+                        case "type":
+                            dataSet.setType(entry.getValue().asText());
+                            break;
+                        case "contents":
+                            dataSet.setContents(entry.getValue().asText());
+                            break;
+                        default:
+                    }
+                }
+                dataSets.add(dataSet);
+            };
+            uploadedJson.forEach(data);
+        }
+
+
+
+
+        if(analysisSessionResource.getResourceType().getName().equals("Interaction Log")) {
+            AnalysisSessionResource result = analysisSessionResourceService.save(analysisSessionResource);
+            interactionRecords.forEach(interactionRecord -> interactionRecordService.save(interactionRecord));
+
+            return ResponseEntity.created(new URI("/api/analysis-session-resources/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+
+
+        if(analysisSessionResource.getResourceType().getName().equals("Data Set")) {
+            AnalysisSessionResource result = analysisSessionResourceService.save(analysisSessionResource);
+            dataSets.forEach(dataSet -> dataSetService.save(dataSet));
+
+            return ResponseEntity.created(new URI("/api/analysis-session-resources/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+
+
+
+        return null;
+
     }
 
     /**

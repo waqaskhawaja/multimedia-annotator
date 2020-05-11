@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity Annotation.
     -->
@@ -21,7 +21,7 @@
             <column name="jhi_end" type="datetime">
                 <constraints nullable="true" />
             </column>
-            <column name="annotation_text" type="varchar(255)">
+            <column name="annotation_text" type="varchar">
                 <constraints nullable="true" />
             </column>
             <column name="annotation_session_id" type="bigint">
@@ -48,7 +48,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="annotation_id, interaction_record_id" tableName="annotation_interaction_record"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

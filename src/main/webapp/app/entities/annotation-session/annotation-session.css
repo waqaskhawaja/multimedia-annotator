@@ -14,8 +14,15 @@ tr.example-element-row:not(.example-expanded-row):active {
     background: #efefef;
 }
 
+td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+}
+
 .example-element-row td {
     border-bottom-width: 0;
+    word-wrap: break-word;
 }
 
 .example-element-detail {
@@ -81,4 +88,8 @@ tr.example-element-row:not(.example-expanded-row):active {
 .button-hide-button:hover {
     background-color: #808080; /* Green */
     color: white;
+}
+
+.word-break {
+    word-wrap: break-word;
 }
