@@ -39,7 +39,7 @@
             <th scope="col" ><span>Type</span></th>
             <th scope="col" ><span>Contents</span></th>
             <th scope="col" ><span>Identifier</span></th>
-            <th scope="col" ><span>Annotation Session</span></th>
+            <th scope="col" ><span>Analysis Scenario</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -52,8 +52,8 @@
                 <td>{{dataSet.contents}}</td>
                 <td>{{dataSet.identifier}}</td>
                 <td>
-                    <div *ngIf="dataSet.annotationSession">
-                        <a [routerLink]="['/annotation-session', dataSet.annotationSession?.id, 'view' ]" >{{dataSet.annotationSession?.id}}</a>
+                    <div *ngIf="dataSet.analysisScenario">
+                        <a [routerLink]="['/analysis-scenario', dataSet.analysisScenario?.id, 'view' ]" >{{dataSet.analysisScenario?.id}}</a>
                     </div>
                 </td>
                 <td class="text-right">

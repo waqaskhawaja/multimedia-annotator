@@ -21,7 +21,7 @@ import pk.waqaskhawaja.ma.repository.search.AnalysisScenarioSearchRepository;
 import pk.waqaskhawaja.ma.service.dto.AnalysisScenarioCriteria;
 
 /**
- * Service for executing complex queries for AnalysisScenario entities in the database.
+ * Service for executing complex queries for {@link AnalysisScenario} entities in the database.
  * The main input is a {@link AnalysisScenarioCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
  * It returns a {@link List} of {@link AnalysisScenario} or a {@link Page} of {@link AnalysisScenario} which fulfills the criteria.
@@ -42,7 +42,7 @@ public class AnalysisScenarioQueryService extends QueryService<AnalysisScenario>
     }
 
     /**
-     * Return a {@link List} of {@link AnalysisScenario} which matches the criteria from the database
+     * Return a {@link List} of {@link AnalysisScenario} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
@@ -54,7 +54,7 @@ public class AnalysisScenarioQueryService extends QueryService<AnalysisScenario>
     }
 
     /**
-     * Return a {@link Page} of {@link AnalysisScenario} which matches the criteria from the database
+     * Return a {@link Page} of {@link AnalysisScenario} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
@@ -67,7 +67,7 @@ public class AnalysisScenarioQueryService extends QueryService<AnalysisScenario>
     }
 
     /**
-     * Return the number of matching entities in the database
+     * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the number of matching entities.
      */
@@ -79,13 +79,15 @@ public class AnalysisScenarioQueryService extends QueryService<AnalysisScenario>
     }
 
     /**
-     * Function to convert AnalysisScenarioCriteria to a {@link Specification}
+     * Function to convert {@link AnalysisScenarioCriteria} to a {@link Specification}
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching {@link Specification} of the entity.
      */
-    private Specification<AnalysisScenario> createSpecification(AnalysisScenarioCriteria criteria) {
+    protected Specification<AnalysisScenario> createSpecification(AnalysisScenarioCriteria criteria) {
         Specification<AnalysisScenario> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), AnalysisScenario_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), AnalysisScenario_.id));
             }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AnalysisScenario_.name));
@@ -93,6 +95,10 @@ public class AnalysisScenarioQueryService extends QueryService<AnalysisScenario>
             if (criteria.getAnalysisSessionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAnalysisSessionId(),
                     root -> root.join(AnalysisScenario_.analysisSessions, JoinType.LEFT).get(AnalysisSession_.id)));
+            }
+            if (criteria.getDataSetId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDataSetId(),
+                    root -> root.join(AnalysisScenario_.dataSets, JoinType.LEFT).get(DataSet_.id)));
             }
         }
         return specification;

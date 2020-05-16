@@ -33,7 +33,8 @@ public class DataSet implements Serializable {
     @Column(name = "type")
     private String type;
 
-
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "contents")
     private String contents;
 
@@ -42,7 +43,7 @@ public class DataSet implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("dataSets")
-    private AnnotationSession annotationSession;
+    private AnalysisScenario analysisScenario;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -118,17 +119,17 @@ public class DataSet implements Serializable {
         this.identifier = identifier;
     }
 
-    public AnnotationSession getAnnotationSession() {
-        return annotationSession;
+    public AnalysisScenario getAnalysisScenario() {
+        return analysisScenario;
     }
 
-    public DataSet annotationSession(AnnotationSession annotationSession) {
-        this.annotationSession = annotationSession;
+    public DataSet analysisScenario(AnalysisScenario analysisScenario) {
+        this.analysisScenario = analysisScenario;
         return this;
     }
 
-    public void setAnnotationSession(AnnotationSession annotationSession) {
-        this.annotationSession = annotationSession;
+    public void setAnalysisScenario(AnalysisScenario analysisScenario) {
+        this.analysisScenario = analysisScenario;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

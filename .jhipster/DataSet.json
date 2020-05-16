@@ -3,8 +3,8 @@
     "clientRootFolder": "",
     "relationships": [
         {
-            "relationshipName": "annotationSession",
-            "otherEntityName": "annotationSession",
+            "relationshipName": "analysisScenario",
+            "otherEntityName": "analysisScenario",
             "relationshipType": "many-to-one",
             "otherEntityField": "id",
             "otherEntityRelationshipName": "dataSet"

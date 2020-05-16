@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
- * Service Implementation for managing AnalysisScenario.
+ * Service Implementation for managing {@link AnalysisScenario}.
  */
 @Service
 @Transactional
@@ -36,8 +36,8 @@ public class AnalysisScenarioService {
     /**
      * Save a analysisScenario.
      *
-     * @param analysisScenario the entity to save
-     * @return the persisted entity
+     * @param analysisScenario the entity to save.
+     * @return the persisted entity.
      */
     public AnalysisScenario save(AnalysisScenario analysisScenario) {
         log.debug("Request to save AnalysisScenario : {}", analysisScenario);
@@ -49,8 +49,8 @@ public class AnalysisScenarioService {
     /**
      * Get all the analysisScenarios.
      *
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<AnalysisScenario> findAll(Pageable pageable) {
@@ -62,8 +62,8 @@ public class AnalysisScenarioService {
     /**
      * Get one analysisScenario by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     @Transactional(readOnly = true)
     public Optional<AnalysisScenario> findOne(Long id) {
@@ -74,7 +74,7 @@ public class AnalysisScenarioService {
     /**
      * Delete the analysisScenario by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     public void delete(Long id) {
         log.debug("Request to delete AnalysisScenario : {}", id);
@@ -85,9 +85,9 @@ public class AnalysisScenarioService {
     /**
      * Search for the analysisScenario corresponding to the query.
      *
-     * @param query the query of the search
-     * @param pageable the pagination information
-     * @return the list of entities
+     * @param query the query of the search.
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public Page<AnalysisScenario> search(String query, Pageable pageable) {

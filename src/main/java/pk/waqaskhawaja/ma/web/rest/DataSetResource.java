@@ -4,13 +4,13 @@ import pk.waqaskhawaja.ma.domain.DataSet;
 import pk.waqaskhawaja.ma.service.DataSetService;
 import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
 
+import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -32,7 +32,8 @@ public class DataSetResource {
 
     private static final String ENTITY_NAME = "dataSet";
 
-
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     private final DataSetService dataSetService;
 

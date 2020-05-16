@@ -7,10 +7,9 @@ import { DataSetDetailComponent } from './data-set-detail.component';
 import { DataSetUpdateComponent } from './data-set-update.component';
 import { DataSetDeleteDialogComponent } from './data-set-delete-dialog.component';
 import { dataSetRoute } from './data-set.route';
-import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    imports: [MaSharedModule, RouterModule.forChild(dataSetRoute), ReactiveFormsModule],
+    imports: [MaSharedModule, RouterModule.forChild(dataSetRoute)],
     declarations: [DataSetComponent, DataSetDetailComponent, DataSetUpdateComponent, DataSetDeleteDialogComponent],
     entryComponents: [DataSetDeleteDialogComponent]
 })

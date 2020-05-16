@@ -37,10 +37,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" for="field_annotationSession">Annotation Session</label>
-                    <select class="form-control" id="field_annotationSession" name="annotationSession" formControlName="annotationSession">
+                    <label class="form-control-label" for="field_analysisScenario">Analysis Scenario</label>
+                    <select class="form-control" id="field_analysisScenario" name="analysisScenario" formControlName="analysisScenario">
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="annotationSessionOption.id === editForm.get('annotationSession').value?.id ? editForm.get('annotationSession').value : annotationSessionOption" *ngFor="let annotationSessionOption of annotationsessions; trackBy: trackAnnotationSessionById">{{annotationSessionOption.id}}</option>
+                        <option [ngValue]="analysisScenarioOption.id === editForm.get('analysisScenario').value?.id ? editForm.get('analysisScenario').value : analysisScenarioOption" *ngFor="let analysisScenarioOption of analysisscenarios; trackBy: trackAnalysisScenarioById">{{analysisScenarioOption.id}}</option>
                     </select>
                 </div>
             </div>

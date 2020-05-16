@@ -10,8 +10,8 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 import { IDataSet, DataSet } from 'app/shared/model/data-set.model';
 import { DataSetService } from './data-set.service';
-import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
-import { AnnotationSessionService } from 'app/entities/annotation-session/annotation-session.service';
+import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
+import { AnalysisScenarioService } from 'app/entities/analysis-scenario/analysis-scenario.service';
 
 @Component({
     selector: 'jhi-data-set-update',
@@ -20,7 +20,7 @@ import { AnnotationSessionService } from 'app/entities/annotation-session/annota
 export class DataSetUpdateComponent implements OnInit {
     isSaving: boolean;
 
-    annotationsessions: IAnnotationSession[];
+    analysisscenarios: IAnalysisScenario[];
 
     editForm = this.fb.group({
         id: [],
@@ -29,14 +29,14 @@ export class DataSetUpdateComponent implements OnInit {
         type: [],
         contents: [],
         identifier: [],
-        annotationSession: []
+        analysisScenario: []
     });
 
     constructor(
         protected dataUtils: JhiDataUtils,
         protected jhiAlertService: JhiAlertService,
         protected dataSetService: DataSetService,
-        protected annotationSessionService: AnnotationSessionService,
+        protected analysisScenarioService: AnalysisScenarioService,
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder
     ) {}
@@ -46,10 +46,10 @@ export class DataSetUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ dataSet }) => {
             this.updateForm(dataSet);
         });
-        this.annotationSessionService
+        this.analysisScenarioService
             .query()
             .subscribe(
-                (res: HttpResponse<IAnnotationSession[]>) => (this.annotationsessions = res.body),
+                (res: HttpResponse<IAnalysisScenario[]>) => (this.analysisscenarios = res.body),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -62,7 +62,7 @@ export class DataSetUpdateComponent implements OnInit {
             type: dataSet.type,
             contents: dataSet.contents,
             identifier: dataSet.identifier,
-            annotationSession: dataSet.annotationSession
+            analysisScenario: dataSet.analysisScenario
         });
     }
 
@@ -122,7 +122,7 @@ export class DataSetUpdateComponent implements OnInit {
             type: this.editForm.get(['type']).value,
             contents: this.editForm.get(['contents']).value,
             identifier: this.editForm.get(['identifier']).value,
-            annotationSession: this.editForm.get(['annotationSession']).value
+            analysisScenario: this.editForm.get(['analysisScenario']).value
         };
     }
 
@@ -142,7 +142,7 @@ export class DataSetUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackAnnotationSessionById(index: number, item: IAnnotationSession) {
+    trackAnalysisScenarioById(index: number, item: IAnalysisScenario) {
         return item.id;
     }
 }

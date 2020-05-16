@@ -7,8 +7,7 @@ import pk.waqaskhawaja.ma.repository.search.DataSetSearchRepository;
 import pk.waqaskhawaja.ma.service.DataSetService;
 import pk.waqaskhawaja.ma.web.rest.errors.ExceptionTranslator;
 
-
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class DataSetResourceIT {
 
     private DataSet dataSet;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         final DataSetResource dataSetResource = new DataSetResource(dataSetService);
@@ -133,7 +132,7 @@ public class DataSetResourceIT {
         return dataSet;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         dataSet = createEntity(em);
     }

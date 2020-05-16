@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity DataSet.
     -->
@@ -24,13 +24,13 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="contents" type="varchar">
+            <column name="contents" type="${clobType}">
                 <constraints nullable="true" />
             </column>
             <column name="identifier" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="annotation_session_id" type="bigint">
+            <column name="analysis_scenario_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

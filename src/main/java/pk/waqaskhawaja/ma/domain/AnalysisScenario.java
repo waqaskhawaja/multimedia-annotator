@@ -1,29 +1,26 @@
 package pk.waqaskhawaja.ma.domain;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * A AnalysisScenario.
  */
 @Entity
 @Table(name = "analysis_scenario")
-@Document(indexName = "analysisscenario")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "analysisscenario")
 public class AnalysisScenario implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     private Long id;
 
     @Column(name = "name")
@@ -31,6 +28,10 @@ public class AnalysisScenario implements Serializable {
 
     @OneToMany(mappedBy = "analysisScenario")
     private Set<AnalysisSession> analysisSessions = new HashSet<>();
+
+    @OneToMany(mappedBy = "analysisScenario")
+    private Set<DataSet> dataSets = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -77,6 +78,31 @@ public class AnalysisScenario implements Serializable {
     public void setAnalysisSessions(Set<AnalysisSession> analysisSessions) {
         this.analysisSessions = analysisSessions;
     }
+
+    public Set<DataSet> getDataSets() {
+        return dataSets;
+    }
+
+    public AnalysisScenario dataSets(Set<DataSet> dataSets) {
+        this.dataSets = dataSets;
+        return this;
+    }
+
+    public AnalysisScenario addDataSet(DataSet dataSet) {
+        this.dataSets.add(dataSet);
+        dataSet.setAnalysisScenario(this);
+        return this;
+    }
+
+    public AnalysisScenario removeDataSet(DataSet dataSet) {
+        this.dataSets.remove(dataSet);
+        dataSet.setAnalysisScenario(null);
+        return this;
+    }
+
+    public void setDataSets(Set<DataSet> dataSets) {
+        this.dataSets = dataSets;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -84,19 +110,15 @@ public class AnalysisScenario implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AnalysisScenario)) {
             return false;
         }
-        AnalysisScenario analysisScenario = (AnalysisScenario) o;
-        if (analysisScenario.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), analysisScenario.getId());
+        return id != null && id.equals(((AnalysisScenario) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

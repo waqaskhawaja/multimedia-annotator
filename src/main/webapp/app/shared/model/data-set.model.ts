@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { IAnnotationSession } from 'app/shared/model/annotation-session.model';
+import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
 
 export interface IDataSet {
     id?: number;
@@ -8,7 +8,7 @@ export interface IDataSet {
     type?: string;
     contents?: any;
     identifier?: string;
-    annotationSession?: IAnnotationSession;
+    analysisScenario?: IAnalysisScenario;
 }
 
 export class DataSet implements IDataSet {
@@ -19,6 +19,6 @@ export class DataSet implements IDataSet {
         public type?: string,
         public contents?: any,
         public identifier?: string,
-        public annotationSession?: IAnnotationSession
+        public analysisScenario?: IAnalysisScenario
     ) {}
 }

@@ -1,5 +1,4 @@
 package pk.waqaskhawaja.ma.repository;
-
 import pk.waqaskhawaja.ma.domain.AnalysisScenario;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

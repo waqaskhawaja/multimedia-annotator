@@ -1,34 +1,21 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { MaSharedModule } from 'app/shared';
-import {
-    AnalysisScenarioComponent,
-    AnalysisScenarioDetailComponent,
-    AnalysisScenarioUpdateComponent,
-    AnalysisScenarioDeletePopupComponent,
-    AnalysisScenarioDeleteDialogComponent,
-    analysisScenarioRoute,
-    analysisScenarioPopupRoute
-} from './';
-
-const ENTITY_STATES = [...analysisScenarioRoute, ...analysisScenarioPopupRoute];
+import { MaSharedModule } from 'app/shared/shared.module';
+import { AnalysisScenarioComponent } from './analysis-scenario.component';
+import { AnalysisScenarioDetailComponent } from './analysis-scenario-detail.component';
+import { AnalysisScenarioUpdateComponent } from './analysis-scenario-update.component';
+import { AnalysisScenarioDeleteDialogComponent } from './analysis-scenario-delete-dialog.component';
+import { analysisScenarioRoute } from './analysis-scenario.route';
 
 @NgModule({
-    imports: [MaSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [MaSharedModule, RouterModule.forChild(analysisScenarioRoute)],
     declarations: [
         AnalysisScenarioComponent,
         AnalysisScenarioDetailComponent,
         AnalysisScenarioUpdateComponent,
-        AnalysisScenarioDeleteDialogComponent,
-        AnalysisScenarioDeletePopupComponent
+        AnalysisScenarioDeleteDialogComponent
     ],
-    entryComponents: [
-        AnalysisScenarioComponent,
-        AnalysisScenarioUpdateComponent,
-        AnalysisScenarioDeleteDialogComponent,
-        AnalysisScenarioDeletePopupComponent
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    entryComponents: [AnalysisScenarioDeleteDialogComponent]
 })
 export class MaAnalysisScenarioModule {}

@@ -87,6 +87,11 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
+    data:
+        elasticsearch:
+            properties:
+                node:
+                    max_local_storage_nodes: 2
 
 server:
     servlet:

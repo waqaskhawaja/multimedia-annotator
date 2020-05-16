@@ -1,29 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { JhiResolvePagingParams } from 'ng-jhipster';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AnalysisScenario } from 'app/shared/model/analysis-scenario.model';
 import { AnalysisScenarioService } from './analysis-scenario.service';
 import { AnalysisScenarioComponent } from './analysis-scenario.component';
 import { AnalysisScenarioDetailComponent } from './analysis-scenario-detail.component';
 import { AnalysisScenarioUpdateComponent } from './analysis-scenario-update.component';
-import { AnalysisScenarioDeletePopupComponent } from './analysis-scenario-delete-dialog.component';
 import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
 
 @Injectable({ providedIn: 'root' })
 export class AnalysisScenarioResolve implements Resolve<IAnalysisScenario> {
     constructor(private service: AnalysisScenarioService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IAnalysisScenario> {
-        const id = route.params['id'] ? route.params['id'] : null;
+    resolve(route: ActivatedRouteSnapshot): Observable<IAnalysisScenario> {
+        const id = route.params['id'];
         if (id) {
-            return this.service.find(id).pipe(
-                filter((response: HttpResponse<AnalysisScenario>) => response.ok),
-                map((analysisScenario: HttpResponse<AnalysisScenario>) => analysisScenario.body)
-            );
+            return this.service.find(id).pipe(map((analysisScenario: HttpResponse<AnalysisScenario>) => analysisScenario.body));
         }
         return of(new AnalysisScenario());
     }
@@ -78,21 +74,5 @@ export const analysisScenarioRoute: Routes = [
             pageTitle: 'AnalysisScenarios'
         },
         canActivate: [UserRouteAccessService]
-    }
-];
-
-export const analysisScenarioPopupRoute: Routes = [
-    {
-        path: ':id/delete',
-        component: AnalysisScenarioDeletePopupComponent,
-        resolve: {
-            analysisScenario: AnalysisScenarioResolve
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'AnalysisScenarios'
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
     }
 ];

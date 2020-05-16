@@ -4,10 +4,11 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-analysis-scenario" [routerLink]="['/analysis-scenario/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span class="hidden-sm-down" >
-            Create new Analysis Scenario
+            Create a new Analysis Scenario
             </span>
         </button>
     </h2>
+    <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
     <div class="row">
         <div class="col-sm-12">
@@ -25,13 +26,16 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="analysisScenarios">
-        <table class="table table-striped">
+    <div class="alert alert-warning" *ngIf="analysisScenarios?.length === 0">
+        <span>No analysisScenarios found</span>
+    </div>
+    <div class="table-responsive" *ngIf="analysisScenarios?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
+            <th scope="col"  jhiSortBy="id"><span>ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"  jhiSortBy="name"><span>Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -39,7 +43,7 @@
                 <td><a [routerLink]="['/analysis-scenario', analysisScenario.id, 'view' ]">{{analysisScenario.id}}</a></td>
                 <td>{{analysisScenario.name}}</td>
                 <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
+                    <div class="btn-group">
                         <button type="submit"
                                 [routerLink]="['/analysis-scenario', analysisScenario.id, 'view' ]"
                                 class="btn btn-info btn-sm">
@@ -52,10 +56,7 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline">Edit</span>
                         </button>
-                        <button type="submit"
-                                [routerLink]="['/', 'analysis-scenario', { outlets: { popup: analysisScenario.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                        <button type="submit" (click)="delete(analysisScenario)"
                                 class="btn btn-danger btn-sm">
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline">Delete</span>
@@ -67,7 +68,7 @@
         </table>
     </div>
     <!-- Pager is not implemented yet, so this is normal pagination instead -->
-    <div *ngIf="analysisScenarios && analysisScenarios.length">
+    <div [hidden]="analysisScenarios?.length === 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

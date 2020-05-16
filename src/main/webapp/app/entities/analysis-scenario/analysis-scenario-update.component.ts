@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
+import { IAnalysisScenario, AnalysisScenario } from 'app/shared/model/analysis-scenario.model';
 import { AnalysisScenarioService } from './analysis-scenario.service';
 
 @Component({
@@ -11,15 +13,30 @@ import { AnalysisScenarioService } from './analysis-scenario.service';
     templateUrl: './analysis-scenario-update.component.html'
 })
 export class AnalysisScenarioUpdateComponent implements OnInit {
-    analysisScenario: IAnalysisScenario;
     isSaving: boolean;
 
-    constructor(protected analysisScenarioService: AnalysisScenarioService, protected activatedRoute: ActivatedRoute) {}
+    editForm = this.fb.group({
+        id: [],
+        name: []
+    });
+
+    constructor(
+        protected analysisScenarioService: AnalysisScenarioService,
+        protected activatedRoute: ActivatedRoute,
+        private fb: FormBuilder
+    ) {}
 
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ analysisScenario }) => {
-            this.analysisScenario = analysisScenario;
+            this.updateForm(analysisScenario);
+        });
+    }
+
+    updateForm(analysisScenario: IAnalysisScenario) {
+        this.editForm.patchValue({
+            id: analysisScenario.id,
+            name: analysisScenario.name
         });
     }
 
@@ -29,15 +46,24 @@ export class AnalysisScenarioUpdateComponent implements OnInit {
 
     save() {
         this.isSaving = true;
-        if (this.analysisScenario.id !== undefined) {
-            this.subscribeToSaveResponse(this.analysisScenarioService.update(this.analysisScenario));
+        const analysisScenario = this.createFromForm();
+        if (analysisScenario.id !== undefined) {
+            this.subscribeToSaveResponse(this.analysisScenarioService.update(analysisScenario));
         } else {
-            this.subscribeToSaveResponse(this.analysisScenarioService.create(this.analysisScenario));
+            this.subscribeToSaveResponse(this.analysisScenarioService.create(analysisScenario));
         }
     }
 
+    private createFromForm(): IAnalysisScenario {
+        return {
+            ...new AnalysisScenario(),
+            id: this.editForm.get(['id']).value,
+            name: this.editForm.get(['name']).value
+        };
+    }
+
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IAnalysisScenario>>) {
-        result.subscribe((res: HttpResponse<IAnalysisScenario>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
     }
 
     protected onSaveSuccess() {

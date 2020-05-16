@@ -12,6 +12,12 @@
             "otherEntityName": "analysisSession",
             "otherEntityRelationshipName": "analysisScenario",
             "relationshipName": "analysisSession"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "dataSet",
+            "otherEntityRelationshipName": "analysisScenario",
+            "relationshipName": "dataSet"
         }
     ],
     "changelogDate": "20190522140840",

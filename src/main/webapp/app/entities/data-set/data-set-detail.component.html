@@ -25,10 +25,10 @@
                 <dd>
                     <span>{{dataSet.identifier}}</span>
                 </dd>
-                <dt><span>Annotation Session</span></dt>
+                <dt><span>Analysis Scenario</span></dt>
                 <dd>
-                    <div *ngIf="dataSet.annotationSession">
-                        <a [routerLink]="['/annotation-session', dataSet.annotationSession?.id, 'view']">{{dataSet.annotationSession?.id}}</a>
+                    <div *ngIf="dataSet.analysisScenario">
+                        <a [routerLink]="['/analysis-scenario', dataSet.analysisScenario?.id, 'view']">{{dataSet.analysisScenario?.id}}</a>
                     </div>
                 </dd>
             </dl>
