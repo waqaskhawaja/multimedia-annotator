@@ -2,6 +2,7 @@ import './vendor.ts';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -36,6 +37,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         YtPlayerAngularModule,
         Ng5SliderModule,
         BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
         BrowserAnimationsModule,
         NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-' }),
         NgJhipsterModule.forRoot({

@@ -7,7 +7,7 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IAnalysisSession } from 'app/shared/model/analysis-session.model';
 import { AnalysisSessionService } from './analysis-session.service';
 import { IAnalysisScenario } from 'app/shared/model/analysis-scenario.model';
-import { AnalysisScenarioService } from 'app/entities/analysis-scenario';
+import { AnalysisScenarioService } from 'app/entities/analysis-scenario/analysis-scenario.service';
 
 @Component({
     selector: 'jhi-analysis-session-update',

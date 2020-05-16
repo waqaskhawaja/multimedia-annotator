@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaSharedModule } from 'app/shared/shared.module';
 import { DataSetComponent } from './data-set.component';
 import { DataSetDetailComponent } from './data-set-detail.component';
@@ -9,7 +9,7 @@ import { DataSetDeleteDialogComponent } from './data-set-delete-dialog.component
 import { dataSetRoute } from './data-set.route';
 
 @NgModule({
-    imports: [MaSharedModule, RouterModule.forChild(dataSetRoute)],
+    imports: [MaSharedModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(dataSetRoute)],
     declarations: [DataSetComponent, DataSetDetailComponent, DataSetUpdateComponent, DataSetDeleteDialogComponent],
     entryComponents: [DataSetDeleteDialogComponent]
 })

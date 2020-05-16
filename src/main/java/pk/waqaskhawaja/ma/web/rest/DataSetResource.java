@@ -31,9 +31,8 @@ public class DataSetResource {
     private final Logger log = LoggerFactory.getLogger(DataSetResource.class);
 
     private static final String ENTITY_NAME = "dataSet";
-
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    
+    private String applicationName = "ma";
 
     private final DataSetService dataSetService;
 

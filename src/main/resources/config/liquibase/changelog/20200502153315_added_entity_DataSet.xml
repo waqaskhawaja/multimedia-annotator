@@ -24,7 +24,7 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="contents" type="${clobType}">
+            <column name="contents" type="text">
                 <constraints nullable="true" />
             </column>
             <column name="identifier" type="varchar(255)">
@@ -60,7 +60,7 @@
             <column name="title" type="string"/>
             <column name="date" type="datetime"/>
             <column name="type" type="string"/>
-            <column name="contents" type="clob"/>
+            <column name="contents" type="text"/>
             <column name="identifier" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

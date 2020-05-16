@@ -39,9 +39,8 @@ public class AnalysisScenarioResource {
     private final Logger log = LoggerFactory.getLogger(AnalysisScenarioResource.class);
 
     private static final String ENTITY_NAME = "analysisScenario";
-
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    
+    private String applicationName= "ma";
 
     private final AnalysisScenarioService analysisScenarioService;
 
