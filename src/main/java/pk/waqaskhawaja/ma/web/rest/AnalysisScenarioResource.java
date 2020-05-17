@@ -1,33 +1,37 @@
 package pk.waqaskhawaja.ma.web.rest;
 
-import pk.waqaskhawaja.ma.domain.AnalysisScenario;
-import pk.waqaskhawaja.ma.service.AnalysisScenarioService;
-import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
-import pk.waqaskhawaja.ma.service.dto.AnalysisScenarioCriteria;
-import pk.waqaskhawaja.ma.service.AnalysisScenarioQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
-import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import io.github.jhipster.web.util.ResponseUtil;
+import pk.waqaskhawaja.ma.domain.AnalysisScenario;
+import pk.waqaskhawaja.ma.domain.DataSet;
+import pk.waqaskhawaja.ma.service.AnalysisScenarioQueryService;
+import pk.waqaskhawaja.ma.service.AnalysisScenarioService;
+import pk.waqaskhawaja.ma.service.DataSetService;
+import pk.waqaskhawaja.ma.service.dto.AnalysisScenarioCriteria;
+import pk.waqaskhawaja.ma.web.rest.errors.BadRequestAlertException;
+import pk.waqaskhawaja.ma.web.rest.util.HeaderUtil;
+import pk.waqaskhawaja.ma.web.rest.util.PaginationUtil;
 
 /**
  * REST controller for managing {@link pk.waqaskhawaja.ma.domain.AnalysisScenario}.
@@ -43,12 +47,16 @@ public class AnalysisScenarioResource {
     private String applicationName= "ma";
 
     private final AnalysisScenarioService analysisScenarioService;
+    private final DataSetService dataSetService;
 
     private final AnalysisScenarioQueryService analysisScenarioQueryService;
 
-    public AnalysisScenarioResource(AnalysisScenarioService analysisScenarioService, AnalysisScenarioQueryService analysisScenarioQueryService) {
+    public AnalysisScenarioResource(AnalysisScenarioService analysisScenarioService, 
+    		AnalysisScenarioQueryService analysisScenarioQueryService,
+    		DataSetService dataSetService) {
         this.analysisScenarioService = analysisScenarioService;
         this.analysisScenarioQueryService = analysisScenarioQueryService;
+        this.dataSetService = dataSetService;
     }
 
     /**
@@ -65,6 +73,12 @@ public class AnalysisScenarioResource {
             throw new BadRequestAlertException("A new analysisScenario cannot already have an ID", ENTITY_NAME, "idexists");
         }
         AnalysisScenario result = analysisScenarioService.save(analysisScenario);
+        
+        Set<DataSet> dataSets = analysisScenario.getDataSets();
+        dataSets.forEach(dataSet -> {
+        	dataSet.setAnalysisScenario(analysisScenario);
+        	dataSetService.save(dataSet);
+        });
         return ResponseEntity.created(new URI("/api/analysis-scenarios/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -85,6 +99,15 @@ public class AnalysisScenarioResource {
         if (analysisScenario.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        
+        Set<DataSet> dataSets = analysisScenario.getDataSets();
+        dataSets.forEach(dataSet -> {
+        	if(!dataSetService.findByIdentifierAndAnalysisScenario(dataSet.getIdentifier(), analysisScenario).isPresent()) {
+        		dataSet.setAnalysisScenario(analysisScenario);
+        		dataSetService.save(dataSet);
+        	}
+        });        
+        
         AnalysisScenario result = analysisScenarioService.save(analysisScenario);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, analysisScenario.getId().toString()))

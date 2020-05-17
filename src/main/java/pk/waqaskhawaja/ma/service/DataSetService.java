@@ -1,20 +1,21 @@
 package pk.waqaskhawaja.ma.service;
 
-import pk.waqaskhawaja.ma.domain.DataSet;
-import pk.waqaskhawaja.ma.repository.DataSetRepository;
-import pk.waqaskhawaja.ma.repository.search.DataSetSearchRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import pk.waqaskhawaja.ma.domain.AnalysisScenario;
+import pk.waqaskhawaja.ma.domain.DataSet;
+import pk.waqaskhawaja.ma.repository.DataSetRepository;
+import pk.waqaskhawaja.ma.repository.search.DataSetSearchRepository;
 
 /**
  * Service Implementation for managing {@link DataSet}.
@@ -69,6 +70,19 @@ public class DataSetService {
     public Optional<DataSet> findOne(Long id) {
         log.debug("Request to get DataSet : {}", id);
         return dataSetRepository.findById(id);
+    }
+    
+    /**
+     * Get one dataSet by identifier and AnalysisScenario.
+     *
+     * @param identifier the identifier of the entity.
+     * @param analysisScenario the AnalysisScenario of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<DataSet> findByIdentifierAndAnalysisScenario(String identifier, AnalysisScenario analysisScenario) {
+        log.debug("Request to get DataSet : {} and AnalysisScenario {}", identifier, analysisScenario.getId());
+        return dataSetRepository.findByIdentifierAndAnalysisScenario(identifier, analysisScenario);
     }
 
     /**

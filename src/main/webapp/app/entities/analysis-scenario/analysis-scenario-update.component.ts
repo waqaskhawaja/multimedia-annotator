@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IAnalysisScenario, AnalysisScenario } from 'app/shared/model/analysis-scenario.model';
 import { AnalysisScenarioService } from './analysis-scenario.service';
+import { DataSet } from 'app/shared/model/data-set.model';
 
 @Component({
     selector: 'jhi-analysis-scenario-update',
@@ -14,6 +15,27 @@ import { AnalysisScenarioService } from './analysis-scenario.service';
 })
 export class AnalysisScenarioUpdateComponent implements OnInit {
     isSaving: boolean;
+    dataSetFile: File = null;
+    fileReader = new FileReader();
+    dataSets: DataSet[];
+
+    setFileData(files: FileList) {
+        this.dataSetFile = files.item(0);
+        this.fileReader.readAsText(this.dataSetFile);
+        this.fileReader.onload = () => {
+            const jsonData: string = this.fileReader.result as string;
+            this.dataSets = <DataSet[]>JSON.parse(jsonData, function(key, value) {
+                if (key === 'date' && value === 'unknown') {
+                    return undefined;
+                }
+                return value;
+            });
+            this.dataSets.forEach(node => {
+                node.identifier = String(node.id);
+                delete node.id;
+            });
+        };
+    }
 
     editForm = this.fb.group({
         id: [],
@@ -47,6 +69,7 @@ export class AnalysisScenarioUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         const analysisScenario = this.createFromForm();
+        analysisScenario.dataSets = this.dataSets;
         if (analysisScenario.id !== undefined) {
             this.subscribeToSaveResponse(this.analysisScenarioService.update(analysisScenario));
         } else {
